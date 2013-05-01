@@ -1,3 +1,3 @@
 package models
 
-case class MyRecord(x: String)
+//case class MyRecord(x: String)
