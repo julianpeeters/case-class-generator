@@ -1,9 +1,12 @@
 [0m[[0minfo[0m] [0mLoading global plugins from /home/julianpeeters/.sbt/plugins[0m
 [0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-salat-example/)[0m
 [0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/julianpeeters/asm-salat-example/target/scala-2.10/classes...[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:69: not found: type Product0[0m
-[0m[[31merror[0m] [0m  def dbo[MyRecord](rec: MyRecord) = grater[AnyRef with Product].asDBObject(record.asInstanceOf[AnyRef with Product0])[0m
-[0m[[31merror[0m] [0m                                                                                                            ^[0m
-[0m[[31merror[0m] [0mone error found[0m
+[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:29: identifier expected but ']' found.[0m
+[0m[[31merror[0m] [0m  val dbo = grater[-MyRecord].asDBObject(record)[0m
+[0m[[31merror[0m] [0m                            ^[0m
+[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:35: ']' expected but ';' found.[0m
+[0m[[31merror[0m] [0m println(dbo(record))[0m
+[0m[[31merror[0m] [0m^[0m
+[0m[[31merror[0m] [0mtwo errors found[0m
 [0m[[31merror[0m] [0m(compile:[31mcompile[0m) Compilation failed[0m
-[0m[[31merror[0m] [0mTotal time: 6 s, completed Apr 29, 2013 4:16:02 PM[0m
+[0m[[31merror[0m] [0mTotal time: 3 s, completed May 1, 2013 11:26:09 PM[0m
