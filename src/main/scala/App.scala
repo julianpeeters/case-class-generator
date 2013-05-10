@@ -14,10 +14,11 @@ object Main extends App {
   val apply$ = model$.getMethod("apply", classOf[String])//populate the instance with values,
   val record =  apply$.invoke(instance$, "hello world")//roughly equivalent to `MyRecord("hello world"`)
 
-  val dbo = grater[record.type].asDBObject(record)
+  val dbo = grater[record.type].asDBObject(t)
     println(dbo)
   val obj = grater[record.type].asObject(dbo)
     println(obj)
+
 
 }
 
