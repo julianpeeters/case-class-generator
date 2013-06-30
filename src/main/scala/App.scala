@@ -5,6 +5,9 @@ import com.mongodb.casbah.Imports._
 
 object Main extends App {
 
+//Current status: load a class whose shape has been predefined by ASMifying an example case class
+
+
   val model  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump()) // load the class
   val model$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecord$Dump.dump()) //load the module class
 
