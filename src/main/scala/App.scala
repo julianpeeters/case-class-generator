@@ -5,25 +5,29 @@ import com.mongodb.casbah.Imports._
 
 object Main extends App {
 
-//Current status: load a class whose shape has been predefined by ASMifying an example case class
 
+  def applyValues(classModule: java.lang.Class[_], fieldValue: String) = {
+    val method_apply = classModule.getMethod("apply", classOf[String])//populate the instance with values,
+    val classInstance = classModule.getConstructor().newInstance()//getInstance(module)
+    method_apply.invoke(classInstance, fieldValue)//roughly equivalent to using the statement `MyRecord(fieldValue)`
+  }
 
-  val model  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump()) // load the class
-  val model$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecord$Dump.dump()) //load the module class
+  def MyRecord(fieldVal: String) = {
+    val model  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump().get(0)) // load the class
+    val model$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecordDump.dump().get(1)) //load the module class
+    applyValues(model$, fieldVal) //get an instance
+  }
 
-  val ctor$  = model$.getConstructor()
-  val instance$ = ctor$.newInstance()//Changed Module$Dump <init> from PRIVATE to PUBLIC, else no method found
+  val record = MyRecord("hello world")
+  type MyRecord = record.type
+  
+  val dbo = grater[MyRecord].asDBObject(record)
 
-  val apply$ = model$.getMethod("apply", classOf[String])//populate the instance with values,
-  val record = apply$.invoke(instance$, "hello world")//roughly equivalent to using the statement `MyRecord("hello world")`
-    println(record)
-
-  val dbo = grater[record.type].asDBObject(record)
     println(dbo)
 
-  val obj = grater[record.type].asObject(dbo)
+  val obj = grater[MyRecord].asObject(dbo)
     println(obj)
-  
+ 
   println(record == obj)
  
 }
