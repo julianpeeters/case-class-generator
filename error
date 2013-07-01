@@ -1,14 +1,16 @@
 [0m[[0minfo[0m] [0mLoading global plugins from /home/julianpeeters/.sbt/plugins[0m
 [0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-salat-example/)[0m
 [0m[[0minfo[0m] [0mRunning Main [0m
-[0m[[31merror[0m] [0m(run-main) java.lang.IllegalArgumentException: object is not an instance of declaring class[0m
-java.lang.IllegalArgumentException: object is not an instance of declaring class
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:616)
-	at Main$.MyRecord(App.scala:35)
-	at Main$delayedInit$body.apply(App.scala:41)
+[0m[[31merror[0m] [0m(run-main) com.novus.salat.util.MissingPickledSig: FAIL: class 'class Main$MyRecord' is missing both @ScalaSig and .class file![0m
+com.novus.salat.util.MissingPickledSig: FAIL: class 'class Main$MyRecord' is missing both @ScalaSig and .class file!
+	at com.novus.salat.ClassAnalyzer$.findSym(ClassAnalyzer.scala:59)
+	at com.novus.salat.ClassAnalyzer.<init>(ClassAnalyzer.scala:136)
+	at com.novus.salat.ConcreteGrater.ca$lzycompute(Grater.scala:110)
+	at com.novus.salat.ConcreteGrater.ca(Grater.scala:110)
+	at com.novus.salat.ConcreteGrater.useTypeHint$lzycompute(Grater.scala:114)
+	at com.novus.salat.ConcreteGrater.useTypeHint(Grater.scala:112)
+	at com.novus.salat.ConcreteGrater.asDBObject(Grater.scala:231)
+	at Main$delayedInit$body.apply(App.scala:24)
 	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
 	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
 	at scala.App$$anonfun$main$1.apply(App.scala:71)
@@ -27,4 +29,4 @@ java.lang.RuntimeException: Nonzero exit code: 1
 	at scala.sys.package$.error(package.scala:27)
 [0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
 [0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
-[0m[[31merror[0m] [0mTotal time: 1 s, completed Jul 1, 2013 3:06:47 PM[0m
+[0m[[31merror[0m] [0mTotal time: 1 s, completed Jul 1, 2013 3:41:32 PM[0m
