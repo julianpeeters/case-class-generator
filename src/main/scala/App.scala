@@ -5,16 +5,19 @@ import com.mongodb.casbah.Imports._
 
 object Main extends App {
 
-  object MyRecord { 
-    val model  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump().get(0)) // load the class
-    val model$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecordDump.dump().get(1)) //load the module class
+  object MyRecord {
+    //val myRecordDump = new MyRecordDump 
+    val model  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump)//()//.get(0)) // load the class
+    val model$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecordDumpMODULE.dump)////.get(1)) //load the module class
 
-    def apply(fieldValue: String) = {
-      val method_apply = model$.getMethod("apply", classOf[String])//populate the instance with values,
+    def apply(fieldValue: String, y: Int, z: Boolean) = {
+//      val method_apply = model$.getMethod("apply", classOf[String])//populate the instance with values,
+      val method_apply = model$.getMethod("apply", classOf[String], classOf[Int], classOf[Boolean])//populate the instance with values,
       val classInstance = model$.getConstructor().newInstance()//getInstance(module)
-      method_apply.invoke(classInstance, fieldValue)//roughly equivalent to using the statement `MyRecord(fieldValue)`
+      method_apply.invoke(classInstance, fieldValue, y: java.lang.Integer, z: java.lang.Boolean)//roughly equivalent to using the statement `MyRecord(fieldValue)`
     }
-    val typeTemplate = MyRecord("hello world") //Rename def to MyRecord to preserve the look and feel of salat??
+//    val typeTemplate = MyRecord("hello world") //Rename def to MyRecord to preserve the look and feel of salat??
+    val typeTemplate = MyRecord("hello world", 1, true) //Rename def to MyRecord to preserve the look and feel of salat??
     type MyRecord = typeTemplate.type
   }
 
