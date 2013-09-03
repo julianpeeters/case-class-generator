@@ -1,36 +1,73 @@
 [0m[[0minfo[0m] [0mLoading global plugins from /home/julianpeeters/.sbt/plugins[0m
 [0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-salat-example/)[0m
-[0m[[0minfo[0m] [0mCompiling 2 Scala sources and 1 Java source to /home/julianpeeters/asm-salat-example/target/scala-2.10/classes...[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:162: too many arguments for constructor Array: (_length: Int)Array[org.objectweb.asm.Label][0m
-[0m[[31merror[0m] [0mmv.visitTableSwitchInsn(0, 2, l3, new Array[Label]( l0, l1, l2 ));[0m
-[0m[[31merror[0m] [0m                                  ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:190: type mismatch;[0m
-[0m[[31merror[0m] [0m found   : String("java/lang/Object")[0m
-[0m[[31merror[0m] [0m required: Int[0m
-[0m[[31merror[0m] [0mmv.visitFrame(Opcodes.F_SAME1, 0, null, 1, new Array[Object] ("java/lang/Object"));[0m
-[0m[[31merror[0m] [0m                                                              ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:239: too many arguments for constructor Array: (_length: Int)Array[Object][0m
-[0m[[31merror[0m] [0mmv.visitFrame(Opcodes.F_FULL, 2, new Array[Object] ("models/MyRecord", Opcodes.INTEGER), 1, new Array[Object] (Opcodes.INTEGER));[0m
-[0m[[31merror[0m] [0m                                 ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:242: too many arguments for constructor Array: (_length: Int)Array[Object][0m
-[0m[[31merror[0m] [0mmv.visitFrame(Opcodes.F_FULL, 2, new Array[Object] ("models/MyRecord", Opcodes.INTEGER), 2, new Array[Object] (Opcodes.INTEGER, Opcodes.INTEGER));[0m
-[0m[[31merror[0m] [0m                                 ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:280: type mismatch;[0m
-[0m[[31merror[0m] [0m found   : String("java/lang/Object")[0m
-[0m[[31merror[0m] [0m required: Int[0m
-[0m[[31merror[0m] [0mmv.visitFrame(Opcodes.F_APPEND,1, new Array[Object] ("java/lang/Object"), 0, null);[0m
-[0m[[31merror[0m] [0m                                                     ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:336: too many arguments for constructor Array: (_length: Int)Array[Object][0m
-[0m[[31merror[0m] [0mmv.visitFrame(Opcodes.F_FULL, 2, new Array[Object] ("models/MyRecord", "java/lang/Object"), 0, new Array[Object] ());[0m
-[0m[[31merror[0m] [0m                                 ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:384: type mismatch;[0m
-[0m[[31merror[0m] [0m found   : String("scala/Serializable")[0m
-[0m[[31merror[0m] [0m required: Int[0m
-[0m[[31merror[0m] [0mcw_MODULE.visit(V1_6, ACC_PUBLIC + ACC_FINAL + ACC_SUPER, "models/MyRecord$", "Lscala/runtime/AbstractFunction3<Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;Lmodels/MyRecord;>;Lscala/Serializable;", "scala/runtime/AbstractFunction3", new Array[String] ("scala/Serializable" ));[0m
-[0m[[31merror[0m] [0m                                                                                                                                                                                                                                                                      ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/MyRecordDump.scala:490: object java.util.List is not a value[0m
-[0m[[31merror[0m] [0mList(cw.toByteArray(), cw_MODULE.toByteArray());[0m
-[0m[[31merror[0m] [0m^[0m
-[0m[[31merror[0m] [0m8 errors found[0m
-[0m[[31merror[0m] [0m(compile:[31mcompile[0m) Compilation failed[0m
-[0m[[31merror[0m] [0mTotal time: 7 s, completed Aug 27, 2013 12:49:31 AM[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/julianpeeters/asm-salat-example/target/scala-2.10/classes...[0m
+[0m[[0minfo[0m] [0mRunning Main [0m
+last booleanL2042624369
+L991431869
+[0m[[31merror[0m] [0m(run-main) java.lang.ExceptionInInitializerError[0m
+java.lang.ExceptionInInitializerError
+	at Main$delayedInit$body.apply(App.scala:26)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
+	at scala.App$class.main(App.scala:71)
+	at Main$.main(App.scala:6)
+	at Main.main(App.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at Main$MyRecord$.apply(App.scala:18)
+	at Main$MyRecord$.<init>(App.scala:21)
+	at Main$MyRecord$.<clinit>(App.scala)
+	at Main$delayedInit$body.apply(App.scala:26)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
+	at scala.App$class.main(App.scala:71)
+	at Main$.main(App.scala:6)
+	at Main.main(App.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+Caused by: java.lang.VerifyError: (class: models/MyRecord, method: productElement signature: (I)Ljava/lang/Object;) Inconsistent stack height 1 != 0
+	at models.MyRecord$.apply(Unknown Source)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at Main$MyRecord$.apply(App.scala:18)
+	at Main$MyRecord$.<init>(App.scala:21)
+	at Main$MyRecord$.<clinit>(App.scala)
+	at Main$delayedInit$body.apply(App.scala:26)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
+	at scala.App$class.main(App.scala:71)
+	at Main$.main(App.scala:6)
+	at Main.main(App.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+java.lang.RuntimeException: Nonzero exit code: 1
+	at scala.sys.package$.error(package.scala:27)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
+[0m[[31merror[0m] [0mTotal time: 19 s, completed Sep 3, 2013 2:33:47 AM[0m

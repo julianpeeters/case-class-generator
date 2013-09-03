@@ -6,9 +6,10 @@ import com.mongodb.casbah.Imports._
 object Main extends App {
 
   object MyRecord {
-    //val myRecordDump = new MyRecordDump 
-    val model  = DynamicClassLoader.loadClass("models.MyRecord", MyRecordDump.dump)//()//.get(0)) // load the class
-    val model$ = DynamicClassLoader.loadClass("models.MyRecord$", MyRecordDumpMODULE.dump)////.get(1)) //load the module class
+    val myRecordDump = new MyRecordDump 
+    val bytecodes = myRecordDump.dump
+    val model  = DynamicClassLoader.loadClass("models.MyRecord", bytecodes(0)) // load the class
+    val model$ = DynamicClassLoader.loadClass("models.MyRecord$", bytecodes(1)) //load the module class
 
     def apply(fieldValue: String, y: Int, z: Boolean) = {
 //      val method_apply = model$.getMethod("apply", classOf[String])//populate the instance with values,
