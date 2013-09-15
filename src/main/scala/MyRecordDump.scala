@@ -1,7 +1,15 @@
 package models
-
+import avocet._
+import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
+
+import scala.pickling._
+import binary._
+
+
+import java.util.Arrays
+import scala.io.Codec._
 
 case class ClassData(
   classNamespace: String, 
@@ -26,20 +34,34 @@ class MyRecordDump {
     val classNamespace = "models"
     val name = className
    // val fieldData: List[FieldData] = classData.classFields
-    val fieldData: List[FieldData] = List(FieldData("x","string","Ljava/lang/String;", "Ljava/lang/String;",25,176), FieldData("y","int","I", "Ljava/lang/Object;",21,172), FieldData("z","boolean","Z", "Ljava/lang/Object;",21,172))//classData.classFields
+  //val fieldData: List[FieldData] = List(FieldData("x","string","Ljava/lang/String;", "Ljava/lang/String;",25,176), FieldData("y","int","I", "Ljava/lang/Object;",21,172), FieldData("z","boolean","Z", "Ljava/lang/Object;",21,172))//classData.classFields
+    val fieldData: List[FieldData] = List(FieldData("x","string","Ljava/lang/String;", "Ljava/lang/String;",25,176))//classData.classFields
     val ctorReturnType = "(" + fieldData.map(n => n.typeDescriptor ).mkString + ")V"
 
+ 
+    val mySigRecord = new ScalaSig(List("case class"), List(classNamespace, className), List(("x", "String"), ("y", "Int"), ("z", "Boolean")))
+
+
+val enc = ByteCodecs.encode(mySigRecord.bytes)
+enc.foreach(println)
+println(enc.length)
+
+val mySig = new ScalaSig(List("case class"), List(classNamespace, className), List(("x", "String")))
+    
 
     val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);//|ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
     var fv: FieldVisitor = null
     var mv: MethodVisitor = null
     var av0: AnnotationVisitor = null
+//the sig for string, int, boolean
+
+
 
 cw.visit(V1_6, ACC_PUBLIC + ACC_SUPER, caseClassName, null, "java/lang/Object", Array[String] ( "scala/Product", "scala/Serializable" ));
 
 {
 av0 = cw.visitAnnotation("Lscala/reflect/ScalaSignature;", true);
-av0.visit("bytes", "\u0006\u0001\u0005\rc\u0001B\u0001\u0003\u0001\u0016\u0011\u0001\"T=SK\u000e|'\u000f\u001a\u0006\u0002\u0007\u00051Qn\u001c3fYN\u001c\u0001a\u0005\u0003\u0001\r1y\u0001CA\u0004\u000b\u001b\u0005A!\"A\u0005\u0002\u000bM\u001c\u0017\r\\1\n\u0005-A!AB!osJ+g\r\u0005\u0002\u0008\u001b%\u0011a\u0002\u0003\u0002\u0008!J|G-^2u!\u00099\u0001#\u0003\u0002\u0012\u0011\u0009a1+\u001a:jC2L'0\u00192mK\"A1\u0003\u0001BK\u0002\u0013\u0005A#A\u0001y+\u0005)\u0002C\u0001\u000c\u001a\u001d\u00099q#\u0003\u0002\u0019\u0011\u00051\u0001K]3eK\u001aL!AG\u000e\u0003\rM#(/\u001b8h\u0015\u0009A\u0002\u0002\u0003\u0005\u001e\u0001\u0009E\u0009\u0015!\u0003\u0016\u0003\u0009A\u0008\u0005\u0003\u0005 \u0001\u0009U\r\u0011\"\u0001!\u0003\u0005IX#A\u0011\u0011\u0005\u001d\u0011\u0013BA\u0012\u0009\u0005\rIe\u000e\u001e\u0005\u0009K\u0001\u0011\u0009\u0012)A\u0005C\u0005\u0011\u0011\u0010\u0009\u0005\u0009O\u0001\u0011)\u001a!C\u0001Q\u0005\u0009!0F\u0001*!\u00099!&\u0003\u0002,\u0011\u00099!i\\8mK\u0006t\u0007\u0002C\u0017\u0001\u0005#\u0005\u000b\u0011B\u0015\u0002\u0005i\u0004\u0003\"B\u0018\u0001\u0009\u0003\u0001\u0014A\u0002\u001fj]&$h\u0008\u0006\u00032gQ*\u0004C\u0001\u001a\u0001\u001b\u0005\u0011\u0001\"B\n/\u0001\u0004)\u0002\"B\u0010/\u0001\u0004\u0009\u0003\"B\u0014/\u0001\u0004I\u0003bB\u001c\u0001\u0003\u0003%\u0009\u0001O\u0001\u0005G>\u0004\u0018\u0010\u0006\u00032siZ\u0004bB\n7!\u0003\u0005\r!\u0006\u0005\u0008?Y\u0002\n\u00111\u0001\"\u0011\u001d9c\u0007%AA\u0002%Bq!\u0010\u0001\u0012\u0002\u0013\u0005a(\u0001\u0008d_BLH\u0005Z3gCVdG\u000fJ\u0019\u0016\u0003}R#!\u0006!,\u0003\u0005\u0003\"AQ$\u000e\u0003\rS!\u0001R#\u0002\u0013Ut7\r[3dW\u0016$'B\u0001$\u0009\u0003)\u0009gN\\8uCRLwN\\\u0005\u0003\u0011\u000e\u0013\u0011#\u001e8dQ\u0016\u001c7.\u001a3WCJL\u0017M\\2f\u0011\u001dQ\u0005!%A\u0005\u0002-\u000babY8qs\u0012\"WMZ1vYR$#'F\u0001MU\u0009\u0009\u0003\u0009C\u0004O\u0001E\u0005I\u0011A(\u0002\u001d\r|\u0007/\u001f\u0013eK\u001a\u000cW\u000f\u001c;%gU\u0009\u0001K\u000b\u0002*\u0001\"9!\u000bAA\u0001\n\u0003\u001a\u0016!\u00049s_\u0012,8\r\u001e)sK\u001aL\u00070F\u0001U!\u0009)&,D\u0001W\u0015\u00099\u0006,\u0001\u0003mC:<'\"A-\u0002\u0009)\u000cg/Y\u0005\u00035YCq\u0001\u0018\u0001\u0002\u0002\u0013\u0005\u0001%\u0001\u0007qe>$Wo\u0019;Be&$\u0018\u0010C\u0004_\u0001\u0005\u0005I\u0011A0\u0002\u001dA\u0014x\u000eZ;di\u0016cW-\\3oiR\u0011\u0001m\u0019\u0009\u0003\u000f\u0005L!A\u0019\u0005\u0003\u0007\u0005s\u0017\u0010C\u0004e;\u0006\u0005\u0009\u0019A\u0011\u0002\u0007a$\u0013\u0007C\u0004g\u0001\u0005\u0005I\u0011I4\u0002\u001fA\u0014x\u000eZ;di&#XM]1u_J,\u0012\u0001\u001b\u0009\u0004S2\u0004W\"\u00016\u000b\u0005-D\u0011AC2pY2,7\r^5p]&\u0011QN\u001b\u0002\u0009\u0013R,'/\u0019;pe\"9q\u000eAA\u0001\n\u0003\u0001\u0018\u0001C2b]\u0016\u000bX/\u00197\u0015\u0005%\n\u0008b\u00023o\u0003\u0003\u0005\r\u0001\u0019\u0005\u0008g\u0002\u0009\u0009\u0011\"\u0011u\u0003!A\u0017m\u001d5D_\u0012,G#A\u0011\u0009\u000fY\u0004\u0011\u0011!C!o\u0006AAo\\*ue&tw\rF\u0001U\u0011\u001dI\u0008!!A\u0005Bi\u000ca!Z9vC2\u001cHCA\u0015|\u0011\u001d!\u00070!AA\u0002\u0001<q! \u0002\u0002\u0002#\u0005a0\u0001\u0005NsJ+7m\u001c:e!\u0009\u0011tP\u0002\u0005\u0002\u0005\u0005\u0005\u0009\u0012AA\u0001'\u0011y\u00181A\u0008\u0011\u0011\u0005\u0015\u00111B\u000b\"SEj!!a\u0002\u000b\u0007\u0005%\u0001\"A\u0004sk:$\u0018.\\3\n\u0009\u00055\u0011q\u0001\u0002\u0012\u0003\n\u001cHO]1di\u001a+hn\u0019;j_:\u001c\u0004BB\u0018\u0000\u0009\u0003\u0009\u0009\u0002F\u0001\u0011\u001d1x0!A\u0005F]D\u0011\"a\u0006\u0000\u0003\u0003%\u0009)!\u0007\u0002\u000b\u0005\u0004\u0008\u000f\\=\u0015\u000fE\nY\"!\u0008\u0002 !11#!\u0006A\u0002UAaaHA\u000b\u0001\u0004\u0009\u0003BB\u0014\u0002\u0016\u0001\u0007\u0011\u0006C\u0005\u0002$}\u000c\u0009\u0011\"!\u0002&\u00059QO\\1qa2LH\u0003BA\u0014\u0003g\u0001RaBA\u0015\u0003[I1!a\u000b\u0009\u0005\u0019y\u0005\u000f^5p]B1q!a\u000c\u0016C%J1!!\r\u0009\u0005\u0019!V\u000f\u001d7fg!I\u0011QGA\u0011\u0003\u0003\u0005\r!M\u0001\u0004q\u0012\u0002\u0004\"CA\u001d\u0006\u0005I\u0011BA\u001e\u0003-\u0011X-\u00193SKN|GN^3\u0015\u0005\u0005u\u0002cA+\u0002@%\u0019\u0011\u0011\u0009,\u0003\r=\u0013'.Z2u\u0001");
+av0.visit("bytes", new String(ByteCodecs.encode(mySig.bytes)));
 av0.visitEnd();
 }
 
@@ -120,9 +142,9 @@ mv.visitVarInsn(ILOAD, 1);
 mv.visitVarInsn(ISTORE, 2);
 mv.visitVarInsn(ILOAD, 2);
 val labels = (0 to fieldData.length).map(l => new Label())
-val params = labels.take(3)
-mv.visitTableSwitchInsn(0, labels.length - 2, labels(3), params:_*);
-mv.visitLabel(labels(3));
+val params = labels.take(fieldData.length)
+mv.visitTableSwitchInsn(0, labels.length - 2, labels(fieldData.length), params:_*);
+mv.visitLabel(labels(fieldData.length));
 mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] (Opcodes.INTEGER), 0, null);
 mv.visitTypeInsn(NEW, "java/lang/IndexOutOfBoundsException");
 mv.visitInsn(DUP);
@@ -131,12 +153,12 @@ mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "
 mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "toString", "()Ljava/lang/String;");
 mv.visitMethodInsn(INVOKESPECIAL, "java/lang/IndexOutOfBoundsException", "<init>", "(Ljava/lang/String;)V");
 mv.visitInsn(ATHROW);
-mv.visitLabel(labels(2));
+mv.visitLabel(labels(fieldData.length-1));
 mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 
 val reversed = fieldData.reverse
 var terminalLabel: Label = null
-reversed.take(3).foreach( valueMember => {
+reversed.take(fieldData.length).foreach( valueMember => {
   mv.visitVarInsn(ALOAD, 0);
   mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
   valueMember.fieldType match { 
@@ -212,7 +234,7 @@ fieldData.length match {
     mv.visitVarInsn(ALOAD, 0);
     mv.visitMethodInsn(INVOKEVIRTUAL, "scala/runtime/ScalaRunTime$", "_hashCode", "(Lscala/Product;)I");
   }
-  case x if x > 1 => {
+  case x if x > 0 => {
     if (fieldData.map(n => n.fieldType).forall(t => List("nothing", "null", "any", "anyref", "object", "string", "list", "stream").contains(t))) {//if all the valueMembers are in this list (of "empty" types, look different when paired with "real")
       mv.visitFieldInsn(GETSTATIC, "scala/runtime/ScalaRunTime$", "MODULE$", "Lscala/runtime/ScalaRunTime$;");
       mv.visitVarInsn(ALOAD, 0);
@@ -223,7 +245,7 @@ fieldData.length match {
     mv.visitVarInsn(ISTORE, 1);
     mv.visitVarInsn(ILOAD, 1);
 
-    val fields = {if (fieldData.map(n=>n.fieldType).contains("nothing")) fieldData.reverse.dropWhile(valueMember =>  valueMember.fieldType != "nothing").reverse; else fieldData}
+    val fields = if (fieldData.map(n=>n.fieldType).contains("nothing")) fieldData.reverse.dropWhile(valueMember =>  valueMember.fieldType != "nothing").reverse; else fieldData
     //if there is more than one non-"empty" type(see the list above), drop all types after the first "nothing".
     fields.foreach( valueMember => { 
       valueMember.fieldType match { 
@@ -288,6 +310,7 @@ fieldData.length match {
       }
     })      
     fieldData.length match {
+      case 1 => mv.visitInsn(ICONST_1);
       case 2 => mv.visitInsn(ICONST_2);
       case 3 => mv.visitInsn(ICONST_3);
       case 4 => mv.visitInsn(ICONST_4);
@@ -295,11 +318,10 @@ fieldData.length match {
       case x if x > 5  => mv.visitIntInsn(BIPUSH, x);
     }
     mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/Statics", "finalizeHash", "(II)I"); 
-
+    }
     if (!fieldData.map(n => n.fieldType).contains("nothing")) mv.visitInsn(IRETURN);
     mv.visitMaxs(2, 2);
     mv.visitEnd();
-    }
   }
 }
 
