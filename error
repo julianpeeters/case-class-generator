@@ -2,31 +2,56 @@
 [0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-salat-example/)[0m
 [0m[[33mwarn[0m] [0mPotentially incompatible versions of dependencies of {file:/home/julianpeeters/asm-salat-example/}default-ac2fa4:[0m
 [0m[[33mwarn[0m] [0m   org.scala-lang: 2.10.2, 2.10.0[0m
-[0m[[0minfo[0m] [0mCompiling 2 Scala sources to /home/julianpeeters/asm-salat-example/target/scala-2.10/classes...[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:24: type mismatch;[0m
-[0m[[31merror[0m] [0m found   : avocet.Main.typeTemplate.type (with underlying type Any)[0m
-[0m[[31merror[0m] [0m required: AnyRef[0m
-[0m[[31merror[0m] [0mtype MyRecord = typeTemplate.type [0m
-[0m[[31merror[0m] [0m                ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:27: No Manifest available for avocet.Main.MyRecord.[0m
-[0m[[31merror[0m] [0m  val dbo = grater[MyRecord].asDBObject(typeTemplate)[0m
-[0m[[31merror[0m] [0m                  ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:31: No Manifest available for avocet.Main.MyRecord.[0m
-[0m[[31merror[0m] [0m  val obj = grater[MyRecord].asObject(dbo)[0m
-[0m[[31merror[0m] [0m                  ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:90: non-variable type argument String in type pattern Map[String,Any] is unchecked since it is eliminated by erasure[0m
-[0m[[33mwarn[0m] [0m      case m: Map[String, Any] => true[0m
-[0m[[33mwarn[0m] [0m              ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:109: non-variable type argument (Any, Null) in type pattern List[(Any, Null)] is unchecked since it is eliminated by erasure[0m
-[0m[[33mwarn[0m] [0m        case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"[0m
-[0m[[33mwarn[0m] [0m                ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:111: non-variable type argument String in type pattern Map[String,Any] is unchecked since it is eliminated by erasure[0m
-[0m[[33mwarn[0m] [0m        case m: Map[String, Any]  => m("name")   //[0m
-[0m[[33mwarn[0m] [0m                ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:112: non-variable type argument Any in type pattern Class[Any] is unchecked since it is eliminated by erasure[0m
-[0m[[33mwarn[0m] [0m        case c: Class[Any]        => C(c) = c[0m
-[0m[[33mwarn[0m] [0m                ^[0m
-[0m[[33mwarn[0m] [0mfour warnings found[0m
-[0m[[31merror[0m] [0mthree errors found[0m
-[0m[[31merror[0m] [0m(compile:[31mcompile[0m) Compilation failed[0m
-[0m[[31merror[0m] [0mTotal time: 9 s, completed Sep 19, 2013 12:30:57 AM[0m
+[0m[[0minfo[0m] [0mRunning avocet.Main [0m
+1285
+false
+mySig Decoded length: 1131
+sig Decoded length: 1121
+str length: 1285
+stringSig: 1027
+reStringSig: 1027
+stringSig last: 
+reStringSig last: 
+false
+false
++______________++++++++++++++++++_______________________+++++++++++++++++++
+stringSigArray length: 898
+mySigArray length: 1132
+diff: 
+class java.lang.String
+[0m[[31merror[0m] [0m(run-main) java.lang.IllegalArgumentException: argument type mismatch[0m
+java.lang.IllegalArgumentException: argument type mismatch
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at avocet.DynamicCaseClass.<init>(DynamicCaseClass.scala:24)
+	at avocet.AvroDatafileParser$$anonfun$3.apply(AvroDatafileParser.scala:27)
+	at avocet.AvroDatafileParser$$anonfun$3.apply(AvroDatafileParser.scala:27)
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:244)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:244)
+	at scala.collection.AbstractTraversable.map(Traversable.scala:105)
+	at avocet.AvroDatafileParser.<init>(AvroDatafileParser.scala:27)
+	at avocet.CaseClassGenerator.<init>(CaseClassGenerator.scala:12)
+	at avocet.Main$delayedInit$body.apply(App.scala:12)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
+	at scala.App$class.main(App.scala:71)
+	at avocet.Main$.main(App.scala:9)
+	at avocet.Main.main(App.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+java.lang.RuntimeException: Nonzero exit code: 1
+	at scala.sys.package$.error(package.scala:27)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
+[0m[[31merror[0m] [0mTotal time: 2 s, completed Sep 19, 2013 2:54:47 AM[0m

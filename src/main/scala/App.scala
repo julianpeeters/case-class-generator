@@ -9,7 +9,7 @@ import java.io._
 object Main extends App {
 
   val infile = new File("input.avro")
-  val typeTemplate = (new CaseClassGenerator(infile).typeTemplate)
+  val typeTemplate = new CaseClassGenerator(infile).typeTemplate
   type MyRecord = typeTemplate.type 
 
   val dbo = grater[MyRecord].asDBObject(typeTemplate)

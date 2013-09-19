@@ -6,5 +6,6 @@ case class FieldData(
   typeDescriptor: String,
   unapplyType: String,
   loadInstr: Int, 
-  returnInstr: Int)
+  returnInstr: Int,
+  asParam: Object)
 
