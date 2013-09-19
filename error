@@ -2,29 +2,31 @@
 [0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-salat-example/)[0m
 [0m[[33mwarn[0m] [0mPotentially incompatible versions of dependencies of {file:/home/julianpeeters/asm-salat-example/}default-ac2fa4:[0m
 [0m[[33mwarn[0m] [0m   org.scala-lang: 2.10.2, 2.10.0[0m
-[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/julianpeeters/asm-salat-example/target/scala-2.10/classes...[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:145: scrutinee is incompatible with pattern type;[0m
-[0m[[31merror[0m] [0m found   : List[Any][0m
-[0m[[31merror[0m] [0m required: String[0m
-[0m[[31merror[0m] [0m                         case n: List[Any] => classOf[Option[Any]]         [0m
-[0m[[31merror[0m] [0m                                 ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:65: non-variable type argument String in type pattern Map[String,Any] is unchecked since it is eliminated by erasure[0m
+[0m[[0minfo[0m] [0mCompiling 2 Scala sources to /home/julianpeeters/asm-salat-example/target/scala-2.10/classes...[0m
+[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:24: type mismatch;[0m
+[0m[[31merror[0m] [0m found   : avocet.Main.typeTemplate.type (with underlying type Any)[0m
+[0m[[31merror[0m] [0m required: AnyRef[0m
+[0m[[31merror[0m] [0mtype MyRecord = typeTemplate.type [0m
+[0m[[31merror[0m] [0m                ^[0m
+[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:27: No Manifest available for avocet.Main.MyRecord.[0m
+[0m[[31merror[0m] [0m  val dbo = grater[MyRecord].asDBObject(typeTemplate)[0m
+[0m[[31merror[0m] [0m                  ^[0m
+[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:31: No Manifest available for avocet.Main.MyRecord.[0m
+[0m[[31merror[0m] [0m  val obj = grater[MyRecord].asObject(dbo)[0m
+[0m[[31merror[0m] [0m                  ^[0m
+[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:90: non-variable type argument String in type pattern Map[String,Any] is unchecked since it is eliminated by erasure[0m
 [0m[[33mwarn[0m] [0m      case m: Map[String, Any] => true[0m
 [0m[[33mwarn[0m] [0m              ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:84: non-variable type argument (Any, Null) in type pattern List[(Any, Null)] is unchecked since it is eliminated by erasure[0m
+[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:109: non-variable type argument (Any, Null) in type pattern List[(Any, Null)] is unchecked since it is eliminated by erasure[0m
 [0m[[33mwarn[0m] [0m        case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"[0m
 [0m[[33mwarn[0m] [0m                ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:86: non-variable type argument String in type pattern Map[String,Any] is unchecked since it is eliminated by erasure[0m
+[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:111: non-variable type argument String in type pattern Map[String,Any] is unchecked since it is eliminated by erasure[0m
 [0m[[33mwarn[0m] [0m        case m: Map[String, Any]  => m("name")   //[0m
 [0m[[33mwarn[0m] [0m                ^[0m
-[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:87: non-variable type argument Any in type pattern Class[Any] is unchecked since it is eliminated by erasure[0m
+[0m[[33mwarn[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/CaseClassGenerator.scala:112: non-variable type argument Any in type pattern Class[Any] is unchecked since it is eliminated by erasure[0m
 [0m[[33mwarn[0m] [0m        case c: Class[Any]        => C(c) = c[0m
 [0m[[33mwarn[0m] [0m                ^[0m
-[0m[[31merror[0m] [0m/home/julianpeeters/asm-salat-example/src/main/scala/App.scala:97: not enough arguments for method apply: (fieldName: String, fieldType: String, typeDescriptor: String, unapplyType: String, loadInstr: Int, returnInstr: Int)models.FieldData in object FieldData.[0m
-[0m[[31merror[0m] [0mUnspecified value parameter returnInstr.[0m
-[0m[[31merror[0m] [0m    } yield FieldData([0m
-[0m[[31merror[0m] [0m                     ^[0m
 [0m[[33mwarn[0m] [0mfour warnings found[0m
-[0m[[31merror[0m] [0mtwo errors found[0m
+[0m[[31merror[0m] [0mthree errors found[0m
 [0m[[31merror[0m] [0m(compile:[31mcompile[0m) Compilation failed[0m
-[0m[[31merror[0m] [0mTotal time: 8 s, completed Sep 17, 2013 11:09:29 PM[0m
+[0m[[31merror[0m] [0mTotal time: 9 s, completed Sep 19, 2013 12:30:57 AM[0m

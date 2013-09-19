@@ -8,23 +8,12 @@ import Opcodes._
 
 import java.util.Arrays
 import scala.io.Codec._
-//dummy data:
-case class ClassData(
-  classNamespace: String, 
-  className: String, 
-  classFields: List[FieldData], 
-  returnType: List[Any] )
 
-case class FieldData(
-  fieldName: String, 
-  fieldType: String, 
-  typeDescriptor: String,
-  unapplyType: String,
-  loadInstr: Int, 
-  returnInstr: Int)
+//dummy data:
+
 
 class MyRecordDump {
-/*
+
   def dump(classData: ClassData): List[Array[Byte]] = {
 
 
@@ -33,11 +22,11 @@ class MyRecordDump {
     val name = classData.className
     val fieldData: List[FieldData] = classData.classFields
     val ctorReturnType = "(" + fieldData.map(n => n.typeDescriptor ).mkString + ")V"
- */
 
 
 
 
+/*
   def dump(): List[Array[Byte]] = {
 
     val caseClassName = "models/MyRecord"
@@ -52,7 +41,7 @@ class MyRecordDump {
 
     val ctorReturnType = "(" + fieldData.map(n => n.typeDescriptor ).mkString + ")V"
 
-
+ */
 
   //  val mySig = new ScalaSig(List("case class"), List(classNamespace, className), List(("x", "String"), ("y", "Int"), ("z", "Boolean")))
 
@@ -61,7 +50,7 @@ class MyRecordDump {
 //enc.foreach(println)
 //println(enc.length)
 
-val mySig = new ScalaSig(List("case class"), List(classNamespace, className), List(("x", "String"), ("y", "Int"), ("z", "Boolean")))
+val mySig = new ScalaSig(List("case class"), List(classData.classNamespace, classData.className), List(("x", "String"), ("y", "Int"), ("z", "Boolean")))
     
 
     val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);//|ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
@@ -182,7 +171,7 @@ fieldData.zipWithIndex.foreach(fd => {
 
 mv = cw.visitMethod(ACC_PUBLIC, "productPrefix", "()Ljava/lang/String;", null, null);
 mv.visitCode();
-mv.visitLdcInsn(className);
+mv.visitLdcInsn(classData.className);
 mv.visitInsn(ARETURN);
 mv.visitMaxs(1, 1);
 mv.visitEnd();
@@ -640,7 +629,7 @@ mv_MODULE.visitEnd();
 
 mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC + ACC_FINAL, "toString", "()Ljava/lang/String;", null, null);
 mv_MODULE.visitCode();
-mv_MODULE.visitLdcInsn(className);
+mv_MODULE.visitLdcInsn(classData.className);
 mv_MODULE.visitInsn(ARETURN);
 mv_MODULE.visitMaxs(1, 1);
 mv_MODULE.visitEnd();
