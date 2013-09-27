@@ -1,146 +1,23 @@
 package avocet
-import models._
-import com.novus.salat._
-import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
-
-import org.apache.avro.Schema
-
 import org.objectweb.asm._
 import Opcodes._
+import models._
 
-import java.io._
-import scala.util.parsing.json._
+object FieldMatcher {
 
-class AvroDatafileParser(infile: File){
-  val avroSchema = asSchemaFromFile(infile)
-  val jsonSchema = List((JSON.parseFull(avroSchema.toString)).get)
-
-  val classSeeds = asSchemaList(jsonSchema)
-    .filter(s => s != List.empty)
-    .map(schema => ClassData(
-      getNamespace(jsonSchema), 
-      getName(schema), 
-      getFields(schema), 
-      getInstantiationTypes(schema)))
-
-  val typeTemplate = classSeeds.map(classSeed => new DynamicCaseClass(classSeed)).map(cls => cls.instantiated$).head//get a top-level record
-
-//How can I make implicit everything below this line
-  class jsonTypeConverter[T]{
-    def unapply(a:Any): Option[T] = Some(a.asInstanceOf[T])
-    def update(a:Any): Option[T] = Some(a.asInstanceOf[T])
-  }
-
-  object M extends jsonTypeConverter[Map[String, Any]]
-  object L extends jsonTypeConverter[List[Any]]
-  object S extends jsonTypeConverter[String]
-  object I extends jsonTypeConverter[Int]
- // object D extends jsonTypeConverter[Double]
- // object B extends jsonTypeConverter[Boolean]
-  object C extends jsonTypeConverter[java.lang.Class[Any]]
-
-  object O extends jsonTypeConverter[Option[Any]]
-  object U extends jsonTypeConverter[List[(Any, Null)]]
-
-  def asSchemaFromFile(infile: File): Schema = {
-    val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
-    val parsable = new String(bufferedInfile.getLines.mkString.dropWhile(_ != '{').toCharArray)
-    val avroSchema = new Schema.Parser().parse(parsable)
-    avroSchema
-  }
-
-  def asSchemaList(jsonSchema: List[Any]): List[Any]= { 
-    if (jsonSchema == List.empty) List(List.empty)
-    else {
-      val nestedSchemas = asSchemaList(getNestedSchemas(jsonSchema))
-      List(jsonSchema, nestedSchemas).flatten
-    } 
-  }
-
-  def getNestedSchemas(jsonSchema: List[Any]) =  for {
-    M(record) <- jsonSchema
-    L(fields) = record("fields")
-    M(field) <- fields
-    fieldType = field("type")
-
-    if {fieldType match {
-      case m: Map[String, Any] => true
-      case _                   => false
-    }}
-    } yield fieldType
-
-  def getNamespace(jsonSchema: List[Any]): String = (for { 
-    (M(map)) <- jsonSchema
-    S(namespace) = map("namespace")
-  } yield namespace).head
-
-  def getName(schema: Any): String = (for { 
-     M(map) <- List(schema)
-     S(name) = map("name")
-  } yield name).head
-   
-  def getFields(schema: Any): List[FieldData]= {//List[Map[String, Any]]= {
-    def matchTypes(JSONfieldType: Any): Any = {
-      JSONfieldType match {
-        case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
-        case s: String            => S(s) = s; s //if the type is a nested record, getDescriptor returns wrong value anyways
-        case m: Map[String, Any]  => m("name")   //
-        case c: Class[Any]        => C(c) = c
-        case _                    => println("none of the above")
-      }
-    }
-    for {
-      M(schema) <- List(schema)
-      L(fields) = schema("fields")
-      M(field) <- fields
-      S(fieldName) = field("name")
-      S(fieldType) = matchTypes(field("type"))
-    } yield FieldData(
-        fieldName, 
-        fieldType, 
-        toTypeDescriptor(fieldType),
+  def enrichFieldData(field: FieldSeed): FieldData = {
+    val fieldType = field.fieldType
+    FieldData(field.fieldName, fieldType,
+        toTypeDescriptor(fieldType), 
         getUnapplyType(fieldType),
         getLoadInstr(fieldType), 
         getReturnInstr(fieldType),
-        getObject(fieldType) )
+        getObject(fieldType) 
+    )
   }
 
-//TODO Pull the matches out of the map so I can see the tuple I"m creating
-  def getInstantiationTypes(schema: Any) = {
-    val ft = getFields(schema).map(n => n.fieldType)
-    ft.map(m => m match {
-      //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
-      //    case "null"    => classOf[Unit]
-      case "boolean" => classOf[Boolean]
-      case "int"     => classOf[Int]
-      case "long"    => classOf[Long]
-      case "float"   => classOf[Float]
-      case "double"  => classOf[Double]
-      case "bytes"   => classOf[Seq[Byte]]
-      case "string"  => classOf[String]
-      //Complex ------------------------ Not Supported in Salat-Avro?
-      //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-      case "enum"    => classOf[Enumeration#Value]
-      case "array"   => classOf[Seq[_]]
-      case "map"     => classOf[Map[String, _]]
-      case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
-      // case "union"   => classOf[]
-      // case "[null,"+_+"]"      => 
-      // case "[null,String]"      => classOf[Option[String]] 
-      //case "fixed"   => classOf[]
 
-
-      //  case "option"   =>  classOf[Option[Any]]
-      //     case n: List[Any] => classOf[Option[Any]]         
-                         
-      case x: String => x //if its a string but none of the above, its a nested record type
-      case a:Any     => a// "Avro Schemas should only contain Primitive and Complex Avro types" 
-
-    })
-  }
-
-  def toTypeDescriptor(fieldType: String) = {(
+ def toTypeDescriptor(fieldType: String) = {(
     fieldType match {
       //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
                    //    case "null"    => (Type.getDescriptor(classOf[Unit]), )
@@ -293,18 +170,37 @@ value, i.e. object and array references.
                          case _         => println("Avro Schemas only contain Primitive and Complex Avro types"); ALOAD
                         }
   }
+def getReturnTypes(fieldSeeds: List[FieldSeed]) = {
+fieldSeeds.map(n => n.fieldType).map(m => m match {
+      //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
+      //    case "null"    => classOf[Unit]
+      case "boolean" => classOf[Boolean]
+      case "int"     => classOf[Int]
+      case "long"    => classOf[Long]
+      case "float"   => classOf[Float]
+      case "double"  => classOf[Double]
+      case "bytes"   => classOf[Seq[Byte]]
+      case "string"  => classOf[String]
+      //Complex ------------------------ Not Supported in Salat-Avro?
+      //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
+      case "enum"    => classOf[Enumeration#Value]
+      case "array"   => classOf[Seq[_]]
+      case "map"     => classOf[Map[String, _]]
+      case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
+      // case "union"   => classOf[]
+      // case "[null,"+_+"]"      => 
+      // case "[null,String]"      => classOf[Option[String]] 
+      //case "fixed"   => classOf[]
 
-    def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ <: Object] = {
-      JSONfieldType match {
-      //  case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
-      //  case s: String            => S(s) = s; modelClass.getClass() //if the type is a nested record, getDescriptor returns wrong value anyways
-       // case m: Map[String, Any]  => m("name")   //
-       // case c: Class[Any]        => C(c) = c; c
-       // case _                    => Class[Any]
 
-        case "int" => classOf[Int]
-        case "rec" => modelClass
-        case _     => 
-      }
-    }
+      //  case "option"   =>  classOf[Option[Any]]
+      //     case n: List[Any] => classOf[Option[Any]]         
+                         
+      case x: String => x //if its a string but none of the above, its a nested record type
+      case a:Any     => a// "Avro Schemas should only contain Primitive and Complex Avro types" 
+
+    })
+}
+
+
 }
