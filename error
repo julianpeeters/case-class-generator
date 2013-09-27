@@ -1,0 +1,55 @@
+[0m[[33mwarn[0m] [0mThe global sbt directory is now versioned and is located at /home/julianpeeters/.sbt/0.13.1-20130924-062513.[0m
+[0m[[33mwarn[0m] [0m  You are seeing this warning because there is global configuration in /home/julianpeeters/.sbt but not in /home/julianpeeters/.sbt/0.13.1-20130924-062513.[0m
+[0m[[33mwarn[0m] [0m  The global sbt directory may be changed via the sbt.global.base system property.[0m
+[0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-salat-example/)[0m
+[0m[[0minfo[0m] [0mRunning avocet.Main [0m
+1111
+false
+mySig Decoded length: 972
+sig Decoded length: 1121
++______________++++++++++++++++++_______________________+++++++++++++++++++
+[0m[[31merror[0m] [0m(run-main) com.novus.salat.util.GraterGlitch: [0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m      GRATER GLITCH - unable to find or instantiate a grater using supplied path name[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m      REASON: Very strange!  Path='models.MyRecord' from pickled ScalaSig causes ClassNotFoundException[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m      Context: 'global'[0m
+[0m[[31merror[0m] [0m      Path from pickled Scala sig: 'models.MyRecord'[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m[0m
+[0m[[31merror[0m] [0m       [0m
+com.novus.salat.util.GraterGlitch: 
+
+      GRATER GLITCH - unable to find or instantiate a grater using supplied path name
+
+      REASON: Very strange!  Path='models.MyRecord' from pickled ScalaSig causes ClassNotFoundException
+
+      Context: 'global'
+      Path from pickled Scala sig: 'models.MyRecord'
+
+
+       
+	at com.novus.salat.Context$class.lookup(Context.scala:213)
+	at com.novus.salat.global.package$$anon$1.lookup(global.scala:29)
+	at com.novus.salat.package$.grater(package.scala:62)
+	at avocet.Main$delayedInit$body.apply(App.scala:19)
+	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
+	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.App$$anonfun$main$1.apply(App.scala:71)
+	at scala.collection.immutable.List.foreach(List.scala:318)
+	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
+	at scala.App$class.main(App.scala:71)
+	at avocet.Main$.main(App.scala:7)
+	at avocet.Main.main(App.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+java.lang.RuntimeException: Nonzero exit code: 1
+	at scala.sys.package$.error(package.scala:27)
+[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
+[0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
+[0m[[31merror[0m] [0mTotal time: 2 s, completed Sep 25, 2013 9:59:30 PM[0m
