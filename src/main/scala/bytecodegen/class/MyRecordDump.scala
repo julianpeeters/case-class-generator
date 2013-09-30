@@ -5,7 +5,7 @@ import Opcodes._
 
 
 
-object MyRecordDump {
+case class MyRecordDump {
 
   def dump(mySig: ScalaSig, caseClassName: String, fieldData: List[FieldData]): Array[Byte] = {
 

@@ -3,22 +3,13 @@
 [0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-type-provider/)[0m
 [0m[[33mwarn[0m] [0mPotentially incompatible versions of dependencies of {file:/home/julianpeeters/asm-type-provider/}default-c0f35e:[0m
 [0m[[33mwarn[0m] [0m   org.scala-lang: 2.10.2, 2.10.0[0m
+[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/julianpeeters/asm-type-provider/target/scala-2.10/classes...[0m
 [0m[[0minfo[0m] [0mRunning avocet.Main [0m
-1111
-false
-mySig Decoded length: 972
-sig Decoded length: 1121
-+______________++++++++++++++++++_______________________+++++++++++++++++++
-[0m[[31merror[0m] [0m(run-main) com.novus.salat.util.MissingPickledSig: FAIL: class 'class models.MyRecord' is missing both @ScalaSig and .class file![0m
-com.novus.salat.util.MissingPickledSig: FAIL: class 'class models.MyRecord' is missing both @ScalaSig and .class file!
-	at com.novus.salat.ClassAnalyzer$.findSym(ClassAnalyzer.scala:59)
-	at com.novus.salat.ClassAnalyzer.<init>(ClassAnalyzer.scala:136)
-	at com.novus.salat.ConcreteGrater.ca$lzycompute(Grater.scala:110)
-	at com.novus.salat.ConcreteGrater.ca(Grater.scala:110)
-	at com.novus.salat.ConcreteGrater.useTypeHint$lzycompute(Grater.scala:114)
-	at com.novus.salat.ConcreteGrater.useTypeHint(Grater.scala:112)
-	at com.novus.salat.ConcreteGrater.asDBObject(Grater.scala:243)
-	at avocet.Main$delayedInit$body.apply(App.scala:34)
+[0m[[31merror[0m] [0m(run-main) java.lang.NullPointerException[0m
+java.lang.NullPointerException
+	at scala.tools.scalap.scalax.rules.scalasig.ByteCode$.forClass(ClassFileParser.scala:31)
+	at scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser$.parse(ScalaSig.scala:49)
+	at avocet.Main$delayedInit$body.apply(App.scala:28)
 	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
 	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
 	at scala.App$$anonfun$main$1.apply(App.scala:71)
@@ -37,4 +28,4 @@ java.lang.RuntimeException: Nonzero exit code: 1
 	at scala.sys.package$.error(package.scala:27)
 [0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
 [0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
-[0m[[31merror[0m] [0mTotal time: 1 s, completed Sep 30, 2013 1:25:25 PM[0m
+[0m[[31merror[0m] [0mTotal time: 10 s, completed Sep 30, 2013 4:38:57 PM[0m

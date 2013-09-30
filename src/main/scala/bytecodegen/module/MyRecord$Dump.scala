@@ -5,7 +5,7 @@ import Opcodes._
 
 
 
-object MyRecord$Dump {
+case class MyRecord$Dump {
 
   def dump(name: String, caseClassName: String, fieldData: List[FieldData]): Array[Byte] = {
     val cw_MODULE: ClassWriter = new ClassWriter(0);
