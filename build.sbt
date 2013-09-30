@@ -17,7 +17,7 @@ resolvers += Resolver.file("Local Ivy Repository", file("/home/julianpeeters/.iv
 
 libraryDependencies ++= Seq( 
  //  "com.novus" %% "salat" % "1.9.1", 
-   "com.novus" %% "salat" % "1.9.2",
+   "com.novus" %% "salat" % "1.9.3",
    "com.julianpeeters" %% "artisinal-pickle-maker" % "0.2-SNAPSHOT",
    "org.slf4j" % "slf4j-simple" % "1.7.5", 
    "org.apache.avro" % "avro" % "1.7.5"

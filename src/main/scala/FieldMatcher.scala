@@ -197,7 +197,7 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
       //     case n: List[Any] => classOf[Option[Any]]         
                          
       case x: String => x //if its a string but none of the above, its a nested record type
-      case a:Any     => a// "Avro Schemas should only contain Primitive and Complex Avro types" 
+    //  case a:Any     => a// "Avro Schemas should only contain Primitive and Complex Avro types" 
 
     })
 }
