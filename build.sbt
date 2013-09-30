@@ -16,9 +16,9 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 resolvers += Resolver.file("Local Ivy Repository", file("/home/julianpeeters/.ivy2/local/"))(Resolver.ivyStylePatterns)
 
 libraryDependencies ++= Seq( 
-  // "com.novus" %% "salat" % "1.9.1", 
+ //  "com.novus" %% "salat" % "1.9.1", 
    "com.novus" %% "salat" % "1.9.2",
-   "com.julianpeeters" %% "artisinal-pickle-maker" % "0.1-SNAPSHOT",
+   "com.julianpeeters" %% "artisinal-pickle-maker" % "0.2-SNAPSHOT",
    "org.slf4j" % "slf4j-simple" % "1.7.5", 
    "org.apache.avro" % "avro" % "1.7.5"
   // "org.scala-lang" %% "scala-pickling" % "0.8.0-SNAPSHOT"

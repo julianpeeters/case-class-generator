@@ -4,6 +4,10 @@ import com.novus.salat._
 import com.novus.salat.global._
 import com.mongodb.casbah.Imports._
 
+
+import scala.tools.scalap.scalax.rules.scalasig._
+
+
 object Main extends App {
 //usually we'd be reading from a source
  // val infile = new File("input.avro")
@@ -12,9 +16,20 @@ object Main extends App {
 //but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
   val valueMembers: List[FieldSeed] = List(FieldSeed("a","int"), FieldSeed("b","int"))//, FieldSeed("d","boolean"))
   val classData = ClassData("models", "MyRecord", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
-  val typeTemplate = CaseClassGenerator.make(classData)
+  //val typeTemplate = CaseClassGenerator.make(classData)
+//  val typeTemplate = new DynamicCaseClass(classData).instantiated$
+
+  val dcc = new DynamicCaseClass(classData)
+ // val model = dcc.model$
+  val typeTemplate = dcc.instantiated$
+
+
 
   type MyRecord = typeTemplate.type
+
+//println(classOf[MyRecord])//error: class type required but avocet.Main.typeTemplate.type found
+//val parser = ScalaSigParser.parse(typeTemplate.getClass)
+//println(parser)
 
   val dbo = grater[MyRecord].asDBObject(typeTemplate)
     println(dbo)
