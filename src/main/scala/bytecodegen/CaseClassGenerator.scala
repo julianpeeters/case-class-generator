@@ -38,7 +38,7 @@ def generateBytecode(classData: ClassData): List[Array[Byte]] = {
   val mySig = new ScalaSig(List("case class"), List(classData.classNamespace, classData.className), fieldData.map(f => (f.fieldName, f.fieldType.capitalize)))
 
   List(new MyRecordDump().dump(mySig, caseClassName, fieldData),
-       new MyRecord$Dump().dump(classData.className, caseClassName, fieldData) )//ASM's convention for naming the module class
+       new MyRecord$Dump().dump(caseClassName, fieldData) )//ASM's convention for naming the module class
 
   }
 

@@ -1,31 +1,5 @@
 [0m[[0minfo[0m] [0mLoading global plugins from /home/julianpeeters/.sbt/plugins[0m
 [0m[[0minfo[0m] [0mLoading project definition from /home/julianpeeters/asm-type-provider/project[0m
-[0m[[0minfo[0m] [0mSet current project to asm-salat-example (in build file:/home/julianpeeters/asm-type-provider/)[0m
+[0m[[0minfo[0m] [0mSet current project to asm-type-provider (in build file:/home/julianpeeters/asm-type-provider/)[0m
 [0m[[33mwarn[0m] [0mPotentially incompatible versions of dependencies of {file:/home/julianpeeters/asm-type-provider/}default-c0f35e:[0m
 [0m[[33mwarn[0m] [0m   org.scala-lang: 2.10.2, 2.10.0[0m
-[0m[[0minfo[0m] [0mCompiling 1 Scala source to /home/julianpeeters/asm-type-provider/target/scala-2.10/classes...[0m
-[0m[[0minfo[0m] [0mRunning avocet.Main [0m
-[0m[[31merror[0m] [0m(run-main) java.lang.NullPointerException[0m
-java.lang.NullPointerException
-	at scala.tools.scalap.scalax.rules.scalasig.ByteCode$.forClass(ClassFileParser.scala:31)
-	at scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser$.parse(ScalaSig.scala:49)
-	at avocet.Main$delayedInit$body.apply(App.scala:28)
-	at scala.Function0$class.apply$mcV$sp(Function0.scala:40)
-	at scala.runtime.AbstractFunction0.apply$mcV$sp(AbstractFunction0.scala:12)
-	at scala.App$$anonfun$main$1.apply(App.scala:71)
-	at scala.App$$anonfun$main$1.apply(App.scala:71)
-	at scala.collection.immutable.List.foreach(List.scala:318)
-	at scala.collection.generic.TraversableForwarder$class.foreach(TraversableForwarder.scala:32)
-	at scala.App$class.main(App.scala:71)
-	at avocet.Main$.main(App.scala:11)
-	at avocet.Main.main(App.scala)
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-	at java.lang.reflect.Method.invoke(Method.java:616)
-[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
-java.lang.RuntimeException: Nonzero exit code: 1
-	at scala.sys.package$.error(package.scala:27)
-[0m[[31mtrace[0m] [0mStack trace suppressed: run [34mlast compile:run[0m for the full output.[0m
-[0m[[31merror[0m] [0m(compile:[31mrun[0m) Nonzero exit code: 1[0m
-[0m[[31merror[0m] [0mTotal time: 10 s, completed Sep 30, 2013 4:38:57 PM[0m

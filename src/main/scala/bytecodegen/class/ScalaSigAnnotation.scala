@@ -17,8 +17,8 @@ val stringSig = "\u0006\u0001\u0005=a\u0001B\u0001\u0003\u0001\u0016\u0011\u0001
 
   def dump = {
     av0 = cw.visitAnnotation("Lscala/reflect/ScalaSignature;", true);
-    av0.visit("bytes", new String(ByteCodecs.encode(mySig.bytes).dropRight(1)));
-    //av0.visit("bytes", stringSig);
+   // av0.visit("bytes", new String(ByteCodecs.encode(mySig.bytes).dropRight(1)));
+    av0.visit("bytes", mySig.bytes);
     //av0.visit("bytes", sig);
 
     av0.visitEnd();

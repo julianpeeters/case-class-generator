@@ -1,4 +1,4 @@
-name := "asm-salat-example"
+name := "asm-type-provider"
 
 version := "0.1-SNAPSHOT"
 
@@ -18,8 +18,9 @@ resolvers += Resolver.file("Local Ivy Repository", file("/home/julianpeeters/.iv
 libraryDependencies ++= Seq( 
  //  "com.novus" %% "salat" % "1.9.1", 
    "com.novus" %% "salat" % "1.9.3",
-   "com.julianpeeters" %% "artisinal-pickle-maker" % "0.2-SNAPSHOT",
+   "com.julianpeeters" %% "artisinal-pickle-maker" % "0.2-1-SNAPSHOT",
    "org.slf4j" % "slf4j-simple" % "1.7.5", 
+  "org.specs2" %% "specs2" % "2.2" % "test",
    "org.apache.avro" % "avro" % "1.7.5"
   // "org.scala-lang" %% "scala-pickling" % "0.8.0-SNAPSHOT"
 )

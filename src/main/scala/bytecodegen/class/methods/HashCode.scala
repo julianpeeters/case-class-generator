@@ -29,9 +29,9 @@ fieldData.length match {
     //if there is more than one non-"empty" type(see the list above), drop all types after the first "nothing".
     fields.foreach( valueMember => { 
       valueMember.fieldType match { 
-        case "byte"|"short"|"int"|"long"|"float"|"double"|"unit"|"null" => {
+        case "byte"|"char"|"short"|"int"|"long"|"float"|"double"|"unit"|"null" => {
           valueMember.fieldType match {
-            case "byte"|"short"|"int" => { 
+            case "byte"|"short"|"int"|"char" => { 
               mv.visitVarInsn(ALOAD, 0);
               mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
             }
@@ -66,7 +66,7 @@ fieldData.length match {
           mv.visitVarInsn(ISTORE, 1);
           mv.visitVarInsn(ILOAD, 1);
         }
-        //if there was only one valueMember, the "if" statement would have taken care of things
+        //if there were only one valueMember, the "if" statement would have taken care of things
         //so this has to have come after
 
         case "any"|"anyref"|"object"|"string"|"list"|"stream"=> {
@@ -80,7 +80,7 @@ fieldData.length match {
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()Lscala/runtime/Nothing$;");
           mv.visitInsn(ATHROW);
         }
-        case _ => println("unsupported type")
+        case _ => println("cannot generate HashCode method: unsupported type")
       }
       //Booleans and Units get special treatment because their ASM lines have a "mix" already
       if (valueMember.fieldType != "boolean" && valueMember.fieldType != "unit" && valueMember.fieldType != "null") {  

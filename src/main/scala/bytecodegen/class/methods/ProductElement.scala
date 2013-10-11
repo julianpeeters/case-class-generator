@@ -49,7 +49,7 @@ reversed.take(fieldData.length).foreach( valueMember => {
     case "object" => 
 //TODO
     case "list" => 
-    case _ => println("unsupported type")
+    case _ => println("cannot generate productElement method: unsupported type")
   }
   if (fieldData.length > 1) {
 

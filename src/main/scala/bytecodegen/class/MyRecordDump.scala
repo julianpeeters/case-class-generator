@@ -19,10 +19,10 @@ case class MyRecordDump {
   ScalaSigAnnotation(cw, av0, mySig).dump
   Fields(cw, fieldData).dump
   if (fieldData.length > 1) Tupled(cw, mv, caseClassName, fieldData).dump; Curried(cw, mv, caseClassName).dump
-  FieldMethods(cw, mv, caseClassName, fieldData).dump//for lack of a better name
+  FieldMethods(cw, mv, caseClassName, fieldData).dump//"FieldMethods"for lack of a better name
   Copy(cw, mv, caseClassName, fieldData).dump
   CopyDefault(cw, mv, caseClassName, fieldData).dump
-  ProductPrefix(cw, mv, caseClassName, fieldData).dump
+  ProductPrefix(cw, mv, caseClassName.dropWhile(c => c != '/').drop(1), fieldData).dump//3rd arg is the label of the class
   ProductArity(cw, mv, fieldData).dump
   ProductElement(cw, mv, caseClassName, fieldData).dump
   ProductIterator(cw, mv).dump

@@ -11,11 +11,14 @@ case class ProductArity(cw: ClassWriter, var mv: MethodVisitor, fieldData: List[
   case 2 => ICONST_2
   case 3 => ICONST_3
   case 4 => ICONST_4
-  case _ => "not a valid number of value members"      
+  case 5 => ICONST_5
+  case x => x
+// case _ => error("not a valid number of value members")      
 }
 mv = cw.visitMethod(ACC_PUBLIC, "productArity", "()I", null, null);
 mv.visitCode();
-mv.visitInsn(ICONST_VALUE.toString.toInt);
+if (fieldData.length <= 5) mv.visitInsn(ICONST_VALUE.toString.toInt);
+else mv.visitIntInsn(BIPUSH, ICONST_VALUE);
 mv.visitInsn(IRETURN);
 mv.visitMaxs(1, 1);
 mv.visitEnd();

@@ -26,6 +26,7 @@ object FieldMatcher {
                          case "long"    => Type.getDescriptor(classOf[Long])
                          case "float"   => Type.getDescriptor(classOf[Float])
                          case "double"  => Type.getDescriptor(classOf[Double])
+
                          case "bytes"   => Type.getDescriptor(classOf[Seq[Byte]])
                          case "string"  => Type.getDescriptor(classOf[String])
                          //Complex ------------------------ Not Supported in Salat-Avro?
@@ -39,8 +40,17 @@ object FieldMatcher {
                       // case "[null,String]"      => classOf[Option[String]] 
                        //case "fixed"   => classOf[]
 
-
-                        case "option"   =>  Type.getDescriptor(classOf[Option[Any]])           
+                    //other Scala datatypes
+                         case "byte"    => Type.getDescriptor(classOf[Byte])
+                         case "short"    => Type.getDescriptor(classOf[Short])
+                         case "char"    => Type.getDescriptor(classOf[Char])
+                         case "any"    => Type.getDescriptor(classOf[Any])
+                         case "anyref"    => Type.getDescriptor(classOf[AnyRef])
+                         case "unit"    => Type.getDescriptor(classOf[Unit])
+                         case "nothing"    => Type.getDescriptor(classOf[Nothing])
+                         case "null"    => Type.getDescriptor(classOf[Null])
+                         case "object"    => Type.getDescriptor(classOf[Object])
+                       // case "option"   =>  Type.getDescriptor(classOf[Option[Any]])           
                         ///   case n: List[Any] => classOf[Option[Any]]         
                          
                          case x: String => "L"+ x + ";" //if its a string but none of the above, its a nested record type
@@ -58,7 +68,7 @@ object FieldMatcher {
                          case "long"    => "Ljava/lang/Object;"
                          case "float"   => "Ljava/lang/Object;"
                          case "double"  => "Ljava/lang/Object;"
-                         case "bytes"   => "Ljava/lang/Object;"
+                       //  case "bytes"   => "Ljava/lang/Object;"
                          case "string"  => "Ljava/lang/String;"
       //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
@@ -72,10 +82,19 @@ object FieldMatcher {
                       // case "[null,String]"      => classOf[Option[String]] 
                        //case "fixed"   => classOf[]
                      // case n: List[Any] => classOf[Option[Any]]         
-                         
+                                             //other Scala datatypes
+                         case "byte"    => "Ljava/lang/Object;"
+                         case "short"   => "Ljava/lang/Object;"
+                         case "char"    => "Ljava/lang/Object;"
+                         case "any"     => "Ljava/lang/Object;"
+                         case "anyref"  => "Ljava/lang/Object;"
+                         case "unit"    => "Ljava/lang/Object;"
+                         case "nothing" => "Ljava/lang/Object;"
+                         case "null"    => "Ljava/lang/Object;"
+                         case "object"  => "Ljava/lang/Object;"
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
-                         case _         => "unsupported Type"//println("Avro Schemas only contain Primitive and Complex Avro types");
+                         case _         => println("no unapply type for unsupported type"); error("no unapply type for unsupported type")//println("Avro Schemas only contain Primitive and Complex Avro types");
                         }
   }
 
@@ -95,12 +114,23 @@ object FieldMatcher {
                          case "enum"    => ARETURN
                          case "array"   => ARETURN
                          case "map"     => ARETURN
+                      //   case "stream"  => ARETURN
+                      //   case "option"  => ARETURN
                       // case "union"   => classOf[]
                       // case "[null,"+_+"]"      => 
                       // case "[null,String]"      => classOf[Option[String]] 
                        //case "fixed"   => classOf[]
                      // case n: List[Any] => classOf[Option[Any]]         
-                         
+                                             //other Scala datatypes
+                         case "short"   => IRETURN
+                         case "byte"    => IRETURN
+                         case "char"    => IRETURN
+                         case "any"     => ARETURN
+                         case "anyref"  => ARETURN
+                         case "unit"    => RETURN
+                         case "nothing" => ARETURN
+                         case "null"    => ARETURN
+                         case "object"  => ARETURN
                          case x: String => ARETURN //if its a string but none of the above, its a nested record type
 
                          case _         => ARETURN//println("Avro Schemas only contain Primitive and Complex Avro types");ARETURN
@@ -118,7 +148,7 @@ object FieldMatcher {
                          case "long"    => 1L.asInstanceOf[Object]
                          case "float"   => 1F.asInstanceOf[Object]
                          case "double"  => 1D.asInstanceOf[Object]
-                        // case "bytes"   => 1.asInstanceOf[Object]//IRETURN is corrrect for bytes?
+                        // case "bytes"   => Array[Byte](1.toByte).asInstanceOf[Object]//Array is corrrect for bytes?
                          case "string"  => ""
       //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
@@ -130,7 +160,15 @@ object FieldMatcher {
                       // case "[null,String]"      => classOf[Option[String]] 
                        //case "fixed"   => classOf[]
                      // case n: List[Any] => classOf[Option[Any]]         
-                         
+                         case "short"   => 1.toShort.asInstanceOf[Object]
+                         case "byte"    => 1.toByte.asInstanceOf[Object]
+                         case "char"    => 'k'.asInstanceOf[Object]
+                         case "any"     => "".asInstanceOf[Any].asInstanceOf[Object]
+                         case "anyref"  => "".asInstanceOf[AnyRef].asInstanceOf[Object]
+                         case "unit"    => Unit.asInstanceOf[Object]
+                        // case "nothing" => //now here's a conundrum
+                         case "null"    => null.asInstanceOf[Object]
+                         case "object"  => new Object
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
                        //  case _         => //println("Avro Schemas only contain Primitive and Complex Avro types");ARETURN
@@ -166,6 +204,17 @@ value, i.e. object and array references.
                       // case "[null,"+_+"]"      => 
                       // case "[null,String]"      => classOf[Option[String]] 
                        //case "fixed"   => classOf[]
+
+                         case "short"   => ILOAD
+                         case "byte"    => ILOAD
+                         case "char"    => ILOAD
+                         case "any"     => ALOAD
+                         case "anyref"  => ALOAD
+                         case "unit"    => ALOAD
+                         case "nothing" => ALOAD
+                         case "null"    => ALOAD
+                         case "object"  => ALOAD
+
                          case x: String => ALOAD //
                          case _         => println("Avro Schemas only contain Primitive and Complex Avro types"); ALOAD
                         }
@@ -193,6 +242,15 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
       //case "fixed"   => classOf[]
 
 
+                         case "short"   => classOf[Short]
+                         case "byte"    => classOf[Byte]
+                         case "char"    => classOf[Char]
+                         case "any"     => classOf[Any]
+                         case "anyref"  => classOf[AnyRef]
+                         case "unit"    => classOf[Unit]
+                         case "nothing" => classOf[Nothing]
+                         case "null"    => classOf[Null]
+                         case "object"  => classOf[Object]
       //  case "option"   =>  classOf[Option[Any]]
       //     case n: List[Any] => classOf[Option[Any]]         
                          
