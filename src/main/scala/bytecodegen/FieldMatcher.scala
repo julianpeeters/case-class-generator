@@ -20,15 +20,15 @@ object FieldMatcher {
  def toTypeDescriptor(fieldType: String) = {(
     fieldType match {
       //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
-                   //    case "null"    => (Type.getDescriptor(classOf[Unit]), )
-                         case "boolean" => Type.getDescriptor(classOf[Boolean])
-                         case "int"     => Type.getDescriptor(classOf[Int])
-                         case "long"    => Type.getDescriptor(classOf[Long])
-                         case "float"   => Type.getDescriptor(classOf[Float])
-                         case "double"  => Type.getDescriptor(classOf[Double])
+                   //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
+                         case "Boolean" => Type.getDescriptor(classOf[Boolean])
+                         case "Int"     => Type.getDescriptor(classOf[Int])
+                         case "Long"    => Type.getDescriptor(classOf[Long])
+                         case "Float"   => Type.getDescriptor(classOf[Float])
+                         case "Double"  => Type.getDescriptor(classOf[Double])
 
                          case "bytes"   => Type.getDescriptor(classOf[Seq[Byte]])
-                         case "string"  => Type.getDescriptor(classOf[String])
+                         case "String"  => Type.getDescriptor(classOf[String])
                          //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
                          case "enum"    => Type.getDescriptor(classOf[Enumeration#Value])
@@ -41,14 +41,14 @@ object FieldMatcher {
                        //case "fixed"   => classOf[]
 
                     //other Scala datatypes
-                         case "byte"    => Type.getDescriptor(classOf[Byte])
-                         case "short"    => Type.getDescriptor(classOf[Short])
-                         case "char"    => Type.getDescriptor(classOf[Char])
-                         case "any"    => Type.getDescriptor(classOf[Any])
-                         case "anyref"    => Type.getDescriptor(classOf[AnyRef])
+                         case "Byte"    => Type.getDescriptor(classOf[Byte])
+                         case "Short"    => Type.getDescriptor(classOf[Short])
+                         case "Char"    => Type.getDescriptor(classOf[Char])
+                         case "Any"    => Type.getDescriptor(classOf[Any])
+                         case "AnyRef"    => Type.getDescriptor(classOf[AnyRef])
                          case "unit"    => Type.getDescriptor(classOf[Unit])
-                         case "nothing"    => Type.getDescriptor(classOf[Nothing])
-                         case "null"    => Type.getDescriptor(classOf[Null])
+                         case "Nothing"    => Type.getDescriptor(classOf[Nothing])
+                         case "Null"    => Type.getDescriptor(classOf[Null])
                          case "object"    => Type.getDescriptor(classOf[Object])
                        // case "option"   =>  Type.getDescriptor(classOf[Option[Any]])           
                         ///   case n: List[Any] => classOf[Option[Any]]         
@@ -62,14 +62,14 @@ object FieldMatcher {
   def getUnapplyType(fieldType: String): String = {
     fieldType match {
                          //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
-                   //    case "null"    => (Type.getDescriptor(classOf[Unit]), )
-                         case "boolean" => "Ljava/lang/Object;"
-                         case "int"     => "Ljava/lang/Object;"
-                         case "long"    => "Ljava/lang/Object;"
-                         case "float"   => "Ljava/lang/Object;"
-                         case "double"  => "Ljava/lang/Object;"
+                   //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
+                         case "Boolean" => "Ljava/lang/Object;"
+                         case "Int"     => "Ljava/lang/Object;"
+                         case "Long"    => "Ljava/lang/Object;"
+                         case "Float"   => "Ljava/lang/Object;"
+                         case "Double"  => "Ljava/lang/Object;"
                        //  case "bytes"   => "Ljava/lang/Object;"
-                         case "string"  => "Ljava/lang/String;"
+                         case "String"  => "Ljava/lang/String;"
       //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
                     //     case "enum"    => 
@@ -83,14 +83,14 @@ object FieldMatcher {
                        //case "fixed"   => classOf[]
                      // case n: List[Any] => classOf[Option[Any]]         
                                              //other Scala datatypes
-                         case "byte"    => "Ljava/lang/Object;"
-                         case "short"   => "Ljava/lang/Object;"
-                         case "char"    => "Ljava/lang/Object;"
-                         case "any"     => "Ljava/lang/Object;"
-                         case "anyref"  => "Ljava/lang/Object;"
+                         case "Byte"    => "Ljava/lang/Object;"
+                         case "Short"   => "Ljava/lang/Object;"
+                         case "Char"    => "Ljava/lang/Object;"
+                         case "Any"     => "Ljava/lang/Object;"
+                         case "AnyRef"  => "Ljava/lang/Object;"
                          case "unit"    => "Ljava/lang/Object;"
-                         case "nothing" => "Ljava/lang/Object;"
-                         case "null"    => "Ljava/lang/Object;"
+                         case "Nothing" => "Ljava/lang/Object;"
+                         case "Null"    => "Ljava/lang/Object;"
                          case "object"  => "Ljava/lang/Object;"
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
@@ -101,14 +101,14 @@ object FieldMatcher {
   def getReturnInstr(fieldType: String): Int = {
     fieldType match {
                          //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
-                   //    case "null"    => (Type.getDescriptor(classOf[Unit]), )
-                         case "boolean" => IRETURN
-                         case "int"     => IRETURN
-                         case "long"    => LRETURN
-                         case "float"   => FRETURN
-                         case "double"  => DRETURN
+                   //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
+                         case "Boolean" => IRETURN
+                         case "Int"     => IRETURN
+                         case "Long"    => LRETURN
+                         case "Float"   => FRETURN
+                         case "Double"  => DRETURN
                          case "bytes"   => IRETURN//IRETURN is corrrect for bytes?
-                         case "string"  => ARETURN
+                         case "String"  => ARETURN
       //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
                          case "enum"    => ARETURN
@@ -122,14 +122,14 @@ object FieldMatcher {
                        //case "fixed"   => classOf[]
                      // case n: List[Any] => classOf[Option[Any]]         
                                              //other Scala datatypes
-                         case "short"   => IRETURN
-                         case "byte"    => IRETURN
-                         case "char"    => IRETURN
-                         case "any"     => ARETURN
-                         case "anyref"  => ARETURN
+                         case "Short"   => IRETURN
+                         case "Byte"    => IRETURN
+                         case "Char"    => IRETURN
+                         case "Any"     => ARETURN
+                         case "AnyRef"  => ARETURN
                          case "unit"    => RETURN
-                         case "nothing" => ARETURN
-                         case "null"    => ARETURN
+                         case "Nothing" => ARETURN
+                         case "Null"    => ARETURN
                          case "object"  => ARETURN
                          case x: String => ARETURN //if its a string but none of the above, its a nested record type
 
@@ -142,14 +142,14 @@ object FieldMatcher {
   def getObject(fieldType: String) = {
     fieldType match {
                          //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
-                   //    case "null"    => (Type.getDescriptor(classOf[Unit]), )
-                         case "boolean" => true.asInstanceOf[Object]
-                         case "int"     => 1.asInstanceOf[Object]
-                         case "long"    => 1L.asInstanceOf[Object]
-                         case "float"   => 1F.asInstanceOf[Object]
-                         case "double"  => 1D.asInstanceOf[Object]
+                   //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
+                         case "Boolean" => true.asInstanceOf[Object]
+                         case "Int"     => 1.asInstanceOf[Object]
+                         case "Long"    => 1L.asInstanceOf[Object]
+                         case "Float"   => 1F.asInstanceOf[Object]
+                         case "Double"  => 1D.asInstanceOf[Object]
                         // case "bytes"   => Array[Byte](1.toByte).asInstanceOf[Object]//Array is corrrect for bytes?
-                         case "string"  => ""
+                         case "String"  => ""
       //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
                       //   case "enum"    => 
@@ -160,14 +160,14 @@ object FieldMatcher {
                       // case "[null,String]"      => classOf[Option[String]] 
                        //case "fixed"   => classOf[]
                      // case n: List[Any] => classOf[Option[Any]]         
-                         case "short"   => 1.toShort.asInstanceOf[Object]
-                         case "byte"    => 1.toByte.asInstanceOf[Object]
-                         case "char"    => 'k'.asInstanceOf[Object]
-                         case "any"     => "".asInstanceOf[Any].asInstanceOf[Object]
-                         case "anyref"  => "".asInstanceOf[AnyRef].asInstanceOf[Object]
+                         case "Short"   => 1.toShort.asInstanceOf[Object]
+                         case "Byte"    => 1.toByte.asInstanceOf[Object]
+                         case "Char"    => 'k'.asInstanceOf[Object]
+                         case "Any"     => "".asInstanceOf[Any].asInstanceOf[Object]
+                         case "AnyRef"  => "".asInstanceOf[AnyRef].asInstanceOf[Object]
                          case "unit"    => Unit.asInstanceOf[Object]
-                        // case "nothing" => //now here's a conundrum
-                         case "null"    => null.asInstanceOf[Object]
+                        // case "Nothing" => //now here's a conundrum wtf, 
+                         case "Null"    => null.asInstanceOf[Object]
                          case "object"  => new Object
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
@@ -187,14 +187,14 @@ value, i.e. object and array references.
   def getLoadInstr(fieldType: String): Int = {
     fieldType match {
                          //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
-                   //    case "null"    => (Type.getDescriptor(classOf[Unit]), )
-                         case "boolean" => ILOAD
-                         case "int"     => ILOAD
-                         case "long"    => LLOAD
-                         case "float"   => FLOAD
-                         case "double"  => DLOAD
+                   //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
+                         case "Boolean" => ILOAD
+                         case "Int"     => ILOAD
+                         case "Long"    => LLOAD
+                         case "Float"   => FLOAD
+                         case "Double"  => DLOAD
                          case "bytes"   => ILOAD
-                         case "string"  => ALOAD
+                         case "String"  => ALOAD
       //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
                       //   case "enum"    => ARETURN
@@ -205,14 +205,14 @@ value, i.e. object and array references.
                       // case "[null,String]"      => classOf[Option[String]] 
                        //case "fixed"   => classOf[]
 
-                         case "short"   => ILOAD
-                         case "byte"    => ILOAD
-                         case "char"    => ILOAD
-                         case "any"     => ALOAD
-                         case "anyref"  => ALOAD
+                         case "Short"   => ILOAD
+                         case "Byte"    => ILOAD
+                         case "Char"    => ILOAD
+                         case "Any"     => ALOAD
+                         case "AnyRef"  => ALOAD
                          case "unit"    => ALOAD
-                         case "nothing" => ALOAD
-                         case "null"    => ALOAD
+                         case "Nothing" => ALOAD
+                         case "Null"    => ALOAD
                          case "object"  => ALOAD
 
                          case x: String => ALOAD //
@@ -222,14 +222,14 @@ value, i.e. object and array references.
 def getReturnTypes(fieldSeeds: List[FieldSeed]) = {
 fieldSeeds.map(n => n.fieldType).map(m => m match {
       //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
-      //    case "null"    => classOf[Unit]
-      case "boolean" => classOf[Boolean]
-      case "int"     => classOf[Int]
-      case "long"    => classOf[Long]
-      case "float"   => classOf[Float]
-      case "double"  => classOf[Double]
+      //    case "Null"    => classOf[Unit]
+      case "Boolean" => classOf[Boolean]
+      case "Int"     => classOf[Int]
+      case "Long"    => classOf[Long]
+      case "Float"   => classOf[Float]
+      case "Double"  => classOf[Double]
       case "bytes"   => classOf[Seq[Byte]]
-      case "string"  => classOf[String]
+      case "String"  => classOf[String]
       //Complex ------------------------ Not Supported in Salat-Avro?
       //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
       case "enum"    => classOf[Enumeration#Value]
@@ -242,14 +242,14 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
       //case "fixed"   => classOf[]
 
 
-                         case "short"   => classOf[Short]
-                         case "byte"    => classOf[Byte]
-                         case "char"    => classOf[Char]
-                         case "any"     => classOf[Any]
-                         case "anyref"  => classOf[AnyRef]
+                         case "Short"   => classOf[Short]
+                         case "Byte"    => classOf[Byte]
+                         case "Char"    => classOf[Char]
+                         case "Any"     => classOf[Any]
+                         case "AnyRef"  => classOf[AnyRef]
                          case "unit"    => classOf[Unit]
-                         case "nothing" => classOf[Nothing]
-                         case "null"    => classOf[Null]
+                         case "Nothing" => classOf[Nothing]
+                         case "Null"    => classOf[Null]
                          case "object"  => classOf[Object]
       //  case "option"   =>  classOf[Option[Any]]
       //     case n: List[Any] => classOf[Option[Any]]         

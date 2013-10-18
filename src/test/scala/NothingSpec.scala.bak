@@ -1,4 +1,4 @@
-
+//Useless Test: Although I can make a scala class, to use it as a type requires getting an instance, which doesn't exist for Nothing
 package avocet
 import models._
 import com.novus.salat._
@@ -15,15 +15,15 @@ import org.specs2._
 import mutable._
 import specification._
 
-class DoubleSpec extends mutable.Specification {
+class NothingSpec extends mutable.Specification {
 
 //usually we'd be reading from a source
  // val infile = new File("input.avro")
  // val typeTemplate = CaseClassGenerator.parseFromFile(infile)//instantiated module class
 
 //but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Double"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
-  val classData = ClassData("models", "MyRecord_DoubleSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
+  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Nothing"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
+  val classData = ClassData("models", "MyRecord_Nothing", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
 
@@ -41,7 +41,7 @@ class DoubleSpec extends mutable.Specification {
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
  
- "given a dynamically generated case class MyRecord_DoubleSpec(a: Double) as a type parameter, a grater" should {
+ "given a dynamically generated case class MyRecord(c: Nothing) as a type parameter, a grater" should {
     "serialize and deserialize correctly" in {
       typeTemplate === obj
     }

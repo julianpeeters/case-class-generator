@@ -18,7 +18,9 @@ case class MyRecordDump {
   ClassHeader(cw, caseClassName).dump
   ScalaSigAnnotation(cw, av0, mySig).dump
   Fields(cw, fieldData).dump
+
   if (fieldData.length > 1) Tupled(cw, mv, caseClassName, fieldData).dump; Curried(cw, mv, caseClassName).dump
+
   FieldMethods(cw, mv, caseClassName, fieldData).dump//"FieldMethods"for lack of a better name
   Copy(cw, mv, caseClassName, fieldData).dump
   CopyDefault(cw, mv, caseClassName, fieldData).dump
@@ -31,7 +33,6 @@ case class MyRecordDump {
   ToString(cw, mv).dump
   Equals(cw, mv, caseClassName, fieldData).dump
   Init(cw, mv, caseClassName, fieldData, ctorReturnType).dump
-
   cw.toByteArray()
 }
 }

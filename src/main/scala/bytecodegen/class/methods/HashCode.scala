@@ -15,7 +15,7 @@ fieldData.length match {
     mv.visitMethodInsn(INVOKEVIRTUAL, "scala/runtime/ScalaRunTime$", "_hashCode", "(Lscala/Product;)I");
   }
   case x if x > 0 => {
-    if (fieldData.map(n => n.fieldType).forall(t => List("nothing", "null", "any", "anyref", "object", "string", "list", "stream").contains(t))) {//if all the valueMembers are in this list (of "empty" types, look different when paired with "real")
+    if (fieldData.map(n => n.fieldType).forall(t => List("Nothing", "Null", "Any", "AnyRef", "object", "String", "list", "stream").contains(t))) {//if all the valueMembers are in this list (of "empty" types, look different when paired with "real")
       mv.visitFieldInsn(GETSTATIC, "scala/runtime/ScalaRunTime$", "MODULE$", "Lscala/runtime/ScalaRunTime$;");
       mv.visitVarInsn(ALOAD, 0);
       mv.visitMethodInsn(INVOKEVIRTUAL, "scala/runtime/ScalaRunTime$", "_hashCode", "(Lscala/Product;)I");
@@ -25,22 +25,22 @@ fieldData.length match {
     mv.visitVarInsn(ISTORE, 1);
     mv.visitVarInsn(ILOAD, 1);
 
-    val fields = if (fieldData.map(n=>n.fieldType).contains("nothing")) fieldData.reverse.dropWhile(valueMember =>  valueMember.fieldType != "nothing").reverse; else fieldData
-    //if there is more than one non-"empty" type(see the list above), drop all types after the first "nothing".
+    val fields = if (fieldData.map(n=>n.fieldType).contains("Nothing")) fieldData.reverse.dropWhile(valueMember =>  valueMember.fieldType != "Nothing").reverse; else fieldData
+    //if there is more than one non-"empty" type(see the list above), drop all types after the first "Nothing".
     fields.foreach( valueMember => { 
       valueMember.fieldType match { 
-        case "byte"|"char"|"short"|"int"|"long"|"float"|"double"|"unit"|"null" => {
+        case "Byte"|"Char"|"Short"|"Int"|"Long"|"Float"|"Double"|"unit"|"Null" => {
           valueMember.fieldType match {
-            case "byte"|"short"|"int"|"char" => { 
+            case "Byte"|"Short"|"Int"|"Char" => { 
               mv.visitVarInsn(ALOAD, 0);
               mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
             }
-            case "long"|"float"|"double" => {
+            case "Long"|"Float"|"Double" => {
               mv.visitVarInsn(ALOAD, 0);
               mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
               mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/Statics", valueMember.fieldType + "Hash", "(" + valueMember.typeDescriptor + ")I");
             }
-            case "unit"|"null" => {
+            case "unit"|"Null" => {
               mv.visitInsn(ICONST_0);
               mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/Statics", "mix", "(II)I");
               mv.visitVarInsn(ISTORE, 1);
@@ -49,7 +49,7 @@ fieldData.length match {
             case _ => println("""whoops, how'd that get here?""")
           }
         }
-        case "boolean" => {
+        case "Boolean" => {
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
           val l0 = new Label();
@@ -69,13 +69,13 @@ fieldData.length match {
         //if there were only one valueMember, the "if" statement would have taken care of things
         //so this has to have come after
 
-        case "any"|"anyref"|"object"|"string"|"list"|"stream"=> {
+        case "Any"|"AnyRef"|"object"|"String"|"list"|"stream"=> {
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
           mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/Statics", "anyHash", "(Ljava/lang/Object;)I");
         }
 
-        case "nothing" => { //if "nothing" is a value member's type, it will be the last one in the list of value members
+        case "Nothing" => { //if "Nothing" is a value member's type, it will be the last one in the list of value members
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()Lscala/runtime/Nothing$;");
           mv.visitInsn(ATHROW);
@@ -83,7 +83,7 @@ fieldData.length match {
         case _ => println("cannot generate HashCode method: unsupported type")
       }
       //Booleans and Units get special treatment because their ASM lines have a "mix" already
-      if (valueMember.fieldType != "boolean" && valueMember.fieldType != "unit" && valueMember.fieldType != "null") {  
+      if (valueMember.fieldType != "Boolean" && valueMember.fieldType != "unit" && valueMember.fieldType != "Null") {  
         mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/Statics", "mix", "(II)I");
         mv.visitVarInsn(ISTORE, 1);
         mv.visitVarInsn(ILOAD, 1);
@@ -99,7 +99,7 @@ fieldData.length match {
     }
     mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/Statics", "finalizeHash", "(II)I"); 
     }
-    if (!fieldData.map(n => n.fieldType).contains("nothing")) mv.visitInsn(IRETURN);
+    if (!fieldData.map(n => n.fieldType).contains("Nothing")) mv.visitInsn(IRETURN);
     mv.visitMaxs(2, 2);
     mv.visitEnd();
   }

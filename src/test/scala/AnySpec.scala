@@ -15,18 +15,19 @@ import org.specs2._
 import mutable._
 import specification._
 
-class UnitSpec extends mutable.Specification {
+class AnySpec extends mutable.Specification {
 
 //usually we'd be reading from a source
  // val infile = new File("input.avro")
  // val typeTemplate = CaseClassGenerator.parseFromFile(infile)//instantiated module class
 
 //but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","unit"))//, FieldSeed("b","int"))//, FieldSeed("d","boolean"))
-  val classData = ClassData("models", "MyRecord_UnitSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
+  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Any"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
+  val classData = ClassData("models", "MyRecord_AnySpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
+println("hi")
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
-
+println("hill")
   val typeTemplate = dcc.instantiated$
 
   type MyRecord = typeTemplate.type
@@ -41,7 +42,7 @@ class UnitSpec extends mutable.Specification {
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
  
- "given a dynamically generated case class MyRecord_UnitSpec(a: Unit) as a type parameter, a grater" should {
+ "given a dynamically generated case class MyRecord(c: Any) as a type parameter, a grater" should {
     "serialize and deserialize correctly" in {
       typeTemplate === obj
     }

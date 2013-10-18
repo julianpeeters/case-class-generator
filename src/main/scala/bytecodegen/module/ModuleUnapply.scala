@@ -26,44 +26,44 @@ fieldData.foreach(fd => {
   mv_MODULE.visitVarInsn(ALOAD, 1);
   mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
   fd.fieldType match {
-    case "int"     => {
+    case "Int"     => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
     }
-    case "boolean" => {
+    case "Boolean" => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToBoolean", "(Z)Ljava/lang/Boolean;");
     }
-    case "long"    => {
+    case "Long"    => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToLong", "(J)Ljava/lang/Long;");
     }
 
-    case "double"  => {
+    case "Double"  => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToDouble", "(D)Ljava/lang/Double;");
     }
-    case "float"   => {
+    case "Float"   => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToFloat", "(F)Ljava/lang/Float;");
     }
-    case "byte"    => {
+    case "Byte"    => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
     }
-    case "short"   => {
+    case "Short"   => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
     }
-    case "char"    => {
+    case "Char"    => {
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToCharacter", "(C)Ljava/lang/Character;");
     }
-    case "string"  => 
+    case "String"  => 
     case "unit"    => {
       //mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToLong", "(J)Ljava/lang/Long;");
     }
-    case "null"    => {
+    case "Null"    => {
       mv_MODULE.visitInsn(POP);
       mv_MODULE.visitInsn(ACONST_NULL);
     }
-    case "nothing" => {
+    case "Nothing" => {
       mv_MODULE.visitInsn(ATHROW);
     }
-    case "any"     =>
-    case "anyref"  => 
+    case "Any"     =>
+    case "AnyRef"  => 
     case "object"  =>
 
     case _         => println("cannot generate unapply unsupported type")

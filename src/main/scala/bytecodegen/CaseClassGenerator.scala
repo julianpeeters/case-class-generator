@@ -34,11 +34,9 @@ class CaseClassGenerator {
 def generateBytecode(classData: ClassData): List[Array[Byte]] = {
   val caseClassName = classData.classNamespace + "/" + classData.className
   val fieldData: List[FieldData] = classData.classFields.map(field => FieldMatcher.enrichFieldData(field) )
-  def capitalize(s: String) = { s(0).toString.toUpperCase + s.substring(1, s.length).toLowerCase }
   val mySig = new ScalaSig(List("case class"), List(classData.classNamespace, classData.className), fieldData.map(f => (f.fieldName, f.fieldType.capitalize)))
-
-  List(new MyRecordDump().dump(mySig, caseClassName, fieldData),
-       new MyRecord$Dump().dump(caseClassName, fieldData) )//ASM's convention for naming the module class
+//generate a pair of class and module class
+  List(new MyRecordDump().dump(mySig, caseClassName, fieldData), new MyRecord$Dump().dump(caseClassName, fieldData) )//ASM's convention for naming the module class
 
   }
 

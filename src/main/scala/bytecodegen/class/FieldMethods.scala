@@ -12,8 +12,10 @@ case class FieldMethods(cw: ClassWriter, var mv: MethodVisitor, caseClassName: S
     fieldData.foreach(t => {
       mv = cw.visitMethod(ACC_PUBLIC, t.fieldName, "()"+t.typeDescriptor, null, null);
       mv.visitCode();
-      mv.visitVarInsn(ALOAD, 0);
-      mv.visitFieldInsn(GETFIELD, caseClassName, t.fieldName, t.typeDescriptor.toString);
+      if (t.fieldType != "unit") {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitFieldInsn(GETFIELD, caseClassName, t.fieldName, t.typeDescriptor.toString);
+      }
       mv.visitInsn(t.returnInstr);
       mv.visitMaxs(1, 1);
       mv.visitEnd();

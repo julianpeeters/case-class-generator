@@ -15,38 +15,38 @@ mv_MODULE.visitVarInsn(ALOAD, 0);
 fieldData.zipWithIndex.foreach(n => {
 
   n._1.fieldType match {
-    case "string"  => mv_MODULE.visitVarInsn(ALOAD, n._2); mv_MODULE.visitTypeInsn(CHECKCAST, "java/lang/String");
-    case "int"     => {
+    case "String"  => mv_MODULE.visitVarInsn(ALOAD, n._2); mv_MODULE.visitTypeInsn(CHECKCAST, "java/lang/String");
+    case "Int"     => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToInt", "(Ljava/lang/Object;)I");
     }
-    case "boolean" => {
+    case "Boolean" => {
       mv_MODULE.visitVarInsn(ALOAD, n._2);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToBoolean", "(Ljava/lang/Object;)Z");
     }
 
 
-    case "short"   => {
+    case "Short"   => {
       mv_MODULE.visitVarInsn(ALOAD, n._2);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToShort", "(Ljava/lang/Object;)S");
     }
-    case "long"    => {
+    case "Long"    => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToLong", "(Ljava/lang/Object;)J");
     }
-    case "float"   => {
+    case "Float"   => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToFloat", "(Ljava/lang/Object;)F");
     }
-    case "double"  =>  {
+    case "Double"  =>  {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToDouble", "(Ljava/lang/Object;)D");
     }
-    case "byte"    => { 
+    case "Byte"    => { 
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToByte", "(Ljava/lang/Object;)B");
     }
-    case "char"    =>  {
+    case "Char"    =>  {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToChar", "(Ljava/lang/Object;)C");
     }
@@ -54,16 +54,16 @@ fieldData.zipWithIndex.foreach(n => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitTypeInsn(CHECKCAST, "scala/runtime/BoxedUnit");
     }
-    case "null"    => {
+    case "Null"    => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitTypeInsn(CHECKCAST, "scala/runtime/Null$");
     }
-    case "nothing" => {
+    case "Nothing" => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitTypeInsn(CHECKCAST, "scala/runtime/Nothing$");
     }
-    case "any"     => mv_MODULE.visitVarInsn(ALOAD, n._2); 
-    case "anyref"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
+    case "Any"     => mv_MODULE.visitVarInsn(ALOAD, n._2); 
+    case "AnyRef"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
     case "object"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
 
     case "bytes"   => //TODO move this into avro datafile parser

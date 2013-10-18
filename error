@@ -1,5 +1,0 @@
-[0m[[0minfo[0m] [0mLoading global plugins from /home/julianpeeters/.sbt/plugins[0m
-[0m[[0minfo[0m] [0mLoading project definition from /home/julianpeeters/asm-type-provider/project[0m
-[0m[[0minfo[0m] [0mSet current project to asm-type-provider (in build file:/home/julianpeeters/asm-type-provider/)[0m
-[0m[[33mwarn[0m] [0mPotentially incompatible versions of dependencies of {file:/home/julianpeeters/asm-type-provider/}default-c0f35e:[0m
-[0m[[33mwarn[0m] [0m   org.scala-lang: 2.10.2, 2.10.0[0m

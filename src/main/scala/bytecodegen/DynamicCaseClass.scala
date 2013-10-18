@@ -3,7 +3,7 @@ import models._
 
 class DynamicCaseClass(classData: ClassData) {
 
-//prepare the input as to improve readability
+//prepare the input as to improve readability of the code
   val fullName = (classData.classNamespace + "." + classData.className)
   val fieldData: List[FieldSeed] = classData.classFields
 

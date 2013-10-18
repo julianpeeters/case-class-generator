@@ -1,4 +1,4 @@
-
+//Semi- Useless Test: shows that my class passes the verifier, but java.lang.Object will be a custom class, and will be a case class model with a toString that works
 package avocet
 import models._
 import com.novus.salat._
@@ -15,15 +15,15 @@ import org.specs2._
 import mutable._
 import specification._
 
-class DoubleSpec extends mutable.Specification {
+class ObjectSpec extends mutable.Specification {
 
 //usually we'd be reading from a source
  // val infile = new File("input.avro")
  // val typeTemplate = CaseClassGenerator.parseFromFile(infile)//instantiated module class
 
 //but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Double"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
-  val classData = ClassData("models", "MyRecord_DoubleSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
+  val valueMembers: List[FieldSeed] = List(FieldSeed("a","object"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
+  val classData = ClassData("models", "MyRecord_ObjectSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
 
@@ -31,19 +31,16 @@ class DoubleSpec extends mutable.Specification {
 
   type MyRecord = typeTemplate.type
 
-//println(classOf[MyRecord])//error: class type required but avocet.Main.typeTemplate.type found
-  val parser = ScalaSigParser.parse(dcc.model.getClass)
-    println(parser)
-
   val dbo = grater[MyRecord].asDBObject(typeTemplate)
-    println(dbo)
+   // println(dbo)
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_DoubleSpec(a: Double) as a type parameter, a grater" should {
+
+ "given a dynamically generated case class MyRecord(c: Object) as a type parameter, a grater" should {
     "serialize and deserialize correctly" in {
       typeTemplate === obj
+
     }
 }
 

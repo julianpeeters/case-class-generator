@@ -110,7 +110,7 @@ def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ 
        // case c: Class[Any]        => C(c) = c; c
        // case _                    => Class[Any]
 
-        case "int" => classOf[Int]
+        case "Int" => classOf[Int]
         case "rec" => modelClass
         case _     => 
       }
@@ -121,14 +121,14 @@ def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ 
     val ft = getFields(schema).map(n => n.fieldType)
     ft.map(m => m match {
       //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
-      //    case "null"    => classOf[Unit]
-      case "boolean" => classOf[Boolean]
-      case "int"     => classOf[Int]
-      case "long"    => classOf[Long]
-      case "float"   => classOf[Float]
-      case "double"  => classOf[Double]
+      //    case "Null"    => classOf[Unit]
+      case "Boolean" => classOf[Boolean]
+      case "Int"     => classOf[Int]
+      case "Long"    => classOf[Long]
+      case "Float"   => classOf[Float]
+      case "Double"  => classOf[Double]
       case "bytes"   => classOf[Seq[Byte]]
-      case "string"  => classOf[String]
+      case "String"  => classOf[String]
       //Complex ------------------------ Not Supported in Salat-Avro?
       //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
       case "enum"    => classOf[Enumeration#Value]
