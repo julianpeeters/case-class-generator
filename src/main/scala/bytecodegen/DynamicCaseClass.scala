@@ -17,9 +17,9 @@ class DynamicCaseClass(classData: ClassData) {
   val model$ = DynamicClassLoader.loadClass(fullName + "$", bytecode(1)) //load the module class
 
 //now that we've loaded our classes with a dynamic classloader, use reflection to get an instance of the companion class
-  val method_apply = model$.getMethod("apply", methodParams: _*)//populate the instance with real or dummy values,
+  val method_apply$ = model$.getMethod("apply", methodParams: _*)//populate the instance with real or dummy values,
   val instance$ = model$.getConstructor().newInstance()//get an instance of the companion
-  val instantiated$ = model$.getMethod("apply", methodParams: _*).invoke(instance$,  insantiationParams: _*)
+  val instantiated$ = method_apply$.invoke(instance$,  insantiationParams: _*)
 }
 
 

@@ -19,61 +19,99 @@ mv_MODULE.visitLabel(l0_MODULE);
 mv_MODULE.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 mv_MODULE.visitTypeInsn(NEW, "scala/Some");
 mv_MODULE.visitInsn(DUP);
-mv_MODULE.visitTypeInsn(NEW, "scala/Tuple" + fieldData.length);
-mv_MODULE.visitInsn(DUP);
+
+if (fieldData.length > 1) {
+  mv_MODULE.visitTypeInsn(NEW, "scala/Tuple" + fieldData.length);
+  mv_MODULE.visitInsn(DUP);
+}
 
 fieldData.foreach(fd => {
-  mv_MODULE.visitVarInsn(ALOAD, 1);
-  mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
+
   fd.fieldType match {
     case "Int"     => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
     }
     case "Boolean" => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToBoolean", "(Z)Ljava/lang/Boolean;");
     }
     case "Long"    => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToLong", "(J)Ljava/lang/Long;");
     }
 
     case "Double"  => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToDouble", "(D)Ljava/lang/Double;");
     }
     case "Float"   => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToFloat", "(F)Ljava/lang/Float;");
     }
     case "Byte"    => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
     }
     case "Short"   => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
     }
     case "Char"    => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToCharacter", "(C)Ljava/lang/Character;");
     }
-    case "String"  => 
-    case "unit"    => {
-      //mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToLong", "(J)Ljava/lang/Long;");
+    case "String"  => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);    
+    }
+    case "Unit"    => {
+      mv_MODULE.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
     }
     case "Null"    => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitInsn(POP);
       mv_MODULE.visitInsn(ACONST_NULL);
     }
     case "Nothing" => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
       mv_MODULE.visitInsn(ATHROW);
     }
-    case "Any"     =>
-    case "AnyRef"  => 
-    case "object"  =>
+    case "Any"     => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);    
+    }
+    case "AnyRef"  => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
+    } 
+    case "Object"  => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeDescriptor);
+    }
 
     case _         => println("cannot generate unapply unsupported type")
   }
 })
 
-mv_MODULE.visitMethodInsn(INVOKESPECIAL, "scala/Tuple" + fieldData.length, "<init>", "(" + Stream.continually("Ljava/lang/Object;").take(fieldData.length).mkString + ")V");
+
+if (fieldData.length > 1) {
+  mv_MODULE.visitMethodInsn(INVOKESPECIAL, "scala/Tuple" + fieldData.length, "<init>", "(" + Stream.continually("Ljava/lang/Object;").take(fieldData.length).mkString + ")V");
+}
+
+
 mv_MODULE.visitMethodInsn(INVOKESPECIAL, "scala/Some", "<init>", "(Ljava/lang/Object;)V");
 mv_MODULE.visitLabel(l1_MODULE);
-//mv_MODULE.visitFrame(Opcodes.F_SAME1, 0, null, 1, Array[Object] ("scala/Option"));
 mv_MODULE.visitFrame(Opcodes.F_SAME1, 0, null, 1, Array[Object] ("scala/Option"));
 mv_MODULE.visitInsn(ARETURN);
 mv_MODULE.visitMaxs(7, 2);

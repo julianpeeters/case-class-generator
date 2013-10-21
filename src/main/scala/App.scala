@@ -19,7 +19,7 @@ object Main extends App {
  // val typeTemplate = CaseClassGenerator.parseFromFile(infile)//instantiated module class
 
 //but for now lets feed the class info in manually
-  val valueMembers: List[FieldSeed] = List(FieldSeed("x","String"), FieldSeed("y","Int"), FieldSeed("z","Boolean"))
+  val valueMembers: List[FieldSeed] = List(FieldSeed("x","Double"))//, FieldSeed("y","Double"))//, FieldSeed("z","Boolean"))
   val classData = ClassData("models", "MyRecord", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 

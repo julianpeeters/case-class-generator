@@ -20,10 +20,8 @@ libraryDependencies ++= Seq(
  //  "com.novus" %% "salat" % "1.9.1", 
    "com.novus" %% "salat" % "1.9.3",
   "org.ow2.asm" % "asm-util" % "4.1",
-//   "com.julianpeeters" %% "artisinal-pickle-maker" % "0.2-1-SNAPSHOT",
    "com.julianpeeters" %% "artisinal-pickle-maker" % "0.3-SNAPSHOT",
    "org.slf4j" % "slf4j-simple" % "1.7.5", 
   "org.specs2" %% "specs2" % "2.2" % "test",
    "org.apache.avro" % "avro" % "1.7.5"
-  // "org.scala-lang" %% "scala-pickling" % "0.8.0-SNAPSHOT"
 )

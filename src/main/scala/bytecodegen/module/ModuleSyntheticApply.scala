@@ -50,7 +50,7 @@ fieldData.zipWithIndex.foreach(n => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToChar", "(Ljava/lang/Object;)C");
     }
-    case "unit"    => {
+    case "Unit"    => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitTypeInsn(CHECKCAST, "scala/runtime/BoxedUnit");
     }
@@ -64,7 +64,7 @@ fieldData.zipWithIndex.foreach(n => {
     }
     case "Any"     => mv_MODULE.visitVarInsn(ALOAD, n._2); 
     case "AnyRef"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
-    case "object"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
+    case "Object"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
 
     case "bytes"   => //TODO move this into avro datafile parser
 

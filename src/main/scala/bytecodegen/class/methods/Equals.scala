@@ -81,18 +81,24 @@ fields.foreach(valueMember => {
       if (fieldData.indexOf(valueMember) == 0) valueMembersGOTOLabel = new Label();
       mv.visitJumpInsn(IFNE, valueMembersGOTOLabel);
     }
-    case "String"|"Null"|"unit"|"option"|"list"|"stream" => {
-      mv.visitVarInsn(ALOAD, 0);
-      mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
-      if (valueMember.fieldType == null) {
-        mv.visitInsn(POP);
-        mv.visitInsn(ACONST_NULL);
+    case "String"|"Null"|"Unit"|"Option"|"List"|"Stream" => {
+      if (valueMember.fieldType == "Unit") {
+        mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
+        mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
       }
-      mv.visitVarInsn(ALOAD, 4);
-      mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
-      if (valueMember.fieldType == null) {
-        mv.visitInsn(POP);
-        mv.visitInsn(ACONST_NULL);
+      else {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
+        if (valueMember.fieldType == "Null") {
+          mv.visitInsn(POP);
+          mv.visitInsn(ACONST_NULL);
+        }
+        mv.visitVarInsn(ALOAD, 4);
+        mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
+        if (valueMember.fieldType == "Null") {
+          mv.visitInsn(POP);
+          mv.visitInsn(ACONST_NULL);
+        }
       }
       mv.visitVarInsn(ASTORE, 5);
       mv.visitInsn(DUP);
@@ -117,7 +123,7 @@ fields.foreach(valueMember => {
       mv.visitLabel(l5);
       mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
     }
-    case "Any"|"AnyRef"|"object" => {
+    case "Any"|"AnyRef"|"Object" => {
       mv.visitVarInsn(ALOAD, 0);
       mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()Ljava/lang/Object;");
       mv.visitVarInsn(ALOAD, 4);
@@ -156,7 +162,7 @@ if (!fieldData.map(n => n.fieldType).forall(t => List("Nothing").contains(t))) {
       mv.visitJumpInsn(GOTO, penultimateLabel);
       mv.visitLabel(valueMembersGOTOLabel);
   //if all value members are from this list, then:
-      if (fieldData.map(n => n.fieldType).forall(t => List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "object").contains(t))) {//if all field types are types on this list 
+      if (fieldData.map(n => n.fieldType).forall(t => List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "Object").contains(t))) {//if all field types are types on this list 
         mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] (caseClassName), 0, null);
         mv.visitInsn(ICONST_0);
         mv.visitLabel(penultimateLabel);
@@ -165,7 +171,7 @@ if (!fieldData.map(n => n.fieldType).forall(t => List("Nothing").contains(t))) {
         mv.visitLabel(l0);
         mv.visitFrame(Opcodes.F_CHOP,3, null, 0, null);
       }
-      if (List("String", "unit", "list", "option", "Null").contains(fieldData.head.fieldType)){
+      if (List("String", "Unit", "list", "option", "Null").contains(fieldData.head.fieldType)){
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
         mv.visitInsn(ICONST_0);
         mv.visitLabel(penultimateLabel);
@@ -174,7 +180,7 @@ if (!fieldData.map(n => n.fieldType).forall(t => List("Nothing").contains(t))) {
         mv.visitLabel(l0);
         mv.visitFrame(Opcodes.F_FULL, 2, Array[Object] (caseClassName, "java/lang/Object"), 0, Array[Object] ());
       }
-      else if (List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "object").contains(fieldData.head)){
+      else if (List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "Object").contains(fieldData.head)){
         mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
         mv.visitInsn(ICONST_0);
         mv.visitLabel(penultimateLabel);
@@ -211,73 +217,6 @@ mv.visitEnd();
 
 
 
-  /*  
-{
-mv = cw.visitMethod(ACC_PUBLIC, "equals", "(Ljava/lang/Object;)Z", null, null);
-mv.visitCode();
-mv.visitVarInsn(ALOAD, 0);
-mv.visitVarInsn(ALOAD, 1);
-val l0 = new Label();
-mv.visitJumpInsn(IF_ACMPEQ, l0);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitVarInsn(ASTORE, 2);
-mv.visitVarInsn(ALOAD, 2);
-mv.visitTypeInsn(INSTANCEOF, "models/MyRecord");
-val l1 = new Label();
-mv.visitJumpInsn(IFEQ, l1);
-mv.visitInsn(ICONST_1);
-mv.visitVarInsn(ISTORE, 3);
-val l2 = new Label();
-mv.visitJumpInsn(GOTO, l2);
-mv.visitLabel(l1);
-mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] ("java/lang/Object"), 0, null);
-mv.visitInsn(ICONST_0);
-mv.visitVarInsn(ISTORE, 3);
-mv.visitLabel(l2);
-mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] (Opcodes.INTEGER), 0, null);
-mv.visitVarInsn(ILOAD, 3);
-val l3 = new Label();
-mv.visitJumpInsn(IFEQ, l3);
-mv.visitVarInsn(ALOAD, 1);
-mv.visitTypeInsn(CHECKCAST, "models/MyRecord");
-mv.visitVarInsn(ASTORE, 4);
-
-mv.visitVarInsn(ALOAD, 0);
-mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord", "x", "()Ljava/lang/Object;");
-mv.visitVarInsn(ALOAD, 4);
-mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord", "x", "()Ljava/lang/Object;");
-mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "equals", "(Ljava/lang/Object;Ljava/lang/Object;)Z");
-val l4 = new Label();
-mv.visitJumpInsn(IFEQ, l4);
-mv.visitVarInsn(ALOAD, 4);
-mv.visitVarInsn(ALOAD, 0);
-mv.visitMethodInsn(INVOKEVIRTUAL, "models/MyRecord", "canEqual", "(Ljava/lang/Object;)Z");
-mv.visitJumpInsn(IFEQ, l4);
-mv.visitInsn(ICONST_1);
-val l5 = new Label();
-mv.visitJumpInsn(GOTO, l5);
-mv.visitLabel(l4);
-mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] ("models/MyRecord"), 0, null);
-mv.visitInsn(ICONST_0);
-mv.visitLabel(l5);
-mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, Array[Object] (Opcodes.INTEGER));
-mv.visitJumpInsn(IFEQ, l3);
-mv.visitLabel(l0);
-mv.visitFrame(Opcodes.F_CHOP,3, null, 0, null);
-mv.visitInsn(ICONST_1);
-val l6 = new Label();
-mv.visitJumpInsn(GOTO, l6);
-mv.visitLabel(l3);
-mv.visitFrame(Opcodes.F_APPEND,2, Array[Object] ("java/lang/Object", Opcodes.INTEGER), 0, null);
-
-mv.visitInsn(ICONST_0);
-mv.visitLabel(l6);
-mv.visitFrame(Opcodes.F_FULL, 2, Array[Object] ("models/MyRecord", "java/lang/Object"), 1, Array[Object] (Opcodes.INTEGER));
-mv.visitInsn(IRETURN);
-mv.visitMaxs(2, 5);
-mv.visitEnd();
-
-}*/
 }
 
 }

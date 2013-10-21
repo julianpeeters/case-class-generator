@@ -46,10 +46,10 @@ object FieldMatcher {
                          case "Char"    => Type.getDescriptor(classOf[Char])
                          case "Any"    => Type.getDescriptor(classOf[Any])
                          case "AnyRef"    => Type.getDescriptor(classOf[AnyRef])
-                         case "unit"    => Type.getDescriptor(classOf[Unit])
+                         case "Unit"    => "Lscala/runtime/BoxedUnit;"//Type.getDescriptor(classOf[Unit])
                          case "Nothing"    => Type.getDescriptor(classOf[Nothing])
                          case "Null"    => Type.getDescriptor(classOf[Null])
-                         case "object"    => Type.getDescriptor(classOf[Object])
+                         case "Object"    => Type.getDescriptor(classOf[Object])
                        // case "option"   =>  Type.getDescriptor(classOf[Option[Any]])           
                         ///   case n: List[Any] => classOf[Option[Any]]         
                          
@@ -88,10 +88,10 @@ object FieldMatcher {
                          case "Char"    => "Ljava/lang/Object;"
                          case "Any"     => "Ljava/lang/Object;"
                          case "AnyRef"  => "Ljava/lang/Object;"
-                         case "unit"    => "Ljava/lang/Object;"
+                         case "Unit"    => "Ljava/lang/Object;"
                          case "Nothing" => "Ljava/lang/Object;"
                          case "Null"    => "Ljava/lang/Object;"
-                         case "object"  => "Ljava/lang/Object;"
+                         case "Object"  => "Ljava/lang/Object;"
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
                          case _         => println("no unapply type for unsupported type"); error("no unapply type for unsupported type")//println("Avro Schemas only contain Primitive and Complex Avro types");
@@ -127,10 +127,10 @@ object FieldMatcher {
                          case "Char"    => IRETURN
                          case "Any"     => ARETURN
                          case "AnyRef"  => ARETURN
-                         case "unit"    => RETURN
+                         case "Unit"    => RETURN
                          case "Nothing" => ARETURN
                          case "Null"    => ARETURN
-                         case "object"  => ARETURN
+                         case "Object"  => ARETURN
                          case x: String => ARETURN //if its a string but none of the above, its a nested record type
 
                          case _         => ARETURN//println("Avro Schemas only contain Primitive and Complex Avro types");ARETURN
@@ -165,10 +165,10 @@ object FieldMatcher {
                          case "Char"    => 'k'.asInstanceOf[Object]
                          case "Any"     => "".asInstanceOf[Any].asInstanceOf[Object]
                          case "AnyRef"  => "".asInstanceOf[AnyRef].asInstanceOf[Object]
-                         case "unit"    => Unit.asInstanceOf[Object]
+                         case "Unit"    => ().asInstanceOf[scala.runtime.BoxedUnit]//Unit.asInstanceOf[Object]
                         // case "Nothing" => //now here's a conundrum wtf, 
                          case "Null"    => null.asInstanceOf[Object]
-                         case "object"  => new Object
+                         case "Object"  => new Object
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
                        //  case _         => //println("Avro Schemas only contain Primitive and Complex Avro types");ARETURN
@@ -182,7 +182,7 @@ i of the local variable that must be read. ILOAD is used to load a boolean,
 byte, char, short, or int local variable. LLOAD, FLOAD and DLOAD are used to
 load a long, float or double value, respectively (LLOAD and DLOAD actually
 load the two slots i and i+ 1). Finally ALOAD is used to load any non primitive
-value, i.e. object and array references.
+value, i.e. Object and array references.
 */
   def getLoadInstr(fieldType: String): Int = {
     fieldType match {
@@ -210,10 +210,10 @@ value, i.e. object and array references.
                          case "Char"    => ILOAD
                          case "Any"     => ALOAD
                          case "AnyRef"  => ALOAD
-                         case "unit"    => ALOAD
+                         case "Unit"    => ALOAD
                          case "Nothing" => ALOAD
                          case "Null"    => ALOAD
-                         case "object"  => ALOAD
+                         case "Object"  => ALOAD
 
                          case x: String => ALOAD //
                          case _         => println("Avro Schemas only contain Primitive and Complex Avro types"); ALOAD
@@ -247,10 +247,10 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
                          case "Char"    => classOf[Char]
                          case "Any"     => classOf[Any]
                          case "AnyRef"  => classOf[AnyRef]
-                         case "unit"    => classOf[Unit]
+                         case "Unit"    => classOf[scala.runtime.BoxedUnit]//classOf[Unit]
                          case "Nothing" => classOf[Nothing]
                          case "Null"    => classOf[Null]
-                         case "object"  => classOf[Object]
+                         case "Object"  => classOf[Object]
       //  case "option"   =>  classOf[Option[Any]]
       //     case n: List[Any] => classOf[Option[Any]]         
                          

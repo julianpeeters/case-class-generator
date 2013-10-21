@@ -30,7 +30,12 @@ val reversed = fieldData.reverse
 var terminalLabel: Label = null
 reversed.take(fieldData.length).foreach( valueMember => {
   mv.visitVarInsn(ALOAD, 0);
-  mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeDescriptor);
+      val tpe = {
+        if (valueMember.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
+        else valueMember.typeDescriptor
+      } 
+  mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + tpe);
+
   valueMember.fieldType match { 
     case "Byte" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
     case "Short" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
@@ -41,12 +46,12 @@ reversed.take(fieldData.length).foreach( valueMember => {
     case "Char" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToCharacter", "(C)Ljava/lang/Character;");
     case "String" => 
     case "Boolean" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToBoolean", "(Z)Ljava/lang/Boolean;");
-    case "unit" => mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
+    case "Unit" => mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
     case "Null" => mv.visitInsn(POP); mv.visitInsn(ACONST_NULL);
     case "Nothing" => mv.visitInsn(ATHROW);
     case "Any" => 
     case "AnyRef" => 
-    case "object" => 
+    case "Object" => 
 //TODO
     case "list" => 
     case _ => println("cannot generate productElement method: unsupported type")
