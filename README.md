@@ -33,9 +33,11 @@ AnyRef
 1) Designed to dynamically provide a type parameter for Salat and Salat-Avro. Access to the dynamic classes seems to be limited to Java reflection and parsing the Scala sig directly, i.e. access via Scala 2.10 reflection is not yet supported.  
 As a type alias, the class is only "partially typed". It can be used as a type parameter but it is still just a type alias. E.g., it can be used in `TypeOf[]`, but it is not a class type and so `ClassOf[]` gives an error, and will fail if a .class file is required. Further research is required to determine boundaries of its functionality as a type.  
 
-2) Neither objectWeb's classwriter nor my artisinal-pickle-maker are thread-safe.
+2) By commenting out the appropriate methods, and with a little fiddling with the "case class" flag, regular classes can be made too. 
 
-3) I'm new at this so, please, criticism is appreciated!
+3) Neither objectWeb's classwriter nor my artisinal-pickle-maker are thread-safe.
+
+4) I'm new at this so, please, criticism is appreciated!
 
 
 
