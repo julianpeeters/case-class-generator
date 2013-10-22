@@ -1,4 +1,4 @@
-name := "asm-type-provider"
+name := "case-class-generator"
 
 version := "0.1-SNAPSHOT"
 

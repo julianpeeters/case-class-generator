@@ -21,7 +21,7 @@ class StringIntBooleanSpec extends mutable.Specification {
  // val infile = new File("input.avro")
  // val typeTemplate = CaseClassGenerator.parseFromFile(infile)//instantiated module class
 
-//but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
+//but for now lets make it easy debug my Scala signatures 
   val valueMembers: List[FieldSeed] = List(FieldSeed("x","String"), FieldSeed("y","Int"), FieldSeed("z","Boolean"))//, FieldSeed("e","Int"), FieldSeed("f","Int"), FieldSeed("g","Int"))
   val classData = ClassData("models", "MyRecord_StringIntBooleanSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
   val dcc = new DynamicCaseClass(classData)

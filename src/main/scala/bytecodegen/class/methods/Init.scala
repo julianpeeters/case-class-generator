@@ -7,25 +7,36 @@ import Opcodes._
 case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData], ctorReturnType: String) {
   def dump = {
     //init method
-mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, null, null);
-mv.visitCode();
-mv.visitVarInsn(ALOAD, 0);
+    mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, null, null);
+    mv.visitCode();
+
+
 //the variable part of the constructor:
+    var stackIndex = 1
 
-if (fieldData.length == 0) mv.visitVarInsn(ALOAD, 0); //if the case class has no value members
-else fieldData.foreach(t => {
-  mv.visitVarInsn(t.loadInstr, (fieldData.indexOf(t))+1);
-  mv.visitFieldInsn(PUTFIELD, caseClassName, t.fieldName, t.typeDescriptor.toString);
-  mv.visitVarInsn(ALOAD, 0);
-})
+    fieldData.map(fd => { //fd.loadInstr).foreach(lI => {
+      if (fd.loadInstr == DLOAD | fd.loadInstr == LLOAD ) {
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(fd.loadInstr, stackIndex); 
+        mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeDescriptor.toString);
+        stackIndex += 2
+      }
+      else { 
+        mv.visitVarInsn(ALOAD, 0);
+        mv.visitVarInsn(fd.loadInstr, stackIndex); 
+        mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeDescriptor.toString);
+        stackIndex += 1;
+      }
+    })
 
-mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
-mv.visitVarInsn(ALOAD, 0);
-mv.visitMethodInsn(INVOKESTATIC, "scala/Product$class", "$init$", "(Lscala/Product;)V");
-mv.visitInsn(RETURN);
-mv.visitMaxs(2, 4);
-mv.visitEnd();
+    mv.visitVarInsn(ALOAD, 0);
+    mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+    mv.visitVarInsn(ALOAD, 0);
+    mv.visitMethodInsn(INVOKESTATIC, "scala/Product$class", "$init$", "(Lscala/Product;)V");
+    mv.visitInsn(RETURN);
+    mv.visitMaxs(2, 4);
+    mv.visitEnd();
 
-cw.visitEnd();
+    cw.visitEnd();
   }
 }

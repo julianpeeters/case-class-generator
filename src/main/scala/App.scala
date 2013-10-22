@@ -12,14 +12,16 @@ import scala.reflect.internal.pickling._
 
 import com.novus.salat.annotations.util._
 import scala.reflect.ScalaSignature
-
+//Main is for debugging purposes
 object Main extends App {
 //usually we'd be reading from a source
  // val infile = new File("input.avro")
  // val typeTemplate = CaseClassGenerator.parseFromFile(infile)//instantiated module class
 
 //but for now lets feed the class info in manually
-  val valueMembers: List[FieldSeed] = List(FieldSeed("x","Double"))//, FieldSeed("y","Double"))//, FieldSeed("z","Boolean"))
+ // val valueMembers: List[FieldSeed] = List(FieldSeed("x","Long"), FieldSeed("y","Long"))//, FieldSeed("z","Boolean"))
+  val valueMembers: List[FieldSeed] = List(FieldSeed("a", "Byte"), FieldSeed("b", "Short"), FieldSeed("c", "Int"), FieldSeed("d", "Long"), FieldSeed("e", "Float"), FieldSeed("f", "Double"), FieldSeed("g", "Char"), FieldSeed("h", "String"), FieldSeed("i", "Boolean"), FieldSeed("j", "Float"), FieldSeed("m", "Any"), FieldSeed("n", "Byte"), FieldSeed("o", "Object"), FieldSeed("p", "Long"), FieldSeed("q", "Float"))
+
   val classData = ClassData("models", "MyRecord", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
@@ -31,7 +33,7 @@ object Main extends App {
   //  println(dbo)
 
   val obj = grater[MyRecord].asObject(dbo)
-    println(obj)
+  //  println(obj)
  
   println(typeTemplate == obj)
 }
