@@ -2,7 +2,7 @@
 
 
 package avocet
-import models._
+import caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
 import com.mongodb.casbah.Imports._

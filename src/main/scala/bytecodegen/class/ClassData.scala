@@ -1,5 +1,5 @@
 
-package models
+package caseclass.generator
 
 case class ClassData(
   classNamespace: String, 

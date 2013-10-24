@@ -1,7 +1,6 @@
-package avocet
+package caseclass.generator
 import org.objectweb.asm._
 import Opcodes._
-import models._
 
 object FieldMatcher {
 
@@ -20,7 +19,7 @@ object FieldMatcher {
  def toTypeDescriptor(fieldType: String) = {(
     fieldType match {
       //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
-                   //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
+                         case "Null"    => Type.getDescriptor(classOf[Null])
                          case "Boolean" => Type.getDescriptor(classOf[Boolean])
                          case "Int"     => Type.getDescriptor(classOf[Int])
                          case "Long"    => Type.getDescriptor(classOf[Long])
@@ -48,7 +47,7 @@ object FieldMatcher {
                          case "AnyRef"    => Type.getDescriptor(classOf[AnyRef])
                          case "Unit"    => "Lscala/runtime/BoxedUnit;"//Type.getDescriptor(classOf[Unit])
                          case "Nothing"    => Type.getDescriptor(classOf[Nothing])
-                         case "Null"    => Type.getDescriptor(classOf[Null])
+
                          case "Object"    => Type.getDescriptor(classOf[Object])
                        // case "option"   =>  Type.getDescriptor(classOf[Option[Any]])           
                         ///   case n: List[Any] => classOf[Option[Any]]         

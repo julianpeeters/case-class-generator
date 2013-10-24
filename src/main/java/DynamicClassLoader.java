@@ -1,4 +1,4 @@
-package models;
+package caseclass.generator;
 import java.lang.reflect.*;
 
 //package classLoader;

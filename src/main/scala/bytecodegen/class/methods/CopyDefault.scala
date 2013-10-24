@@ -1,4 +1,4 @@
-package models
+package caseclass.generator
 import org.objectweb.asm._
 import Opcodes._
 

@@ -1,6 +1,6 @@
 //Useless Test: Although I can make a scala class, to use it as a type requires getting an instance, which doesn't exist for Nothing
 package avocet
-import models._
+import caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
 import com.mongodb.casbah.Imports._

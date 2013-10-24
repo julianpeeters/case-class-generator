@@ -1,6 +1,6 @@
 //Semi- Useless Test: shows that my class passes the verifier, but java.lang.Object will be a custom class, and will be a case class model with a toString that works
 package avocet
-import models._
+import caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
 import com.mongodb.casbah.Imports._

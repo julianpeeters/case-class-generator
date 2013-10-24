@@ -1,10 +1,5 @@
-//package avocet
-
-//import java.io._
-//import models._
-
-package models
-import avocet._
+package caseclass.generator
+import artisinal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
