@@ -1,28 +1,18 @@
-package avocet
-import caseclass.generator._
-//import com.novus.salat._
-//import com.novus.salat.global._
-//import com.mongodb.casbah.Imports._
-
-import org.apache.avro.Schema
-
-import org.objectweb.asm._
-import Opcodes._
-
-import java.io._
+package caseclass.generator
 import scala.util.parsing.json._
 
-class AvroDatafileParser(infile: File){
-  val avroSchema = asSchemaFromFile(infile)
-  val jsonSchema = List((JSON.parseFull(avroSchema.toString)).get)
+class JSONParser(jsonSchema: String) {
 
-  val classSeeds = asSchemaList(jsonSchema)//extracts nested schemas to a list of schemas
+ val parsedJSON = List((JSON.parseFull(jsonSchema)).get)
+
+  val classSeeds = asSchemaList(parsedJSON)//extracts nested schemas to a list of schemas
     .filter(s => s != List.empty)
     .map(schema => ClassData(
-      getNamespace(jsonSchema), 
+      getNamespace(parsedJSON), 
       getName(schema), 
       getFields(schema), 
       getInstantiationTypes(schema)))
+
 
 //How can I make implicit everything below this line
   class jsonTypeConverter[T]{
@@ -41,12 +31,7 @@ class AvroDatafileParser(infile: File){
   object O extends jsonTypeConverter[Option[Any]]
   object U extends jsonTypeConverter[List[(Any, Null)]]
 
-  def asSchemaFromFile(infile: File): Schema = {
-    val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
-    val parsable = new String(bufferedInfile.getLines.mkString.dropWhile(_ != '{').toCharArray)
-    val avroSchema = new Schema.Parser().parse(parsable)
-    avroSchema
-  }
+
 
   def asSchemaList(jsonSchema: List[Any]): List[Any]= { 
     if (jsonSchema == List.empty) List(List.empty)
@@ -90,13 +75,29 @@ class AvroDatafileParser(infile: File){
       }
     }
 
+    def avroToScalaType(fieldType: String): String = {
+      fieldType match {
+//Thanks to @ConnorDoyle for the mapping: https://github.com/GenslerAppsPod/scalavro
+      case "null"    => "Unit"
+      case "boolean" => "Boolean"
+      case "int"     => "Int"
+      case "long"    => "Float"
+      case "float"    => "Long"
+      case "double"    => "Double"
+      case "string"   => "String"
+      }
+    }
+
+
+
+
     for {
       M(schema) <- List(schema)
       L(fields) = schema("fields")
       M(field) <- fields
       S(fieldName) = field("name")
       S(fieldType) = matchTypes(field("type"))
-    } yield FieldSeed(fieldName, fieldType)
+    } yield FieldSeed(fieldName, avroToScalaType(fieldType))
  
   }
 
@@ -127,9 +128,18 @@ def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ 
       case "Long"    => classOf[Long]
       case "Float"   => classOf[Float]
       case "Double"  => classOf[Double]
-      case "bytes"   => classOf[Seq[Byte]]
+     // case "bytes"   => classOf[Seq[Byte]]
       case "String"  => classOf[String]
-      //Complex ------------------------ Not Supported in Salat-Avro?
+
+      case "boolean" => classOf[Boolean]
+      case "int"     => classOf[Int]
+      case "long"    => classOf[Long]
+      case "float"   => classOf[Float]
+      case "double"  => classOf[Double]
+      case "bytes"   => classOf[Seq[Byte]]
+      case "string"  => classOf[String]
+
+      //Complex ------------------------ 
       //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
       case "enum"    => classOf[Enumeration#Value]
       case "array"   => classOf[Seq[_]]
@@ -145,13 +155,8 @@ def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ 
       //     case n: List[Any] => classOf[Option[Any]]         
                          
       case x: String => x //if its a string but none of the above, its a nested record type
-      case a:Any     => a// "Avro Schemas should only contain Primitive and Complex Avro types" 
+      case a:Any     => a
 
     })
   }
-
- 
-  
 }
-
-  

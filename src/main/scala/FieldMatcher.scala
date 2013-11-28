@@ -18,7 +18,7 @@ object FieldMatcher {
 
  def toTypeDescriptor(fieldType: String) = {(
     fieldType match {
-      //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
+
                          case "Null"    => Type.getDescriptor(classOf[Null])
                          case "Boolean" => Type.getDescriptor(classOf[Boolean])
                          case "Int"     => Type.getDescriptor(classOf[Int])
@@ -26,18 +26,13 @@ object FieldMatcher {
                          case "Float"   => Type.getDescriptor(classOf[Float])
                          case "Double"  => Type.getDescriptor(classOf[Double])
 
-                         case "bytes"   => Type.getDescriptor(classOf[Seq[Byte]])
                          case "String"  => Type.getDescriptor(classOf[String])
+
                          //Complex ------------------------ Not Supported in Salat-Avro?
   //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-                         case "enum"    => Type.getDescriptor(classOf[Enumeration#Value])
-                         case "array"   => Type.getDescriptor(classOf[Seq[_]])
-                         case "map"     => Type.getDescriptor(classOf[Map[String, _]])
+            
                          case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => Type.getDescriptor(classOf[Map[String, _]])
-                      // case "union"   => classOf[]
-                      // case "[null,"+_+"]"      => 
-                      // case "[null,String]"      => classOf[Option[String]] 
-                       //case "fixed"   => classOf[]
+    
 
                     //other Scala datatypes
                          case "Byte"    => Type.getDescriptor(classOf[Byte])
@@ -49,37 +44,29 @@ object FieldMatcher {
                          case "Nothing"    => Type.getDescriptor(classOf[Nothing])
 
                          case "Object"    => Type.getDescriptor(classOf[Object])
-                       // case "option"   =>  Type.getDescriptor(classOf[Option[Any]])           
+
                         ///   case n: List[Any] => classOf[Option[Any]]         
                          
                          case x: String => "L"+ x + ";" //if its a string but none of the above, its a nested record type
 
-                         case _         => "Avro Schemas should only contain Primitive and Complex Avro types"
+                         case _         => error("unsupported type")
                         }).toString
   }
 
   def getUnapplyType(fieldType: String): String = {
     fieldType match {
-                         //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
                    //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
                          case "Boolean" => "Ljava/lang/Object;"
                          case "Int"     => "Ljava/lang/Object;"
                          case "Long"    => "Ljava/lang/Object;"
                          case "Float"   => "Ljava/lang/Object;"
                          case "Double"  => "Ljava/lang/Object;"
-                       //  case "bytes"   => "Ljava/lang/Object;"
                          case "String"  => "Ljava/lang/String;"
-      //Complex ------------------------ Not Supported in Salat-Avro?
-  //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-                    //     case "enum"    => 
-                    //     case "array"   => 
-                     //    case "map"     => 
+      //Complex ------------------------
+  //       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
 
 //TODO the rest of this method
-                      // case "union"   => classOf[]
-                      // case "[null,"+_+"]"      => 
-                      // case "[null,String]"      => classOf[Option[String]] 
-                       //case "fixed"   => classOf[]
+
                      // case n: List[Any] => classOf[Option[Any]]         
                                              //other Scala datatypes
                          case "Byte"    => "Ljava/lang/Object;"
@@ -93,13 +80,13 @@ object FieldMatcher {
                          case "Object"  => "Ljava/lang/Object;"
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
-                         case _         => println("no unapply type for unsupported type"); error("no unapply type for unsupported type")//println("Avro Schemas only contain Primitive and Complex Avro types");
+                         case _         => error("no unapply type for unsupported type")
                         }
   }
 
   def getReturnInstr(fieldType: String): Int = {
     fieldType match {
-                         //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
+
                    //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
                          case "Boolean" => IRETURN
                          case "Int"     => IRETURN
@@ -108,17 +95,9 @@ object FieldMatcher {
                          case "Double"  => DRETURN
                          case "bytes"   => IRETURN//IRETURN is corrrect for bytes?
                          case "String"  => ARETURN
-      //Complex ------------------------ Not Supported in Salat-Avro?
-  //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-                         case "enum"    => ARETURN
-                         case "array"   => ARETURN
-                         case "map"     => ARETURN
-                      //   case "stream"  => ARETURN
-                      //   case "option"  => ARETURN
-                      // case "union"   => classOf[]
-                      // case "[null,"+_+"]"      => 
-                      // case "[null,String]"      => classOf[Option[String]] 
-                       //case "fixed"   => classOf[]
+      //Complex ------------------------ 
+  //         case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
+                      
                      // case n: List[Any] => classOf[Option[Any]]         
                                              //other Scala datatypes
                          case "Short"   => IRETURN
@@ -132,7 +111,7 @@ object FieldMatcher {
                          case "Object"  => ARETURN
                          case x: String => ARETURN //if its a string but none of the above, its a nested record type
 
-                         case _         => ARETURN//println("Avro Schemas only contain Primitive and Complex Avro types");ARETURN
+                         case _         => ARETURN
                         }
   }
 
@@ -140,7 +119,7 @@ object FieldMatcher {
 
   def getObject(fieldType: String) = {
     fieldType match {
-                         //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
+
                    //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
                          case "Boolean" => true.asInstanceOf[Object]
                          case "Int"     => 1.asInstanceOf[Object]
@@ -150,14 +129,8 @@ object FieldMatcher {
                         // case "bytes"   => Array[Byte](1.toByte).asInstanceOf[Object]//Array is corrrect for bytes?
                          case "String"  => ""
       //Complex ------------------------ Not Supported in Salat-Avro?
-  //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-                      //   case "enum"    => 
-                      //   case "array"   => 
-                      //   case "map"     => 
-                      // case "union"   => classOf[]
-                      // case "[null,"+_+"]"      => 
-                      // case "[null,String]"      => classOf[Option[String]] 
-                       //case "fixed"   => classOf[]
+  //    case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
+                     
                      // case n: List[Any] => classOf[Option[Any]]         
                          case "Short"   => 1.toShort.asInstanceOf[Object]
                          case "Byte"    => 1.toByte.asInstanceOf[Object]
@@ -170,7 +143,7 @@ object FieldMatcher {
                          case "Object"  => new Object
                      //    case x: String =>  //if its a string but none of the above, its a nested record type
 
-                       //  case _         => //println("Avro Schemas only contain Primitive and Complex Avro types");ARETURN
+                         case _         => error("unsupported type")
                         }
   }
 
@@ -185,7 +158,6 @@ value, i.e. Object and array references.
 */
   def getLoadInstr(fieldType: String): Int = {
     fieldType match {
-                         //Primitive Avro types --- Thanks @ConnorDoyle for the type mapping
                    //    case "Null"    => (Type.getDescriptor(classOf[Unit]), )
                          case "Boolean" => ILOAD
                          case "Int"     => ILOAD
@@ -194,15 +166,9 @@ value, i.e. Object and array references.
                          case "Double"  => DLOAD
                          case "bytes"   => ILOAD
                          case "String"  => ALOAD
-      //Complex ------------------------ Not Supported in Salat-Avro?
-  //                       case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-                      //   case "enum"    => ARETURN
-                      //   case "array"   => ARETURN
-                      //   case "map"     => ARETURN
-                      // case "union"   => classOf[]
-                      // case "[null,"+_+"]"      => 
-                      // case "[null,String]"      => classOf[Option[String]] 
-                       //case "fixed"   => classOf[]
+      //Complex ------------------------ 
+  //  case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
+                   
 
                          case "Short"   => ILOAD
                          case "Byte"    => ILOAD
@@ -215,12 +181,11 @@ value, i.e. Object and array references.
                          case "Object"  => ALOAD
 
                          case x: String => ALOAD //
-                         case _         => println("Avro Schemas only contain Primitive and Complex Avro types"); ALOAD
+                         case _         => println("unsupported type"); ALOAD
                         }
   }
 def getReturnTypes(fieldSeeds: List[FieldSeed]) = {
 fieldSeeds.map(n => n.fieldType).map(m => m match {
-      //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
       //    case "Null"    => classOf[Unit]
       case "Boolean" => classOf[Boolean]
       case "Int"     => classOf[Int]
@@ -229,17 +194,13 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
       case "Double"  => classOf[Double]
       case "bytes"   => classOf[Seq[Byte]]
       case "String"  => classOf[String]
-      //Complex ------------------------ Not Supported in Salat-Avro?
+      //Complex ------------------------
       //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
       case "enum"    => classOf[Enumeration#Value]
       case "array"   => classOf[Seq[_]]
       case "map"     => classOf[Map[String, _]]
       case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
-      // case "union"   => classOf[]
-      // case "[null,"+_+"]"      => 
-      // case "[null,String]"      => classOf[Option[String]] 
-      //case "fixed"   => classOf[]
-
+   
 
                          case "Short"   => classOf[Short]
                          case "Byte"    => classOf[Byte]
@@ -254,7 +215,7 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
       //     case n: List[Any] => classOf[Option[Any]]         
                          
       case x: String => x //if its a string but none of the above, its a nested record type
-    //  case a:Any     => a// "Avro Schemas should only contain Primitive and Complex Avro types" 
+    //  case a:Any     => a
 
     })
 }

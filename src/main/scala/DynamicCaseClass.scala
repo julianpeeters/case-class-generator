@@ -13,7 +13,7 @@ class DynamicCaseClass(classData: ClassData) {
   val insantiationParams: List[Object] = fieldData.map(f => FieldMatcher.getObject(f.fieldType))
 
 //get a new ASM classwriter, passing it the data necessary to dynamically generate a class, and "dump" the bytecode
-  val bytecode = (new CaseClassGenerator).generateBytecode(classData)
+  val bytecode =  BytecodeGenerator.dump(classData)
   val model  = DynamicClassLoader.loadClass(fullName, bytecode(0)) //load the class
   val model$ = DynamicClassLoader.loadClass(fullName + "$", bytecode(1)) //load the module class
 
