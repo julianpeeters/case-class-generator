@@ -7,6 +7,9 @@ import Opcodes._
 case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
   def dump = {
     
+//  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.map(k => k.dropWhile(c => (c != '.')).tail).toList
+  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+
 mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "unapply", "(L" + caseClassName + ";)Lscala/Option;", "(" + caseClassName + ";)Lscala/Option<Lscala/Tuple" + fieldData.length + "<" + fieldData.map(fd => fd.typeData.unapplyType).mkString + ">;>;", null);
 mv_MODULE.visitCode();
 mv_MODULE.visitVarInsn(ALOAD, 1);
@@ -99,7 +102,10 @@ fieldData.foreach(fd => {
       mv_MODULE.visitVarInsn(ALOAD, 1);
       mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
     }
-
+    case name: String if userDefinedTypes.contains(name)  => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
+    }
     case _         => println("cannot generate unapply unsupported type")
   }
 })

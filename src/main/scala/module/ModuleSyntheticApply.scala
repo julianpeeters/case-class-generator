@@ -7,6 +7,8 @@ import Opcodes._
 case class ModuleSyntheticApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
   def dump = {
     
+    //  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.map(k => k.dropWhile(c => (c != '.')).tail).toList
+      val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
 
 mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC + ACC_BRIDGE + ACC_SYNTHETIC, "apply", "(" + Stream.continually("Ljava/lang/Object;").take(fieldData.length).mkString + ")Ljava/lang/Object;", null, null);
 mv_MODULE.visitCode();
@@ -15,7 +17,10 @@ mv_MODULE.visitVarInsn(ALOAD, 0);
 fieldData.zipWithIndex.foreach(n => {
 
   n._1.fieldType match {
-    case "String"  => mv_MODULE.visitVarInsn(ALOAD, n._2); mv_MODULE.visitTypeInsn(CHECKCAST, "java/lang/String");
+    case "String"  => {
+      mv_MODULE.visitVarInsn(ALOAD, n._2);
+      mv_MODULE.visitTypeInsn(CHECKCAST, "java/lang/String");
+    }
     case "Int"     => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToInt", "(Ljava/lang/Object;)I");
@@ -24,8 +29,6 @@ fieldData.zipWithIndex.foreach(n => {
       mv_MODULE.visitVarInsn(ALOAD, n._2);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToBoolean", "(Ljava/lang/Object;)Z");
     }
-
-
     case "Short"   => {
       mv_MODULE.visitVarInsn(ALOAD, n._2);
       mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToShort", "(Ljava/lang/Object;)S");
@@ -67,6 +70,13 @@ fieldData.zipWithIndex.foreach(n => {
     case "Object"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
 
     case "bytes"   => //TODO move this into avro datafile parser
+   
+    case name: String if userDefinedTypes.contains(name)  => { println("mod synth apply found a user defined type")
+      mv_MODULE.visitVarInsn(ALOAD, n._2);
+      //add namespace to the type name
+      val fullName = caseClassName.takeWhile(c => (c != '/')) + "/" + name
+      mv_MODULE.visitTypeInsn(CHECKCAST, fullName);
+    }
 
     case _         => println("cannot generate apply method: unsupported type")
   }
