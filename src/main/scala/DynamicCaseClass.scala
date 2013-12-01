@@ -1,16 +1,16 @@
-//package avocet
-//import caseclass.generator._
 package caseclass.generator
 
 class DynamicCaseClass(classData: ClassData) {
 
 //prepare the input as to improve readability of the code
-  val fullName = (classData.classNamespace + "." + classData.className)
+  val name = classData.className
+  val namespace = classData.classNamespace 
+  val fullName = (namespace + "." + name)
   val fieldData: List[FieldSeed] = classData.classFields
 
 //using data from the input, prepare the arguments needed for reflective instantiation of the yet-to-be-generated class
   val methodParams: List[Class[_]] = classData.returnType.asInstanceOf[List[Class[_]]]
-  val insantiationParams: List[Object] = fieldData.map(f => FieldMatcher.getObject(f.fieldType))
+  val insantiationParams: List[Object] = fieldData.map(fd => FieldMatcher.getTypeData(namespace, fd.fieldType).asParam)
 
 //get a new ASM classwriter, passing it the data necessary to dynamically generate a class, and "dump" the bytecode
   val bytecode =  BytecodeGenerator.dump(classData)
@@ -21,6 +21,11 @@ class DynamicCaseClass(classData: ClassData) {
   val method_apply$ = model$.getMethod("apply", methodParams: _*)//populate the instance values
   val instance$ = model$.getConstructor().newInstance()//get an instance of the companion
   val instantiated$ = method_apply$.invoke(instance$,  insantiationParams: _*)
+
+//After a DynamiceCaseClass is made, add it to the list of generated Classes 
+  CaseClassGenerator.accept(this)
+  println("generated classes: "  + CaseClassGenerator.generatedClasses)
+
 }
 
 

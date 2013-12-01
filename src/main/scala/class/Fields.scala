@@ -9,7 +9,7 @@ import java.util.Arrays
 import scala.io.Codec._
 case class Fields(cw: ClassWriter, fieldData: List[FieldData]) {
   def dump = {
-    fieldData.foreach(n=>(cw.visitField(ACC_PRIVATE + ACC_FINAL, n.fieldName, n.typeDescriptor.toString, null, null).visitEnd())) 
+    fieldData.foreach(fd=>(cw.visitField(ACC_PRIVATE + ACC_FINAL, fd.fieldName, fd.typeData.typeDescriptor.toString, null, null).visitEnd())) 
 
   }
 }

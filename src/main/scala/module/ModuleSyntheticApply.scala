@@ -71,7 +71,7 @@ fieldData.zipWithIndex.foreach(n => {
     case _         => println("cannot generate apply method: unsupported type")
   }
 })
-mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName + "$", "apply", "(" + fieldData.map(fd => fd.typeDescriptor).mkString + ")L" + caseClassName + ";");
+mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName + "$", "apply", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";");
 mv_MODULE.visitInsn(ARETURN);
 mv_MODULE.visitMaxs(4, 4);
 mv_MODULE.visitEnd();

@@ -28,15 +28,15 @@ mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 
 val reversed = fieldData.reverse
 var terminalLabel: Label = null
-reversed.take(fieldData.length).foreach( valueMember => {
+reversed.take(fieldData.length).foreach( fd => {
   mv.visitVarInsn(ALOAD, 0);
       val tpe = {
-        if (valueMember.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
-        else valueMember.typeDescriptor
+        if   (fd.typeData.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
+        else fd.typeData.typeDescriptor
       } 
-  mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + tpe);
+  mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + tpe);
 
-  valueMember.fieldType match { 
+  fd.fieldType match { 
     case "Byte" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
     case "Short" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
     case "Int" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
@@ -58,12 +58,12 @@ reversed.take(fieldData.length).foreach( valueMember => {
   }
   if (fieldData.length > 1) {
 
-    reversed.indexOf(valueMember) match {
+    reversed.indexOf(fd) match {
       //The last field in the class
       case 0 => {
         terminalLabel = new Label()
         mv.visitJumpInsn(GOTO, terminalLabel);
-        mv.visitLabel(labels(fieldData.indexOf(valueMember) - 1))
+        mv.visitLabel(labels(fieldData.indexOf(fd) - 1))
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
       }
       //The first field, the last one written as bytecode
@@ -74,7 +74,7 @@ reversed.take(fieldData.length).foreach( valueMember => {
       //The middle fields in the class
       case _ => {
         mv.visitJumpInsn(GOTO, terminalLabel);
-        mv.visitLabel(labels(fieldData.indexOf(valueMember) - 1))
+        mv.visitLabel(labels(fieldData.indexOf(fd) - 1))
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null)
       }
     }

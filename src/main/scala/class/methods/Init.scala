@@ -14,17 +14,17 @@ case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, f
 //the variable part of the constructor:
     var stackIndex = 1
 
-    fieldData.map(fd => { //fd.loadInstr).foreach(lI => {
-      if (fd.loadInstr == DLOAD | fd.loadInstr == LLOAD ) {
+    fieldData.map(fd => { //fd.typeData.loadInstr).foreach(lI => {
+      if (fd.typeData.loadInstr == DLOAD | fd.typeData.loadInstr == LLOAD ) {
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(fd.loadInstr, stackIndex); 
-        mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeDescriptor.toString);
+        mv.visitVarInsn(fd.typeData.loadInstr, stackIndex); 
+        mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeData.typeDescriptor.toString);
         stackIndex += 2
       }
       else { 
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(fd.loadInstr, stackIndex); 
-        mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeDescriptor.toString);
+        mv.visitVarInsn(fd.typeData.loadInstr, stackIndex); 
+        mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeData.typeDescriptor.toString);
         stackIndex += 1;
       }
     })

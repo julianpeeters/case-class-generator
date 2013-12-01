@@ -48,7 +48,7 @@ class JSONParser(jsonSchema: String) {
     fieldType = field("type")
 
     if {fieldType match {
-      case m: Map[String, Any] => true
+      case m: Map[_, _] => true //hope for a [String, Any]
       case _                   => false
     }}
     } yield fieldType
@@ -70,7 +70,7 @@ class JSONParser(jsonSchema: String) {
         case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
         case s: String            => S(s) = s; s //if the type is a nested record, getDescriptor returns wrong value anyways
         case m: Map[String, Any]  => m("name")   //
-        case c: Class[Any]        => C(c) = c
+        case c: Class[_]        => C(c) = c
         case _                    => println("none of the above")
       }
     }
