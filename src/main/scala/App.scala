@@ -20,7 +20,7 @@ import scala.reflect.internal.pickling._
 
 //import com.novus.salat.annotations.util._
 //import scala.reflect.ScalaSignature
-case class Alice(x: String)
+
 
 
 //Main is for debugging purposes
@@ -50,13 +50,13 @@ object Main extends App {
 println(typeTemplate)
 println(typeTemplate.getClass)
 
-  type MyRecord = typeTemplate.type 
+  type Record = typeTemplate.type 
 //println(MyRecord.getClass)
 
 
 
  // val obj = grater[MyRecord].asObject(dbo)
-  val obj = grater[MyRecord].asObjectsFromFile(infile)
+  val obj = grater[Record].asObjectsFromFile(infile)
     //println(obj)
     obj foreach println
 

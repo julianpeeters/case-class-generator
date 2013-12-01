@@ -14,7 +14,6 @@ class JSONParser(jsonSchema: String) {
       getInstantiationTypes(schema)))
 
 
-//How can I make implicit everything below this line
   class jsonTypeConverter[T]{
     def unapply(a:Any): Option[T] = Some(a.asInstanceOf[T])
     def update(a:Any): Option[T] = Some(a.asInstanceOf[T])
@@ -48,7 +47,7 @@ class JSONParser(jsonSchema: String) {
     fieldType = field("type")
 
     if {fieldType match {
-      case m: Map[_, _] => true //hope for a [String, Any]
+      case m: Map[String, Any] => true
       case _                   => false
     }}
     } yield fieldType
@@ -70,7 +69,7 @@ class JSONParser(jsonSchema: String) {
         case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
         case s: String            => S(s) = s; s //if the type is a nested record, getDescriptor returns wrong value anyways
         case m: Map[String, Any]  => m("name")   //
-        case c: Class[_]        => C(c) = c
+        case c: Class[Any]        => C(c) = c
         case _                    => println("none of the above")
       }
     }
@@ -82,9 +81,11 @@ class JSONParser(jsonSchema: String) {
       case "boolean" => "Boolean"
       case "int"     => "Int"
       case "long"    => "Float"
-      case "float"    => "Long"
-      case "double"    => "Double"
-      case "string"   => "String"
+      case "float"   => "Long"
+      case "double"  => "Double"
+      case "string"  => "String"
+      case x: String => println(x) ; x
+      case _         => error("JSON parser found an unsupported type")
       }
     }
 
@@ -144,7 +145,7 @@ def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ 
       case "enum"    => classOf[Enumeration#Value]
       case "array"   => classOf[Seq[_]]
       case "map"     => classOf[Map[String, _]]
-      case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
+   //   case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
       // case "union"   => classOf[]
       // case "[null,"+_+"]"      => 
       // case "[null,String]"      => classOf[Option[String]] 
@@ -155,7 +156,7 @@ def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ 
       //     case n: List[Any] => classOf[Option[Any]]         
                          
       case x: String => x //if its a string but none of the above, its a nested record type
-      case a:Any     => a
+      case _     => error("JSON parser found nuthin' good")
 
     })
   }
