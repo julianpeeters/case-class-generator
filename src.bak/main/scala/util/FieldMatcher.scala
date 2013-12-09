@@ -18,10 +18,7 @@ object FieldMatcher {
   }
 
   def getTypeData(namespace: String, fieldType: String): TypeData = {
-
-println("FieldMatcher getTypeData fieldType " + fieldType)
     fieldType match {
-
       case "Null"    => { 
         TypeData(
           Type.getDescriptor(classOf[Null]),
@@ -160,15 +157,16 @@ println("FieldMatcher getTypeData fieldType " + fieldType)
       //Complex 
 
       //User-Defined
-      case name: String => {
-       CaseClassGenerator.generatedClasses.foreach(println)
+      case name: String => { 
         TypeData(
-          "L"+ name + ";", //if its a string but none of the above, its a nested record type
+//          "L"+ name + ";", //if its a string but none of the above, its a nested record type
+          "L"+ namespace + "/" + name + ";", //if its a string but none of the above, its a nested record type
           "Ljava/lang/Object;",//not at all sure that this is the correct thing to use here
           ALOAD,
           ARETURN,
 //          CaseClassGenerator.generatedClasses.get(namespace + "." + name).get.instantiated$.asInstanceOf[Object]
-          CaseClassGenerator.generatedClasses.get(name).get.instantiated$.asInstanceOf[Object]
+          CaseClassGenerator.generatedClasses.get(name).get.instantiated$
+//          CaseClassGenerator.generatedClasses.get(name).get.instantiated$.asInstanceOf[Object]
         )
       }
       case _         => error("only Strings are valid type names")
@@ -185,7 +183,51 @@ load the two slots i and i+ 1). Finally ALOAD is used to load any non primitive
 value, i.e. Object and array references.
 */
 
-def getReturnTypes(fieldSeeds: List[FieldSeed]) = {
+  def getInstantiationTypes(schema: Any) = {      
+    val ft = JSONParser.getFields(schema).map(n => n.fieldType)
+    ft.map(m => m match {
+      //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
+      //    case "Null"    => classOf[Unit]
+      case "Boolean" => classOf[Boolean]
+      case "Int"     => classOf[Int]
+      case "Long"    => classOf[Long]
+      case "Float"   => classOf[Float]
+      case "Double"  => classOf[Double]
+     // case "bytes"   => classOf[Seq[Byte]]
+      case "String"  => classOf[String]
+
+      case "boolean" => classOf[Boolean]
+      case "int"     => classOf[Int]
+      case "long"    => classOf[Long]
+      case "float"   => classOf[Float]
+      case "double"  => classOf[Double]
+      case "bytes"   => classOf[Seq[Byte]]
+      case "string"  => classOf[String]
+
+      //Complex ------------------------ 
+      //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
+      case "enum"    => classOf[Enumeration#Value]
+      case "array"   => classOf[Seq[_]]
+      case "map"     => classOf[Map[String, _]]
+   //   case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
+      // case "union"   => classOf[]
+      // case "[null,"+_+"]"      => 
+      // case "[null,String]"      => classOf[Option[String]] 
+      //case "fixed"   => classOf[]
+
+
+      //  case "option"   =>  classOf[Option[Any]]
+      //     case n: List[Any] => classOf[Option[Any]]         
+                         
+      case x: String =>{println (CaseClassGenerator.generatedClasses);CaseClassGenerator.generatedClasses.get(x).get.model} //if its a string but none of the above, its a nested record type
+      case _     => error("File parser found nuthin' good")
+
+    })
+  }
+
+
+//def getReturnTypes(fieldSeeds: List[FieldSeed]) = {
+def getReturnType(fieldSeeds: List[FieldSeed]) = {
 fieldSeeds.map(n => n.fieldType).map(m => m match {
       //    case "Null"    => classOf[Unit]
       case "Boolean" => classOf[Boolean]
@@ -214,8 +256,8 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
                          case "Object"  => classOf[Object]
       //  case "option"   =>  classOf[Option[Any]]
       //     case n: List[Any] => classOf[Option[Any]]         
-                         
-      case x: String => x //if its a string but none of the above, its a nested record type
+      //case x: String => classOf[Class]                          
+      case x: String => CaseClassGenerator.generatedClasses.get("rec").get.model//Class.forName(x) //if its a string but none of the above, its a nested record type
     //  case a:Any     => a
 
     })

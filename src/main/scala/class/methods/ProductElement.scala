@@ -28,15 +28,15 @@ mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
 
 val reversed = fieldData.reverse
 var terminalLabel: Label = null
-reversed.take(fieldData.length).foreach( fd => {
+reversed.take(fieldData.length).foreach( valueMember => {
   mv.visitVarInsn(ALOAD, 0);
       val tpe = {
-        if   (fd.typeData.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
-        else fd.typeData.typeDescriptor
+        if (valueMember.typeData.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
+        else valueMember.typeData.typeDescriptor
       } 
-  mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + tpe);
+  mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + tpe);
 
-  fd.fieldType match { 
+  valueMember.fieldType match { 
     case "Byte" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
     case "Short" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
     case "Int" => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
@@ -52,18 +52,19 @@ reversed.take(fieldData.length).foreach( fd => {
     case "Any" => 
     case "AnyRef" => 
     case "Object" => 
-//TODO
+
     case "list" => 
-    case _ => println("cannot generate productElement method: unsupported type")
+    case name: String  => //nothing needed for user-defined types
+    case _ => error("cannot generate productElement method: unsupported type")
   }
   if (fieldData.length > 1) {
 
-    reversed.indexOf(fd) match {
+    reversed.indexOf(valueMember) match {
       //The last field in the class
       case 0 => {
         terminalLabel = new Label()
         mv.visitJumpInsn(GOTO, terminalLabel);
-        mv.visitLabel(labels(fieldData.indexOf(fd) - 1))
+        mv.visitLabel(labels(fieldData.indexOf(valueMember) - 1))
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
       }
       //The first field, the last one written as bytecode
@@ -74,7 +75,7 @@ reversed.take(fieldData.length).foreach( fd => {
       //The middle fields in the class
       case _ => {
         mv.visitJumpInsn(GOTO, terminalLabel);
-        mv.visitLabel(labels(fieldData.indexOf(fd) - 1))
+        mv.visitLabel(labels(fieldData.indexOf(valueMember) - 1))
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null)
       }
     }

@@ -4,13 +4,27 @@ class DynamicCaseClass(classData: ClassData) {
 
 //prepare the input as to improve readability of the code
   val name = classData.className
-  val namespace = classData.classNamespace 
+  val namespace = classData.classNamespace.replaceAllLiterally(".", "/")
+println("================================" + namespace)
+//  val fullName = (namespace + "." + name)
   val fullName = (namespace + "." + name)
+println(fullName)
+
+println(fullName)
   val fieldData: List[FieldSeed] = classData.classFields
+//println(classData.returnType)
+//  println("dcc return type " + classData.returnType.head.getClass)
 
 //using data from the input, prepare the arguments needed for reflective instantiation of the yet-to-be-generated class
-  val methodParams: List[Class[_]] = classData.returnType.asInstanceOf[List[Class[_]]]
+  val methodParams: List[Class[_]] = {
+//    classData.returnType.asInstanceOf[List[Class[_]]]
+     FieldMatcher.getReturnType(fieldData).asInstanceOf[List[Class[_]]]
+  } 
+    println("methodParams" + methodParams)
+
+
   val insantiationParams: List[Object] = fieldData.map(fd => FieldMatcher.getTypeData(namespace, fd.fieldType).asParam)
+    println("insantiationParams" + insantiationParams)
 
 //get a new ASM classwriter, passing it the data necessary to dynamically generate a class, and "dump" the bytecode
   val bytecode =  BytecodeGenerator.dump(classData)
@@ -24,7 +38,6 @@ class DynamicCaseClass(classData: ClassData) {
 
 //After a DynamiceCaseClass is made, add it to the list of generated Classes 
   CaseClassGenerator.accept(this)
-  println("generated classes: "  + CaseClassGenerator.generatedClasses)
 
 }
 

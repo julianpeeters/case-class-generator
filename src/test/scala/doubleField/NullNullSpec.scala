@@ -23,7 +23,7 @@ class NullNullSpec extends mutable.Specification {
 
 //but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
   val valueMembers: List[FieldSeed] = List(FieldSeed("a","Null"), FieldSeed("b","Null"))//, FieldSeed("d","Boolean"))
-  val classData = ClassData("models", "MyRecord_NullNullSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
+  val classData = ClassData("models", "MyRecord_NullNullSpec", valueMembers)
 println("nullspec")
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model

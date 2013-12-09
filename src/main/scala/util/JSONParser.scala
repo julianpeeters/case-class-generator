@@ -1,18 +1,19 @@
 package caseclass.generator
 import scala.util.parsing.json._
 
-class JSONParser(jsonSchema: String) {
+object JSONParser {
 
- val parsedJSON = List((JSON.parseFull(jsonSchema)).get)
+  def parseJsonString(jsonSchema: String) = {
+    
+    val parsedJSON = List((JSON.parseFull(jsonSchema)).get)
 
-  val classSeeds = asSchemaList(parsedJSON)//extracts nested schemas to a list of schemas
-    .filter(s => s != List.empty)
-    .map(schema => ClassData(
-      getNamespace(parsedJSON), 
-      getName(schema), 
-      getFields(schema), 
-      getInstantiationTypes(schema)))
-
+    asSchemaList(parsedJSON)//extracts nested schemas to a list of schemas (parsed, so really a list of ClassData objects)
+      .filter( s => s != List.empty)
+      .map(schema => ClassData( 
+        getNamespace(parsedJSON), 
+        getName(schema), 
+        getFields(schema)) )
+  }
 
   class jsonTypeConverter[T]{
     def unapply(a:Any): Option[T] = Some(a.asInstanceOf[T])
@@ -54,8 +55,11 @@ class JSONParser(jsonSchema: String) {
 
   def getNamespace(jsonSchema: List[Any]): String = (for { 
     (M(map)) <- jsonSchema
-    S(namespace) = map("namespace")
-  } yield namespace).head
+    S(namespace) = {
+      if (Option(map("namespace")).isDefined) map("namespace")
+      else "<empty>"
+    } 
+  } yield namespace).head//.takeRight(4)
 
   def getName(schema: Any): String = (for { 
      M(map) <- List(schema)
@@ -68,9 +72,9 @@ class JSONParser(jsonSchema: String) {
       JSONfieldType match {
         case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
         case s: String            => S(s) = s; s //if the type is a nested record, getDescriptor returns wrong value anyways
-        case m: Map[String, Any]  => m("name")   //
+        case m: Map[String, Any]  => m("name")   
         case c: Class[Any]        => C(c) = c
-        case _                    => println("none of the above")
+        case _                    => error("JSON field type not found")
       }
     }
 
@@ -80,15 +84,17 @@ class JSONParser(jsonSchema: String) {
       case "null"    => "Unit"
       case "boolean" => "Boolean"
       case "int"     => "Int"
-      case "long"    => "Float"
-      case "float"   => "Long"
+      case "long"    => "Long"
+      case "float"   => "Float"
       case "double"  => "Double"
       case "string"  => "String"
-      case x: String => println(x) ; x
+
+
+
+      case x: String => println("JSON paser foun a " + x) ; x
       case _         => error("JSON parser found an unsupported type")
       }
     }
-
 
 
 
@@ -119,45 +125,4 @@ def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ 
     }
 */
 
-  def getInstantiationTypes(schema: Any) = {
-    val ft = getFields(schema).map(n => n.fieldType)
-    ft.map(m => m match {
-      //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
-      //    case "Null"    => classOf[Unit]
-      case "Boolean" => classOf[Boolean]
-      case "Int"     => classOf[Int]
-      case "Long"    => classOf[Long]
-      case "Float"   => classOf[Float]
-      case "Double"  => classOf[Double]
-     // case "bytes"   => classOf[Seq[Byte]]
-      case "String"  => classOf[String]
-
-      case "boolean" => classOf[Boolean]
-      case "int"     => classOf[Int]
-      case "long"    => classOf[Long]
-      case "float"   => classOf[Float]
-      case "double"  => classOf[Double]
-      case "bytes"   => classOf[Seq[Byte]]
-      case "string"  => classOf[String]
-
-      //Complex ------------------------ 
-      //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-      case "enum"    => classOf[Enumeration#Value]
-      case "array"   => classOf[Seq[_]]
-      case "map"     => classOf[Map[String, _]]
-   //   case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
-      // case "union"   => classOf[]
-      // case "[null,"+_+"]"      => 
-      // case "[null,String]"      => classOf[Option[String]] 
-      //case "fixed"   => classOf[]
-
-
-      //  case "option"   =>  classOf[Option[Any]]
-      //     case n: List[Any] => classOf[Option[Any]]         
-                         
-      case x: String => x //if its a string but none of the above, its a nested record type
-      case _     => error("JSON parser found nuthin' good")
-
-    })
-  }
 }

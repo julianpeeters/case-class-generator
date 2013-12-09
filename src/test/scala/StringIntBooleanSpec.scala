@@ -23,7 +23,7 @@ class StringIntBooleanSpec extends mutable.Specification {
 
 //but for now lets make it easy debug my Scala signatures 
   val valueMembers: List[FieldSeed] = List(FieldSeed("x","String"), FieldSeed("y","Int"), FieldSeed("z","Boolean"))//, FieldSeed("e","Int"), FieldSeed("f","Int"), FieldSeed("g","Int"))
-  val classData = ClassData("models", "MyRecord_StringIntBooleanSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
+  val classData = ClassData("models", "MyRecord_StringIntBooleanSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
 

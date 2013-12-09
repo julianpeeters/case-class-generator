@@ -23,7 +23,7 @@ class ShortSpec extends mutable.Specification {
 
 //but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
   val valueMembers: List[FieldSeed] = List(FieldSeed("a","Short"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
-  val classData = ClassData("models", "MyRecord_ShortSpec", valueMembers, FieldMatcher.getReturnTypes(valueMembers))
+  val classData = ClassData("models", "MyRecord_ShortSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
 

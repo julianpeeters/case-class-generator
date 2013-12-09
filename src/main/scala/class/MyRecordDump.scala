@@ -9,7 +9,8 @@ case class MyRecordDump {
 
   def dump(mySig: ScalaSig, caseClassName: String, fieldData: List[FieldData]): Array[Byte] = {
 
-    val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);//|ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
+    val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS)//, ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
+    //val cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
     var fv: FieldVisitor = null
     var mv: MethodVisitor = null
     var av0: AnnotationVisitor = null

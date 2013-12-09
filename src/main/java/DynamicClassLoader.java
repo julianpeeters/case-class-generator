@@ -8,7 +8,6 @@ public class DynamicClassLoader {
     //override classDefine (as it is protected) and define the class.
     Class<?> clazz = null;
     try {
-     // ClassLoader loader = ClassLoader.getSystemClassLoader();
       ClassLoader loader = Thread.currentThread().getContextClassLoader();
       Class<?> cls = Class.forName("java.lang.ClassLoader");
       Method method = cls.getDeclaredMethod("defineClass", new Class[] { String.class, byte[].class, int.class, int.class });
