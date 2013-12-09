@@ -35,7 +35,7 @@ object Main extends App {
     avroSchema.toString
   }
 
-
+  //val infile = new File("twitter.avro")
   val infile = new File("input.avro")
   val jsonSchema: String = getSchemaAsString(infile)
   val typeTemplate = CaseClassGenerator.asInstance(jsonSchema)//instantiated module class
