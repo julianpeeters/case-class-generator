@@ -47,7 +47,7 @@ classSeeds.foreach(println)
 
     //classSeeds.map(seed => new DynamicCaseClass(seed).instantiated$)
 //    classSeeds.reverse.map(seed => new DynamicCaseClass(seed).instantiated$)
-    classSeeds.reverse.map(seed => new DynamicCaseClass(seed))
+    classSeeds.reverse.map(seed => new DynamicCaseClass(seed)).reverse.head
 
 
   }

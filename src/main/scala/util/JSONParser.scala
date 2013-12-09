@@ -59,7 +59,7 @@ object JSONParser {
       if (Option(map("namespace")).isDefined) map("namespace")
       else "<empty>"
     } 
-  } yield namespace).head//.takeRight(4)
+  } yield namespace).head//.replaceAllLiterally(".", "/")//.takeRight(4)
 
   def getName(schema: Any): String = (for { 
      M(map) <- List(schema)
