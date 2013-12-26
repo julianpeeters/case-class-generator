@@ -34,8 +34,9 @@ object Main extends App {
   }
 
 //  val infile = new File("enron_head.avro")
-  val infile = new File("input2.avro")
-  //val infile = new File("twitter.avro")
+  //val infile = new File("input2.avro")
+ // val infile = new File("input.avro")
+  val infile = new File("twitter.avro")
   val outfile = new File("output.avro")
   val jsonSchema: String = getSchemaAsString(infile)
 println("json " + jsonSchema)

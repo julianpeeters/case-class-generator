@@ -4,7 +4,8 @@ class DynamicCaseClass(classData: ClassData) {
 
 //prepare the input as to improve readability of the code
   val name = classData.className
-  val namespace = classData.classNamespace.replaceAllLiterally(".", "/")
+  //val namespace = classData.classNamespace.replaceAllLiterally(".", "/")
+  val namespace = classData.classNamespace.replaceAllLiterally("/", ".")
 println("================================" + namespace)
 //  val fullName = (namespace + "." + name)
   val fullName = (namespace + "." + name)
