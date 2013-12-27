@@ -108,21 +108,6 @@ object JSONParser {
  
   }
 
-//TODO Add support for nested custom classes
-/*
-def matchTypes(JSONfieldType: Any, modelClass: Object) = {//: java.lang.Class[_ <: Object] = {
-      JSONfieldType match {
-      //  case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
-      //  case s: String            => S(s) = s; modelClass.getClass() //if the type is a nested record, getDescriptor returns wrong value anyways
-       // case m: Map[String, Any]  => m("name")   //
-       // case c: Class[Any]        => C(c) = c; c
-       // case _                    => Class[Any]
 
-        case "Int" => classOf[Int]
-        case "rec" => modelClass
-        case _     => 
-      }
-    }
-*/
 
 }

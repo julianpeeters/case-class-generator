@@ -2,10 +2,11 @@ package avocet
 
 
 import caseclass.generator._
-import com.banno.salat.avro._
+//import com.banno.salat.avro._
 
-//import com.novus.salat._
+import com.novus.salat._
 import global._
+import com.mongodb.casbah.Imports._
 //import models._
 
 import java.io.File
@@ -26,6 +27,7 @@ object Main extends App {
 //usually we'd be reading from a source
 
 
+
   def getSchemaAsString(infile: java.io.File): String = {
     val bufferedInfile = scala.io.Source.fromFile(infile, "iso-8859-1")
     val parsable = new String(bufferedInfile.getLines.mkString.dropWhile(_ != '{').toCharArray)
@@ -34,15 +36,16 @@ object Main extends App {
   }
 
 //  val infile = new File("enron_head.avro")
-  //val infile = new File("input2.avro")
- // val infile = new File("input.avro")
-  val infile = new File("twitter.avro")
+  val infile = new File("input2.avro")
+  //val infile = new File("twitter.avro")
   val outfile = new File("output.avro")
+
+/*
   val jsonSchema: String = getSchemaAsString(infile)
 println("json " + jsonSchema)
-  val typeTemplate = CaseClassGenerator.asInstance(jsonSchema).instantiated$//instantiated module class
+//  val typeTemplate = CaseClassGenerator.asInstance(jsonSchema).instantiated$//instantiated module class
 
-
+*/
 //but for now lets feed the class info in manually
 
 
@@ -55,30 +58,33 @@ println("json " + jsonSchema)
   val valueMembers: List[FieldSeed] = List(FieldSeed("i","Int"))
   val classData = ClassData("models", "rec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
-
-  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","rec"))
+*/
+//  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","rec"))
+  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","Int"))
   val classData2 = ClassData("models", "MyRecord", valueMembers2)
   val dcc2 = new DynamicCaseClass(classData2)
 
   val typeTemplate = dcc2.instantiated$
-*/
 
-println("type template " + typeTemplate)
-println(typeTemplate.getClass)
+
+//println("type template " + typeTemplate)
+//println(typeTemplate.getClass)
 
   type Record = typeTemplate.type 
 
 
 println(grater[Record])
-  //val dbo = grater[Record].asDBObject(typeTemplate)
-  //  println(dbo)
+  val dbo = grater[Record].asDBObject(typeTemplate)
+    println(dbo)
+  val obj = grater[Record].asObject(dbo)
+    println(obj)
 
 
-  //val obj = grater[Record].serializeToFile(outfile, typeTemplate)
+//  val obj = grater[Record].serializeToFile(outfile, typeTemplate)
 
 
-  val obj = grater[Record].asObjectsFromFile(infile)
-    obj foreach println
+ // val obj = grater[Record].asObjectsFromFile(infile)
+  //  obj foreach println
 
  
  // println(typeTemplate == obj)
