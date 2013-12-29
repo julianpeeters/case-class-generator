@@ -1,5 +1,5 @@
 package caseclass.generator
-import artisinal.pickle.maker._
+import artisanal.pickle.maker._
 import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
@@ -11,7 +11,7 @@ case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: Strin
 //  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.map(k => k.dropWhile(c => (c != '.')).tail).toList
   val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
 
-    println("HC DEFINED TYPES" + userDefinedTypes)
+    println("HC DEFINED TYPES " + userDefinedTypes)
     println(fieldData.map(fd => fd.fieldType))
 
   def dump = {
@@ -23,8 +23,8 @@ case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: Strin
         mv.visitVarInsn(ALOAD, 0);
         mv.visitMethodInsn(INVOKEVIRTUAL, "scala/runtime/ScalaRunTime$", "_hashCode", "(Lscala/Product;)I");
       }
-      case x if x > 0 => { 
-        if (fieldData.map(fd => fd.fieldType).forall(t => (List("Nothing", "Null", "Any", "AnyRef", "Object", "String", "List", "Stream" ):::userDefinedTypes).contains(t))) {//if all the valueMembers are in this list (of "empty" types, look different when paired with "real")   
+      case x if x > 0 => { //type erase the generics, then check if all the types are from the folling list
+        if (fieldData.map(fd => fd.fieldType.takeWhile(c => c != '[')).forall(t => (List("Nothing", "Null", "Any", "AnyRef", "Object", "String", "List", "Stream" ):::userDefinedTypes).contains(t))) {//if all the valueMembers are in this list (of "empty" types, look different when paired with "real")   
           println("HC found a user defined type " + fieldData.map(fd => fd.fieldType))
 println()
           mv.visitFieldInsn(GETSTATIC, "scala/runtime/ScalaRunTime$", "MODULE$", "Lscala/runtime/ScalaRunTime$;");

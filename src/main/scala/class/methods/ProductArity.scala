@@ -1,5 +1,5 @@
 package caseclass.generator
-import artisinal.pickle.maker._
+import artisanal.pickle.maker._
 import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
@@ -13,7 +13,7 @@ case class ProductArity(cw: ClassWriter, var mv: MethodVisitor, fieldData: List[
   case 4 => ICONST_4
   case 5 => ICONST_5
   case x => x
-// case _ => error("not a valid number of value members")      
+
 }
 mv = cw.visitMethod(ACC_PUBLIC, "productArity", "()I", null, null);
 mv.visitCode();

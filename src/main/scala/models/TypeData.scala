@@ -5,4 +5,5 @@ case class TypeData(
   unapplyType: String, 
   loadInstr: Int, 
   returnInstr: Int, 
-  asParam: Object  )
+  asParam: Object,
+  unerasedType: String)

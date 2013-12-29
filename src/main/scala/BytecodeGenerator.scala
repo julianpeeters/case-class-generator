@@ -1,5 +1,5 @@
 package caseclass.generator
-import artisinal.pickle.maker._
+import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
@@ -14,7 +14,7 @@ object BytecodeGenerator {
     val namespace = classData.classNamespace.replaceAllLiterally(".", "/")
     val caseClassName = namespace + "/" + name
     val fieldData: List[FieldData] = classData.classFields.map(field => FieldMatcher.enrichFieldData(namespace, field) )
-println(fieldData)
+
     val mySig = new ScalaSig(List("case class"), List(classData.classNamespace, classData.className), fieldData.map(f => (f.fieldName, f.fieldType)))
 
     //generate a pair of class and module class

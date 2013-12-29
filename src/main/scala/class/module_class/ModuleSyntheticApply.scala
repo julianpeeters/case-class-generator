@@ -1,5 +1,5 @@
 package caseclass.generator
-import artisinal.pickle.maker._
+import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
@@ -15,8 +15,8 @@ mv_MODULE.visitCode();
 mv_MODULE.visitVarInsn(ALOAD, 0);
 
 fieldData.zipWithIndex.foreach(n => {
-
-  n._1.fieldType match {
+  //erase types and then match types
+  n._1.fieldType.takeWhile(c => c != '[') match {
     case "String"  => {
       mv_MODULE.visitVarInsn(ALOAD, n._2);
       mv_MODULE.visitTypeInsn(CHECKCAST, "java/lang/String");
@@ -68,7 +68,10 @@ fieldData.zipWithIndex.foreach(n => {
     case "Any"     => mv_MODULE.visitVarInsn(ALOAD, n._2); 
     case "AnyRef"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
     case "Object"  => mv_MODULE.visitVarInsn(ALOAD, n._2); 
-
+    case "List"    => {
+      mv_MODULE.visitVarInsn(ALOAD, n._2); 
+      mv_MODULE.visitTypeInsn(CHECKCAST, "scala/collection/immutable/List") 
+    }
     case "bytes"   => //TODO move this into avro datafile parser
    
     case name: String if userDefinedTypes.contains(name)  => {
@@ -78,7 +81,7 @@ fieldData.zipWithIndex.foreach(n => {
       mv_MODULE.visitTypeInsn(CHECKCAST, fullName);
     }
 
-    case _         => println("cannot generate apply method: unsupported type")
+    case _         => error("cannot generate synthetic apply method: unsupported type")
   }
 })
 mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName + "$", "apply", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";");

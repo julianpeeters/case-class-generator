@@ -35,9 +35,9 @@ Supports generating classes with arbitrary fields of the following datatypes:
 ##Warnings: 
 1)  This is designed to dynamically provide a type parameter for Salat and Salat-Avro. Further utilitiy is incidental. Access to the dynamic classes seems to be limited to Java reflection and parsing the Scala sig directly, i.e. access via Scala 2.10 reflection is not yet supported. Further research is required to determine boundaries of its functionality as a type.  
 
-2)  For now only classes with vals can be generated: no vars, no defs. It is feasible to add them in the future, but for them to work, artisinal-pickle-maker must be updated as well.
+2)  For now only classes with vals can be generated: no vars, no defs. It is feasible to add them in the future, but for them to work, artisanal-pickle-maker must be updated as well.
 
-3)  Neither objectWeb's classwriter nor my artisinal-pickle-maker are thread-safe.
+3)  Neither objectWeb's classwriter nor my artisanal-pickle-maker are thread-safe.
 
 4)  I'm new at this so, please, criticism is appreciated!
 

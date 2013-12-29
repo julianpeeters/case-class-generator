@@ -10,7 +10,7 @@ scalacOptions in Test ++= Seq("-Yrangepos")
 
 libraryDependencies ++= Seq( 
   "org.ow2.asm" % "asm-util" % "4.1",
-  "com.julianpeeters" %% "artisinal-pickle-maker" % "0.5",
+  "com.julianpeeters" %% "artisanal-pickle-maker" % "0.6",
   "com.banno.salat.avro" %% "salat-avro" % "0.0.10-3",
   "org.apache.avro" % "avro" % "1.7.5",
   "org.slf4j" % "slf4j-simple" % "1.7.5", 

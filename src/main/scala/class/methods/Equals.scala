@@ -1,5 +1,5 @@
 package caseclass.generator
-import artisinal.pickle.maker._
+import artisanal.pickle.maker._
 import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
@@ -59,8 +59,8 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
     var penultimateLabel: Label = null
     var ultimateLabel: Label = null
 
-    fields.foreach(valueMember => { 
-      valueMember.fieldType match {
+    fields.foreach(valueMember => { //erased types 
+      valueMember.fieldType.takeWhile(c => c != '[') match {
         case "Boolean"|"Byte"|"Char"|"Short"|"Int" => {
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeData.typeDescriptor);
@@ -194,7 +194,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           mv.visitLabel(valueMembersGOTOLabel);
 
   //if all value members are from this list, then:
-          if (fieldData.map(n => n.fieldType).forall(t => List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "Object").contains(t))) {//if all field types are types on this list 
+          if (fieldData.map(n => n.fieldType.takeWhile(c => c != '[')).forall(t => List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "Object").contains(t))) {//if all field types are types on this list 
             mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] (caseClassName), 0, null);
             mv.visitInsn(ICONST_0);
             mv.visitLabel(penultimateLabel);
@@ -203,7 +203,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
             mv.visitLabel(l0);
             mv.visitFrame(Opcodes.F_CHOP,3, null, 0, null);
           }
-          if ((List("String", "Unit", "List", "Option", "Null"):::userDefinedTypes).contains(fieldData.head.fieldType)){
+          if ((List("String", "Unit", "List", "Option", "Null"):::userDefinedTypes).contains(fieldData.head.fieldType.takeWhile(c => c != '['))){
             mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
             mv.visitInsn(ICONST_0);
             mv.visitLabel(penultimateLabel);

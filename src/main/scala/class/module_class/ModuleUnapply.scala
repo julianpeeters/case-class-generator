@@ -1,5 +1,5 @@
 package caseclass.generator
-import artisinal.pickle.maker._
+import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
@@ -12,7 +12,11 @@ case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, c
 
     fieldData.length match {
       case 1            => {
+
+    
+
         mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "unapply", "(L" + caseClassName + ";)Lscala/Option;", "(" + caseClassName + ";)Lscala/Option<" + fieldData.map(fd => fd.typeData.unapplyType).mkString + ">;", null);
+        
       }
       case x: Int if x > 1 => {
         mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "unapply", "(L" + caseClassName + ";)Lscala/Option;", "(" + caseClassName + ";)Lscala/Option<Lscala/Tuple" + fieldData.length + "<" + fieldData.map(fd => fd.typeData.unapplyType).mkString + ">;>;", null);
@@ -37,8 +41,8 @@ case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, c
     }
 
 fieldData.foreach(fd => {
-
-  fd.fieldType match {
+  //match types after erasing boxed types
+  fd.fieldType.takeWhile(c => c != '[') match {
     case "Int"     => {
       mv_MODULE.visitVarInsn(ALOAD, 1);
       mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
@@ -110,11 +114,15 @@ fieldData.foreach(fd => {
       mv_MODULE.visitVarInsn(ALOAD, 1);
       mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
     }
+    case "List"  => {
+      mv_MODULE.visitVarInsn(ALOAD, 1);
+      mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
+    }
     case name: String if userDefinedTypes.contains(name)  => {
       mv_MODULE.visitVarInsn(ALOAD, 1);
       mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
     }
-    case _         => println("cannot generate unapply unsupported type")
+    case _         => error("cannot generate module unapply method, unsupported type")
   }
 })
 

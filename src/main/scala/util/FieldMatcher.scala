@@ -5,6 +5,7 @@ import Opcodes._
 
 
 object FieldMatcher {
+println("FM")
 
   def enrichFieldData(namespace: String, field: FieldSeed): FieldData = {
 
@@ -12,9 +13,56 @@ object FieldMatcher {
 
     FieldData( 
       field.fieldName, 
-      fieldType, 
+      fieldType,
       getTypeData(namespace, fieldType) 
     )
+  }
+
+  def getBoxed(typeName: String) = {
+    typeName.dropWhile( c => (c != '[') ).drop(1).dropRight(1)
+  }
+
+
+  
+  def getUnerasedTypeName(typeName: String): String = {
+    typeName match {
+      case "Null"|"Boolean"| "Int"| "Long"|"Float"| "Double"| "String"| "Byte"| "Short"| "Char"| "Any"| "AnyRef"| "Unit"|"Nothing"|"Object" => "null"
+
+      case "Ljava/lang/Object;" => "Ljava/lang/Object;"
+      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getBracketedTypeName(getBoxed(l)) + ">;"
+      case o: String if o.startsWith("Option[") => ""
+    }
+  }
+
+  def getBracketedTypeName(typeName: String): String = {
+    typeName match {
+      case "Null"|"Boolean"| "Int"| "Long"|"Float"| "Double"| "String"| "Byte"| "Short"| "Char"| "Any"| "AnyRef"| "Unit"|"Nothing"|"Object" => "Ljava/lang/Object;"
+      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getBracketedTypeName(getBoxed(l)) + ">;"
+      case o: String if o.startsWith("Option[") => ""
+    }
+  }
+
+  def getExampleObject(typeName: String): Object = {
+    typeName match {
+      case "Null"    => null.asInstanceOf[Object]
+      case "Boolean" => true.asInstanceOf[Object]
+      case "Int"     => 1.asInstanceOf[Object]
+      case "Long"    => 1L.asInstanceOf[Object]
+      case "Float"   => 1F.asInstanceOf[Object]
+      case "Double"  => 1D.asInstanceOf[Object]
+      case "String"  => ""
+      case "Byte"    => 1.toByte.asInstanceOf[Object]
+      case "Short"   => 1.toShort.asInstanceOf[Object]
+      case "Char"    => 'k'.asInstanceOf[Object]
+      case "Any"     => "".asInstanceOf[Any].asInstanceOf[Object]
+      case "AnyRef"  => "".asInstanceOf[AnyRef].asInstanceOf[Object]
+      case "Unit"    => ().asInstanceOf[scala.runtime.BoxedUnit]
+      case "Nothing" => null
+      case "Object"  => new Object
+
+      case l: String if l.startsWith("List[") => List(getExampleObject(getBoxed(l))).asInstanceOf[List[Any]].asInstanceOf[Object]
+      case o: String if o.startsWith("Option[") => Option(getExampleObject(getBoxed(o))).asInstanceOf[Option[Any]].asInstanceOf[Object]
+    }
   }
 
   def getTypeData(namespace: String, fieldType: String): TypeData = {
@@ -25,7 +73,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ALOAD,
           ARETURN,
-          null.asInstanceOf[Object]
+          getExampleObject(fieldType), 
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Boolean" => {
@@ -34,7 +83,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ILOAD,
           IRETURN,
-          true.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Int"     => {
@@ -43,7 +93,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ILOAD,
           IRETURN,
-          1.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Long"    => {
@@ -51,7 +102,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           LLOAD,
           LRETURN, 
-          1L.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Float"   => {
@@ -60,7 +112,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           FLOAD,
           FRETURN,
-          1F.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Double"  => {
@@ -69,7 +122,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           DLOAD,
           DRETURN,
-          1D.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "String"  => {
@@ -78,7 +132,8 @@ object FieldMatcher {
           "Ljava/lang/String;",
           ALOAD,
           ARETURN,
-          ""
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Byte"    => {
@@ -87,7 +142,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ILOAD,
           IRETURN,
-          1.toByte.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Short"    => {
@@ -96,7 +152,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ILOAD,
           IRETURN,
-          1.toShort.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Char"    => {
@@ -105,7 +162,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ILOAD,
           IRETURN,
-          'k'.asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Any"    => {
@@ -114,7 +172,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ALOAD,
           ARETURN,
-          "".asInstanceOf[Any].asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "AnyRef"    => {
@@ -123,7 +182,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ALOAD,
           ARETURN,
-          "".asInstanceOf[AnyRef].asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Unit"    => {
@@ -132,7 +192,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ALOAD,
           RETURN,
-          ().asInstanceOf[scala.runtime.BoxedUnit]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Nothing"    => {
@@ -141,7 +202,8 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ALOAD,
           ARETURN,
-          null//here's a conundrum, there is no instance of Nothing
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
       case "Object"    => {
@@ -150,11 +212,45 @@ object FieldMatcher {
           "Ljava/lang/Object;",
           ALOAD,
           ARETURN,
-          new Object
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
         )
       }
 
       //Complex 
+/*
+      case name: String if name.startsWith("List[") => { 
+        TypeData(
+          Type.getDescriptor(classOf[List[Any]]),
+          "Ljava/lang/Object;",
+          ALOAD,
+          ARETURN,
+          List(List(1,2), List(3,4)).asInstanceOf[List[Any]].asInstanceOf[Object]
+        )
+      } 
+*/
+      case name: String if name.startsWith("List[") => { 
+        TypeData(
+          Type.getDescriptor(classOf[List[Any]]),
+          "Ljava/lang/Object;",
+          ALOAD,
+          ARETURN,
+          //List(1,2).asInstanceOf[List[Any]].asInstanceOf[Object]
+          getExampleObject(fieldType),
+          getUnerasedTypeName(fieldType)
+        )
+      } 
+      case name: String if name.startsWith("Option[") => { println("howdy")
+        TypeData(
+          Type.getDescriptor(classOf[Option[Any]]),
+          "Ljava/lang/Object;",
+          ALOAD,
+          ARETURN,
+          Some("").asInstanceOf[Option[Any]].asInstanceOf[Object],
+          getUnerasedTypeName(fieldType)
+        )
+      } 
+
 
       //User-Defined
       case name: String => { 
@@ -165,8 +261,9 @@ object FieldMatcher {
           ALOAD,
           ARETURN,
 //          CaseClassGenerator.generatedClasses.get(namespace + "." + name).get.instantiated$.asInstanceOf[Object]
-          CaseClassGenerator.generatedClasses.get(name).get.instantiated$
+          CaseClassGenerator.generatedClasses.get(name).get.instantiated$,
 //          CaseClassGenerator.generatedClasses.get(name).get.instantiated$.asInstanceOf[Object]
+          getUnerasedTypeName(fieldType)
         )
       }
       case _         => error("only Strings are valid type names")
@@ -183,7 +280,7 @@ load the two slots i and i+ 1). Finally ALOAD is used to load any non primitive
 value, i.e. Object and array references.
 */
 
-  def getInstantiationTypes(schema: Any) = {      
+  def getInstantiationTypes(schema: Any) = {      println("getting instantiation type")
     val ft = JSONParser.getFields(schema).map(n => n.fieldType)
     ft.map(m => m match {
       //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
@@ -217,9 +314,9 @@ value, i.e. Object and array references.
 
 
       //  case "option"   =>  classOf[Option[Any]]
-      //     case n: List[Any] => classOf[Option[Any]]         
+      case l: String if l.startsWith("List[") => classOf[List[Any]]         
                          
-      case x: String =>{println (CaseClassGenerator.generatedClasses);CaseClassGenerator.generatedClasses.get(x).get.model} //if its a string but none of the above, its a nested record type
+      case x: String =>CaseClassGenerator.generatedClasses.get(x).get.model //if its a string but none of the above, its a nested record type
       case _     => error("File parser found nuthin' good")
 
     })
@@ -227,8 +324,8 @@ value, i.e. Object and array references.
 
 
 //def getReturnTypes(fieldSeeds: List[FieldSeed]) = {
-def getReturnType(fieldSeeds: List[FieldSeed]) = {
-fieldSeeds.map(n => n.fieldType).map(m => m match {
+def getReturnType(fieldSeeds: List[FieldSeed]) = { println("getting return types")
+fieldSeeds.map(n => n.fieldType).map(m => m match { 
       //    case "Null"    => classOf[Unit]
       case "Boolean" => classOf[Boolean]
       case "Int"     => classOf[Int]
@@ -242,7 +339,7 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
       case "enum"    => classOf[Enumeration#Value]
       case "array"   => classOf[Seq[_]]
       case "map"     => classOf[Map[String, _]]
-      case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
+     // case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
    
 
                          case "Short"   => classOf[Short]
@@ -254,10 +351,11 @@ fieldSeeds.map(n => n.fieldType).map(m => m match {
                          case "Nothing" => classOf[Nothing]
                          case "Null"    => classOf[Null]
                          case "Object"  => classOf[Object]
-      //  case "option"   =>  classOf[Option[Any]]
-      //     case n: List[Any] => classOf[Option[Any]]         
+
+      case l: String if l.startsWith("List[") => classOf[List[Any]]         
+      case o: String if o.startsWith("Option[") => classOf[Option[Any]]         
       //case x: String => classOf[Class]                          
-      case x: String => CaseClassGenerator.generatedClasses.get("rec").get.model//Class.forName(x) //if its a string but none of the above, its a nested record type
+      case x: String => CaseClassGenerator.generatedClasses.get(x).get.model//Class.forName(x) //if its a string but none of the above, its a nested record type
     //  case a:Any     => a
 
     })

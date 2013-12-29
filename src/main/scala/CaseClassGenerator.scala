@@ -1,5 +1,5 @@
 package caseclass.generator
-import artisinal.pickle.maker._
+import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
@@ -20,6 +20,11 @@ object CaseClassGenerator {
       generatedClasses += dcc.name -> dcc
     }
   }
+
+
+
+
+
 
   def asClass(classSeed: ClassData) = {
     new DynamicCaseClass(classSeed).model
