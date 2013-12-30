@@ -27,17 +27,42 @@ println("FM")
   def getUnerasedTypeName(typeName: String): String = {
     typeName match {
       case "Null"|"Boolean"| "Int"| "Long"|"Float"| "Double"| "String"| "Byte"| "Short"| "Char"| "Any"| "AnyRef"| "Unit"|"Nothing"|"Object" => "null"
-
-      case "Ljava/lang/Object;" => "Ljava/lang/Object;"
-      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getBracketedTypeName(getBoxed(l)) + ">;"
+      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getUnapplyType(getBoxed(l)) + ">;"
       case o: String if o.startsWith("Option[") => ""
+      case u: String =>
     }
   }
 
-  def getBracketedTypeName(typeName: String): String = {
+  def getUnapplyType(typeName: String): String = {
     typeName match {
-      case "Null"|"Boolean"| "Int"| "Long"|"Float"| "Double"| "String"| "Byte"| "Short"| "Char"| "Any"| "AnyRef"| "Unit"|"Nothing"|"Object" => "Ljava/lang/Object;"
-      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getBracketedTypeName(getBoxed(l)) + ">;"
+      case  "String" => "Ljava/lang/String;"
+      case "Null"|"Boolean"|"Int"|"Long"|"Float"|"Double"|"Byte"|"Short"|"Char"|"Any"|"AnyRef"|"Unit"|"Nothing"|"Object" => "Ljava/lang/Object;"
+      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getUnapplyType(getBoxed(l)) + ">;"
+      case o: String if o.startsWith("Option[") => ""
+      //user-defined
+      case u: String => "L" + namespace + "/" + typeName + ";"
+    }
+  }
+
+  def getUnerasedTypeDescriptor(typeName: String): String = {
+    typeName match {
+      case "Null"    => Type.getDescriptor(classOf[Null])
+      case "Boolean" => Type.getDescriptor(classOf[Boolean])
+      case "Int"     => Type.getDescriptor(classOf[Int])
+      case "Long"    => Type.getDescriptor(classOf[Long])
+      case "Float"   => Type.getDescriptor(classOf[Float])
+      case "Double"  => Type.getDescriptor(classOf[Double])
+      case "String"  => Type.getDescriptor(classOf[String])
+      case "Byte"    => Type.getDescriptor(classOf[Byte])
+      case "Short"   => Type.getDescriptor(classOf[Short])
+      case "Char"    => Type.getDescriptor(classOf[Char])
+      case "Any"     => Type.getDescriptor(classOf[Any])
+      case "AnyRef"  => Type.getDescriptor(classOf[AnyRef])
+      case "Unit"    => Type.getDescriptor(classOf[Unit])
+      case "Nothing" => Type.getDescriptor(classOf[Nothing])
+      case "Object"  => Type.getDescriptor(classOf[Object])
+
+      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getUnapplyType(getBoxed(l)) + ">;"
       case o: String if o.startsWith("Option[") => ""
     }
   }
@@ -70,150 +95,165 @@ println("FM")
       case "Null"    => { 
         TypeData(
           Type.getDescriptor(classOf[Null]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           getExampleObject(fieldType), 
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Boolean" => {
         TypeData(
           Type.getDescriptor(classOf[Boolean]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ILOAD,
           IRETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Int"     => {
         TypeData(
           Type.getDescriptor(classOf[Int]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ILOAD,
           IRETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Long"    => {
         TypeData(Type.getDescriptor(classOf[Long]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           LLOAD,
           LRETURN, 
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Float"   => {
         TypeData(
           Type.getDescriptor(classOf[Float]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           FLOAD,
           FRETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Double"  => {
         TypeData(
           Type.getDescriptor(classOf[Double]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           DLOAD,
           DRETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "String"  => {
         TypeData(
           Type.getDescriptor(classOf[String]),
-          "Ljava/lang/String;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Byte"    => {
         TypeData(
           Type.getDescriptor(classOf[Byte]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ILOAD,
           IRETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Short"    => {
         TypeData(
           Type.getDescriptor(classOf[Short]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ILOAD,
           IRETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Char"    => {
         TypeData(
           Type.getDescriptor(classOf[Char]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ILOAD,
           IRETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Any"    => {
         TypeData(
           Type.getDescriptor(classOf[Any]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "AnyRef"    => {
         TypeData(
           Type.getDescriptor(classOf[AnyRef]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Unit"    => {
         TypeData(
           "Lscala/runtime/BoxedUnit;",//Type.getDescriptor(classOf[Unit])
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           RETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Nothing"    => {
         TypeData(
           Type.getDescriptor(classOf[Nothing]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case "Object"    => {
         TypeData(
           Type.getDescriptor(classOf[Object]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
 
@@ -232,22 +272,24 @@ println("FM")
       case name: String if name.startsWith("List[") => { 
         TypeData(
           Type.getDescriptor(classOf[List[Any]]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           //List(1,2).asInstanceOf[List[Any]].asInstanceOf[Object]
           getExampleObject(fieldType),
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       } 
       case name: String if name.startsWith("Option[") => { println("howdy")
         TypeData(
           Type.getDescriptor(classOf[Option[Any]]),
-          "Ljava/lang/Object;",
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
           Some("").asInstanceOf[Option[Any]].asInstanceOf[Object],
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       } 
 
@@ -257,13 +299,14 @@ println("FM")
         TypeData(
 //          "L"+ name + ";", //if its a string but none of the above, its a nested record type
           "L"+ namespace + "/" + name + ";", //if its a string but none of the above, its a nested record type
-          "Ljava/lang/Object;",//not at all sure that this is the correct thing to use here
+          getUnapplyType(fieldType),
           ALOAD,
           ARETURN,
 //          CaseClassGenerator.generatedClasses.get(namespace + "." + name).get.instantiated$.asInstanceOf[Object]
           CaseClassGenerator.generatedClasses.get(name).get.instantiated$,
 //          CaseClassGenerator.generatedClasses.get(name).get.instantiated$.asInstanceOf[Object]
-          getUnerasedTypeName(fieldType)
+          getUnerasedTypeName(fieldType),
+          getUnerasedTypeDescriptor(fieldType)
         )
       }
       case _         => error("only Strings are valid type names")

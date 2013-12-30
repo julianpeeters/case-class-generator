@@ -9,7 +9,8 @@ import java.util.Arrays
 import scala.io.Codec._
 case class Copy(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
   def dump = {
-  mv = cw.visitMethod(ACC_PUBLIC, "copy", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" +  caseClassName + ";", null, null);
+
+    mv = cw.visitMethod(ACC_PUBLIC, "copy", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" +  caseClassName + ";", "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")L" + caseClassName + ";", null);
     mv.visitCode();
     mv.visitTypeInsn(NEW, caseClassName);
     mv.visitInsn(DUP);

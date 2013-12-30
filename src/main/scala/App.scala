@@ -61,7 +61,7 @@ println("json " + jsonSchema)
 */
 //  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","rec"))
  // val valueMembers2: List[FieldSeed] = List(FieldSeed("x","List[Int]"))
-  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","List[List[Boolean]]"))
+  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","List[List[String]]"))
  // val valueMembers2: List[FieldSeed] = List(FieldSeed("x","Option[Int]"))
   val classData2 = ClassData("models", "MyRecord", valueMembers2)
   val dcc2 = new DynamicCaseClass(classData2)
