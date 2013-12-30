@@ -53,13 +53,14 @@ object JSONParser {
     }}
     } yield fieldType
 
-  def getNamespace(jsonSchema: List[Any]): String = (for { 
+  def getNamespace(jsonSchema: List[Any]): Option[String] = Option((for { 
     (M(map)) <- jsonSchema
+//    S(namespace) = {
     S(namespace) = {
       if (Option(map("namespace")).isDefined) map("namespace")
-      else "<empty>"
+      else None
     } 
-  } yield namespace).head//.replaceAllLiterally(".", "/")//.takeRight(4)
+  } yield namespace).head)//.replaceAllLiterally(".", "/")//.takeRight(4)
 
   def getName(schema: Any): String = (for { 
      M(map) <- List(schema)
@@ -95,8 +96,6 @@ object JSONParser {
       case _         => error("JSON parser found an unsupported type")
       }
     }
-
-
 
     for {
       M(schema) <- List(schema)

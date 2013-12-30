@@ -29,10 +29,13 @@ case class MyRecordDump {
     }
 
     FieldMethods(cw, mv, caseClassName, fieldData).dump//"FieldMethods"for lack of a better name
-
+    val name = {
+      if (caseClassName.contains('/')) caseClassName.dropWhile(c => c != '/').drop(1)
+      else caseClassName
+    }
     Copy(cw, mv, caseClassName, fieldData).dump
     CopyDefault(cw, mv, caseClassName, fieldData).dump
-    ProductPrefix(cw, mv, caseClassName.dropWhile(c => c != '/').drop(1), fieldData).dump//3rd arg is the label of the class
+    ProductPrefix(cw, mv, name, fieldData).dump
     ProductArity(cw, mv, fieldData).dump
     ProductElement(cw, mv, caseClassName, fieldData).dump
     ProductIterator(cw, mv).dump

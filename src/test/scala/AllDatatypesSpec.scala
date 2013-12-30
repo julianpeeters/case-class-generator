@@ -27,7 +27,7 @@ class AllDatatypesSpec extends mutable.Specification {
 //All datatypes except Nothing and Null, simply because we're testing with salat, while I can't get an instance of an object witha Nothing field, and salat can't deserialize Nulls
   val valueMembers: List[FieldSeed] = List(FieldSeed("a", "Byte"), FieldSeed("b", "Short"), FieldSeed("c", "Int"), FieldSeed("d", "Long"), FieldSeed("e", "Float"), FieldSeed("f", "Double"), FieldSeed("g", "Char"), FieldSeed("h", "String"), FieldSeed("i", "Boolean"), FieldSeed("j", "Unit"), FieldSeed("m", "Any"), FieldSeed("n", "Byte"), FieldSeed("o", "Object"))
 
-  val classData = ClassData("models", "MyRecord_AllDatatypesSpec", valueMembers)
+  val classData = ClassData(Some("models"), "MyRecord_AllDatatypesSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
 

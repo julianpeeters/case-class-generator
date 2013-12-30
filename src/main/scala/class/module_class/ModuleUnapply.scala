@@ -10,7 +10,7 @@ case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, c
     val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
 
     fieldData.length match {
-      case 1            => {
+      case 1            => { 
         mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "unapply", "(L" + caseClassName + ";)Lscala/Option;", "(" + caseClassName + ";)Lscala/Option<" + fieldData.map(fd => fd.typeData.unapplyType).mkString + ">;", null);
         
       }
@@ -110,7 +110,8 @@ fieldData.foreach(fd => {
       mv_MODULE.visitVarInsn(ALOAD, 1);
       mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
     }
-    case "List"  => {
+    //generics
+    case "List"|"Option"  => {
       mv_MODULE.visitVarInsn(ALOAD, 1);
       mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
     }

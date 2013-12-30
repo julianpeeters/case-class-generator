@@ -27,6 +27,7 @@ object CaseClassGenerator {
 
 
   def asClass(classSeed: ClassData) = {
+
     new DynamicCaseClass(classSeed).model
   }
 
@@ -40,6 +41,7 @@ object CaseClassGenerator {
 
   def asInstance(classSeed: ClassData) = {
 //    new DynamicCaseClass(classSeed).instantiated$
+
     new DynamicCaseClass(classSeed)
   }
 
@@ -47,7 +49,7 @@ object CaseClassGenerator {
 //    val classSeed = new JSONParser(json).classSeed.head
 //    new DynamicCaseClass(classSeeds.head)//.instantiated$
     val classSeeds = JSONParser.parseJsonString(json)
-println("caseclassgenerator classSeeds " )
+
 classSeeds.foreach(println)
 
     //classSeeds.map(seed => new DynamicCaseClass(seed).instantiated$)

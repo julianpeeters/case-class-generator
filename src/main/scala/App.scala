@@ -36,46 +36,39 @@ object Main extends App {
   }
 
 //  val infile = new File("enron_head.avro")
-  val infile = new File("input2.avro")
-  //val infile = new File("twitter.avro")
+ // val infile = new File("input.avro")
+  val infile = new File("twitter.avro")
   val outfile = new File("output.avro")
 
-/*
+
   val jsonSchema: String = getSchemaAsString(infile)
 println("json " + jsonSchema)
-//  val typeTemplate = CaseClassGenerator.asInstance(jsonSchema).instantiated$//instantiated module class
-
-*/
-//but for now lets feed the class info in manually
-
-
-//val tempDescriptors = List(ClassData("models","MyRecord",List(FieldData("x","rec","Lrec;",ALOAD,ARETURN)),List("rec")), ClassData("models","rec",List(FieldData("i","int","I",ILOAD,IRETURN)),List("int"))).reverse
-
+  val typeTemplate = CaseClassGenerator.asInstance(jsonSchema).instantiated$//instantiated module class
 
 /*
- // val valueMembers: List[FieldSeed] = List(FieldSeed("x","Long"), FieldSeed("y","Long"), FieldSeed("z","Boolean"))
- // val classData = ClassData("models", "MyRecord", valueMembers)
+//but for now lets feed the class info in manually
   val valueMembers: List[FieldSeed] = List(FieldSeed("i","Int"))
-  val classData = ClassData("models", "rec", valueMembers)
+  val classData = ClassData(Some("models"), "rec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
-*/
-//  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","rec"))
+
+ //val valueMembers2: List[FieldSeed] = List(FieldSeed("x","rec"))
  // val valueMembers2: List[FieldSeed] = List(FieldSeed("x","List[Int]"))
-  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","List[List[String]]"))
+  val valueMembers2: List[FieldSeed] = List(FieldSeed("x","Option[rec]"))
  // val valueMembers2: List[FieldSeed] = List(FieldSeed("x","Option[Int]"))
-  val classData2 = ClassData("models", "MyRecord", valueMembers2)
+  val classData2 = ClassData(Some("models"), "MyRecord", valueMembers2)
+//  val classData2 = ClassData(None, "MyRecord", valueMembers2)
   val dcc2 = new DynamicCaseClass(classData2)
 
   val typeTemplate = dcc2.instantiated$
-
+*/
 
 //println("type template " + typeTemplate)
-//println(typeTemplate.getClass)
+//typeTemplate.getClass.getMethods.foreach(println)
 
   type Record = typeTemplate.type 
 
 
-println(grater[Record])
+//println(grater[Record])
   val dbo = grater[Record].asDBObject(typeTemplate)
     println(dbo)
   val obj = grater[Record].asObject(dbo)

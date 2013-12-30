@@ -23,7 +23,7 @@ class FloatFloatSpec extends mutable.Specification {
 
 //but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
   val valueMembers: List[FieldSeed] = List(FieldSeed("a","Float"), FieldSeed("b","Float"))//, FieldSeed("d","Boolean"))
-  val classData = ClassData("models", "MyRecord_FloatFloatSpec", valueMembers)
+  val classData = ClassData(Some("models"), "MyRecord_FloatFloatSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
 

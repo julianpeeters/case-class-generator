@@ -1,4 +1,0 @@
-package models
-
-case class rec(i: Int)
-case class MyRecord(x: rec)

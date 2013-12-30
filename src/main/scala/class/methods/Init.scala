@@ -6,6 +6,7 @@ import Opcodes._
 
 case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData], ctorReturnType: String) {
   def dump = {
+
     //init method
     if ( fieldData.map(fd => fd.fieldType).exists(ft => ft.endsWith("]"))) {
       mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")V", null);

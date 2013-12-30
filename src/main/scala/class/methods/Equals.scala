@@ -172,7 +172,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
     })
 
 //do the following unless there is was "Nothing" type and we broke out with a ATHROW instead
-    if (!fieldData.map(n => n.fieldType).contains("Nothing")) {println("no nothing"); mv.visitVarInsn(ALOAD, 4);}
+    if (!fieldData.map(n => n.fieldType).contains("Nothing")) mv.visitVarInsn(ALOAD, 4);
 //if all value members are of type "Nothing", skip the canEqual portion and go to the final portion
     if (!fieldData.map(n => n.fieldType).forall(t => List("Nothing").contains(t))) {
       fields.contains("Nothing") match {

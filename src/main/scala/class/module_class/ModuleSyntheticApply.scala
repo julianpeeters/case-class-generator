@@ -72,6 +72,10 @@ fieldData.zipWithIndex.foreach(n => {
       mv_MODULE.visitVarInsn(ALOAD, n._2); 
       mv_MODULE.visitTypeInsn(CHECKCAST, "scala/collection/immutable/List") 
     }
+    case "Option"    => {
+      mv_MODULE.visitVarInsn(ALOAD, n._2); 
+      mv_MODULE.visitTypeInsn(CHECKCAST, "scala/Option") 
+    }
     case "bytes"   => //TODO move this into avro datafile parser
    
     case name: String if userDefinedTypes.contains(name)  => {

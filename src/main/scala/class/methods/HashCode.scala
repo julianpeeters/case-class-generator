@@ -8,11 +8,7 @@ import Opcodes._
 //HashCode has two methods: the main "dump" method, and the helper "matchFields" That it calls
 case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
 
-//  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.map(k => k.dropWhile(c => (c != '.')).tail).toList
   val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
-
-    println("HC DEFINED TYPES " + userDefinedTypes)
-    println(fieldData.map(fd => fd.fieldType))
 
   def dump = {
     mv = cw.visitMethod(ACC_PUBLIC, "hashCode", "()I", null, null);
@@ -24,9 +20,8 @@ case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: Strin
         mv.visitMethodInsn(INVOKEVIRTUAL, "scala/runtime/ScalaRunTime$", "_hashCode", "(Lscala/Product;)I");
       }
       case x if x > 0 => { //type erase the generics, then check if all the types are from the folling list
-        if (fieldData.map(fd => fd.fieldType.takeWhile(c => c != '[')).forall(t => (List("Nothing", "Null", "Any", "AnyRef", "Object", "String", "List", "Stream" ):::userDefinedTypes).contains(t))) {//if all the valueMembers are in this list (of "empty" types, look different when paired with "real")   
-          println("HC found a user defined type " + fieldData.map(fd => fd.fieldType))
-println()
+        if (fieldData.map(fd => fd.fieldType.takeWhile(c => c != '[')).forall(t => (List("Nothing", "Null", "Any", "AnyRef", "Object", "String", "List", "Option", "Stream" ):::userDefinedTypes).contains(t))) {//if all the valueMembers are in this list (of "empty" types, look different when paired with "real")   
+  
           mv.visitFieldInsn(GETSTATIC, "scala/runtime/ScalaRunTime$", "MODULE$", "Lscala/runtime/ScalaRunTime$;");
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, "scala/runtime/ScalaRunTime$", "_hashCode", "(Lscala/Product;)I");
@@ -103,7 +98,7 @@ println()
         //if there were only one valueMember, the "if" statement would have taken care of things
         //so this has to have come after
 
-              case "Any"|"AnyRef"|"Object"|"String"|"List"|"Stream" => {
+              case "Any"|"AnyRef"|"Object"|"String"|"List"|"Stream"|"Option" => {
                 mv.visitVarInsn(ALOAD, 0);
                 mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeData.typeDescriptor);
                 mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/Statics", "anyHash", "(Ljava/lang/Object;)I");
@@ -128,10 +123,6 @@ println()
             }
 
   }
-
-
-
-
 
 
 }
