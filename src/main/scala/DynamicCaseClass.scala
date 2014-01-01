@@ -14,7 +14,6 @@ class DynamicCaseClass(classData: ClassData) {
     if (namespace.isDefined) (namespace.get + "." + name)
     else name
   }
-println(fullName)
 
   val fieldData: List[FieldSeed] = classData.classFields
 

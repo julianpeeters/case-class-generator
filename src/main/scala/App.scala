@@ -2,24 +2,16 @@ package avocet
 
 
 import caseclass.generator._
-//import com.banno.salat.avro._
+import com.banno.salat.avro._
 
-import com.novus.salat._
+//import com.novus.salat._
 import global._
-import com.mongodb.casbah.Imports._
+//import com.mongodb.casbah.Imports._
 //import models._
 
 import java.io.File
 import org.apache.avro._
 
-
-
-//import scala.tools.scalap.scalax.rules.scalasig._
-
-//import scala.reflect.internal.pickling._
-
-//import com.novus.salat.annotations.util._
-//import scala.reflect.ScalaSignature
 
 
 //Main is for debugging purposes
@@ -36,7 +28,8 @@ object Main extends App {
   }
 
 //  val infile = new File("enron_head.avro")
- // val infile = new File("input.avro")
+//  val infile = new File("input.avro")
+  //val infile = new File("input2.avro")
   val infile = new File("twitter.avro")
   val outfile = new File("output.avro")
 
@@ -69,17 +62,17 @@ println("json " + jsonSchema)
 
 
 //println(grater[Record])
-  val dbo = grater[Record].asDBObject(typeTemplate)
-    println(dbo)
-  val obj = grater[Record].asObject(dbo)
-    println(obj)
+  //val dbo = grater[Record].asDBObject(typeTemplate)
+  //  println(dbo)
+  //val obj = grater[Record].asObject(dbo)
+  //  println(obj)
 
 
 //  val obj = grater[Record].serializeToFile(outfile, typeTemplate)
 
 
- // val obj = grater[Record].asObjectsFromFile(infile)
-  //  obj foreach println
+  val obj = grater[Record].asObjectsFromFile(infile)
+    obj foreach println
 
  
  // println(typeTemplate == obj)

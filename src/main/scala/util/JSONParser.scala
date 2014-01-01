@@ -23,6 +23,7 @@ object JSONParser {
   object M extends jsonTypeConverter[Map[String, Any]]
   object L extends jsonTypeConverter[List[Any]]
   object S extends jsonTypeConverter[String]
+  object P extends jsonTypeConverter[Option[String]]
   object I extends jsonTypeConverter[Int]
  // object D extends jsonTypeConverter[Double]
  // object B extends jsonTypeConverter[Boolean]
@@ -41,45 +42,49 @@ object JSONParser {
     } 
   }
 
-  def getNestedSchemas(jsonSchema: List[Any]) =  for {
-    M(record) <- jsonSchema
-    L(fields) = record("fields")
-    M(field) <- fields
-    fieldType = field("type")
+  def getNestedSchemas(jsonSchema: List[Any]) =  {
+    for {
+      M(record) <- jsonSchema
+      L(fields) = record("fields")
+      M(field) <- fields
+      fieldType = field("type")
 
-    if {fieldType match {
-      case m: Map[String, Any] => true
-      case _                   => false
-    }}
+      if (fieldType match {
+        case m: Map[String, Any] => true
+        case _                   => false
+      })
     } yield fieldType
+  }
 
-  def getNamespace(jsonSchema: List[Any]): Option[String] = Option((for { 
+  def getNamespace(jsonSchema: List[Any]): Option[String] = (for { 
     (M(map)) <- jsonSchema
-//    S(namespace) = {
-    S(namespace) = {
-      if (Option(map("namespace")).isDefined) map("namespace")
-      else None
+    P(namespace) = {  
+      if (map.keys.exists(k => k == "namespace")) Some(map("namespace"))
+      else  None
     } 
-  } yield namespace).head)//.replaceAllLiterally(".", "/")//.takeRight(4)
+  } yield namespace).head
 
-  def getName(schema: Any): String = (for { 
-     M(map) <- List(schema)
-     S(name) = map("name")
-  } yield name).head
+  def getName(schema: Any): String = { 
+    (for { 
+       M(map) <- List(schema)
+       S(name) = map("name")
+    } yield name).head
+  }
    
-  def getFields(schema: Any): List[FieldSeed]= {//List[Map[String, Any]]= {
+  def getFields(schema: Any): List[FieldSeed]= { 
 
-    def matchTypes(JSONfieldType: Any): Any = {
+    def matchTypes(JSONfieldType: Any): Any = { 
       JSONfieldType match {
-        case u: List[(Any, Null)] => U(u) = u; List("option", u(0)) //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
-        case s: String            => S(s) = s; s //if the type is a nested record, getDescriptor returns wrong value anyways
-        case m: Map[String, Any]  => m("name")   
-        case c: Class[Any]        => C(c) = c
-        case _                    => error("JSON field type not found")
+        case u: List[(Any, Null)]  =>  U(u) = u; List("option", u(0)) ;  //u(0) // U(u) = u//u.asInstanceOf[Option[Int]]//"union"
+        case s: String             => S(s) = s; s //if the type is a nested record, getDescriptor returns wrong value anyways
+        case m: Map[String, Any]   => m("name")   
+        case c: Class[Any]         => C(c) = c
+      //  case o: List[String] => println("odelay")
+        case _                     => error("JSON field type not found")
       }
     }
 
-    def avroToScalaType(fieldType: String): String = {
+    def avroToScalaType(fieldType: String): String = {  
       fieldType match {
 //Thanks to @ConnorDoyle for the mapping: https://github.com/GenslerAppsPod/scalavro
       case "null"    => "Unit"
