@@ -1,4 +1,4 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
 
 case class TypeData(
   typeDescriptor: String, 

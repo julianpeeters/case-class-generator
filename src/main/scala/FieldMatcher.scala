@@ -1,8 +1,6 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
 import org.objectweb.asm._
 import Opcodes._
-
-
 
 object FieldMatcher {
 
@@ -22,7 +20,9 @@ object FieldMatcher {
   def getUnerasedTypeName(namespace: Option[String], typeName: String) = {
     typeName match {
       case "Null"|"Boolean"| "Int"| "Long"|"Float"| "Double"| "String"| "Byte"| "Short"| "Char"| "Any"| "AnyRef"| "Unit"|"Nothing"|"Object" => null
-      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getUnapplyType(namespace, getBoxed(l)) + ">;"
+      case l: String if l.startsWith("List[")   => {
+        "Lscala/collection/immutable/List<" + getUnapplyType(namespace, getBoxed(l)) + ">;"
+      }
       case o: String if o.startsWith("Option[") => "Lscala/Option<" + getUnapplyType(namespace, getBoxed(o)) + ">;"
       case u: String => null
     }
@@ -32,7 +32,9 @@ object FieldMatcher {
     typeName match {
       case  "String" => "Ljava/lang/String;"
       case "Null"|"Boolean"|"Int"|"Long"|"Float"|"Double"|"Byte"|"Short"|"Char"|"Any"|"AnyRef"|"Unit"|"Nothing"|"Object" => "Ljava/lang/Object;"
-      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getUnapplyType(namespace, getBoxed(l)) + ">;"
+      case l: String if l.startsWith("List[")   => {
+        "Lscala/collection/immutable/List<" + getUnapplyType(namespace, getBoxed(l)) + ">;"
+      }
       case o: String if o.startsWith("Option[") => "Lscala/Option<" + getUnapplyType(namespace, getBoxed(o)) + ">;"
       //user-defined
       case u: String => { 
@@ -60,7 +62,9 @@ object FieldMatcher {
       case "Nothing" => Type.getDescriptor(classOf[Nothing])
       case "Object"  => Type.getDescriptor(classOf[Object])
 
-      case l: String if l.startsWith("List[")   => "Lscala/collection/immutable/List<" + getUnapplyType(namespace, getBoxed(l)) + ">;"
+      case l: String if l.startsWith("List[")   => {
+        "Lscala/collection/immutable/List<" + getUnapplyType(namespace, getBoxed(l)) + ">;"
+      }
       case o: String if o.startsWith("Option[") => "Lscala/Option<" + getUnapplyType(namespace, getBoxed(o)) + ">;"
       case u: String => { //user defined
         if (namespace.isDefined) "L" + namespace.get + "/" + typeName + ";"
@@ -90,9 +94,20 @@ object FieldMatcher {
 
       case l: String if l.startsWith("List[") => List(getExampleObject(getBoxed(l))).asInstanceOf[List[Any]].asInstanceOf[Object]
       case o: String if o.startsWith("Option[") => Option(getExampleObject(getBoxed(o))).asInstanceOf[Option[Any]].asInstanceOf[Object]
-      case u: String => CaseClassGenerator.generatedClasses.get(typeName).get.instantiated$
+      case u: String =>  ClassStore.generatedClasses.get(typeName).get.runtimeInstance 
     }
   }
+
+/*
+From the ASM userguide:
+The ILOAD, LLOAD, FLOAD, DLOAD, and ALOAD instructions read a local variable
+and push its value on the operand stack. They take as argument the index
+i of the local variable that must be read. ILOAD is used to load a boolean,
+byte, char, short, or int local variable. LLOAD, FLOAD and DLOAD are used to
+load a long, float or double value, respectively (LLOAD and DLOAD actually
+load the two slots i and i+ 1). Finally ALOAD is used to load any non primitive
+value, i.e. Object and array references.
+*/
 
   def getTypeData(namespace: Option[String], fieldType: String): TypeData = {
     fieldType match {
@@ -304,58 +319,6 @@ object FieldMatcher {
     }
   }
 
-/*
-The ILOAD, LLOAD, FLOAD, DLOAD, and ALOAD instructions read a local variable
-and push its value on the operand stack. They take as argument the index
-i of the local variable that must be read. ILOAD is used to load a boolean,
-byte, char, short, or int local variable. LLOAD, FLOAD and DLOAD are used to
-load a long, float or double value, respectively (LLOAD and DLOAD actually
-load the two slots i and i+ 1). Finally ALOAD is used to load any non primitive
-value, i.e. Object and array references.
-*/
-
-  def getInstantiationTypes(schema: Any) = {      println("getting instantiation type")
-    val ft = JSONParser.getFields(schema).map(n => n.fieldType)
-    ft.map(m => m match {
-      //Primitive Avro types --- Thanks to @ConnorDoyle for suggesting the type mapping
-      //    case "Null"    => classOf[Unit]
-      case "Boolean" => classOf[Boolean]
-      case "Int"     => classOf[Int]
-      case "Long"    => classOf[Long]
-      case "Float"   => classOf[Float]
-      case "Double"  => classOf[Double]
-     // case "bytes"   => classOf[Seq[Byte]]
-      case "String"  => classOf[String]
-
-      case "boolean" => classOf[Boolean]
-      case "int"     => classOf[Int]
-      case "long"    => classOf[Long]
-      case "float"   => classOf[Float]
-      case "double"  => classOf[Double]
-      case "bytes"   => classOf[Seq[Byte]]
-      case "string"  => classOf[String]
-
-      //Complex ------------------------ 
-      //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-      case "enum"    => classOf[Enumeration#Value]
-      case "array"   => classOf[Seq[_]]
-      case "map"     => classOf[Map[String, _]]
-   //   case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
-      // case "union"   => classOf[]
-      // case "[null,"+_+"]"      => 
-      // case "[null,String]"      => classOf[Option[String]] 
-      //case "fixed"   => classOf[]
-
-
-      //  case "option"   =>  classOf[Option[Any]]
-      case l: String if l.startsWith("List[") => classOf[List[Any]]  
-      case o: String if o.startsWith("Option[") => classOf[Option[Any]]  
-      //user-defined                   
-      case x: String =>CaseClassGenerator.generatedClasses.get(x).get.model //if its a string but none of the above, its a nested record type
-      case _     => error("File parser found nuthin' good")
-
-    })
-  }
 
   def getReturnType(fieldSeeds: List[FieldSeed]) = {
     fieldSeeds.map(n => n.fieldType).map(m => m match { 
@@ -367,13 +330,6 @@ value, i.e. Object and array references.
       case "Double"  => classOf[Double]
       case "bytes"   => classOf[Seq[Byte]]
       case "String"  => classOf[String]
-      //Complex ------------------------
-      //case "record"  => (modelClass.toString, modelClass.toString)   //MyRecord-and-others simulataneously?-----Needs a test
-      case "enum"    => classOf[Enumeration#Value]
-      case "array"   => classOf[Seq[_]]
-      case "map"     => classOf[Map[String, _]]
-     // case "Map(type -> record, name -> rec, doc -> , fields -> List(Map(name -> i, type -> List(int, null))))"     => classOf[Map[String, _]]
-   
       case "Short"   => classOf[Short]
       case "Byte"    => classOf[Byte]
       case "Char"    => classOf[Char]
@@ -383,11 +339,15 @@ value, i.e. Object and array references.
       case "Nothing" => classOf[Nothing]
       case "Null"    => classOf[Null]
       case "Object"  => classOf[Object]
+      //Complex ------------------------
+
+      case "enum"    => classOf[Enumeration#Value]
+      case "array"   => classOf[Seq[_]]
+      case "map"     => classOf[Map[String, _]]
 
       case l: String if l.startsWith("List[") => classOf[List[Any]]         
       case o: String if o.startsWith("Option[") => classOf[Option[Any]]         
-
-      case x: String => CaseClassGenerator.generatedClasses.get(x).get.model
+      case x: String => ClassStore.generatedClasses.get(x).get.runtimeClass
     })
   }
 }

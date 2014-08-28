@@ -1,4 +1,4 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
 import artisanal.pickle.maker._
 import scala.reflect.internal.pickling._
 import org.objectweb.asm._
@@ -6,7 +6,8 @@ import Opcodes._
 
 case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
   def dump = {
-    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+//    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+    val userDefinedTypes = ClassStore.generatedClasses.keys.toList
     mv = cw.visitMethod(ACC_PUBLIC, "equals", "(Ljava/lang/Object;)Z", null, null);
     mv.visitCode();//if there's a "Nothing" then drop all value members after the first "Nothing".
     val fields = (if (fieldData.map(n=>n.fieldType).contains("Nothing")) fieldData.reverse.dropWhile(valueMember =>   valueMember.fieldType != "Nothing").reverse; else fieldData)

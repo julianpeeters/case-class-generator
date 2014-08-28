@@ -1,4 +1,5 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
+
 import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
@@ -10,7 +11,10 @@ case class ModuleApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, cas
     if ( fieldData.map(fd => fd.fieldType).exists(ft => ft.endsWith("]"))) {
       mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "apply", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";", "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")L" + caseClassName + ";", null);
     }
-    else mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "apply", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";", null, null);
+    else {
+println("modapply " + caseClassName)
+      mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "apply", "(" + fieldData.map(fd =>  fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";", null, null)
+    }
 
     mv_MODULE.visitCode();
     mv_MODULE.visitTypeInsn(NEW, caseClassName);

@@ -1,4 +1,4 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
 import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
@@ -7,7 +7,8 @@ import Opcodes._
 case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
   def dump = {
     
-    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+    val userDefinedTypes = ClassStore.generatedClasses.keys.toList
+//    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
 
     fieldData.length match {
       case 1            => { 

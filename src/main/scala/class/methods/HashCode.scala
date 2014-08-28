@@ -1,4 +1,4 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
 import artisanal.pickle.maker._
 import scala.reflect.internal.pickling._
 import org.objectweb.asm._
@@ -8,7 +8,8 @@ import Opcodes._
 //HashCode has two methods: the main "dump" method, and the helper "matchFields" That it calls
 case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
 
-  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+//  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+  val userDefinedTypes = ClassStore.generatedClasses.keys.toList
 
   def dump = {
     mv = cw.visitMethod(ACC_PUBLIC, "hashCode", "()I", null, null);

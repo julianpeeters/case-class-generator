@@ -1,4 +1,4 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
 import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
@@ -8,7 +8,8 @@ case class ModuleSyntheticApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVis
   def dump = {
     
     //  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.map(k => k.dropWhile(c => (c != '.')).tail).toList
-      val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+//      val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+      val userDefinedTypes = ClassStore.generatedClasses.keys.toList
 
 mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC + ACC_BRIDGE + ACC_SYNTHETIC, "apply", "(" + Stream.continually("Ljava/lang/Object;").take(fieldData.length).mkString + ")Ljava/lang/Object;", null, null);
 mv_MODULE.visitCode();
@@ -81,7 +82,9 @@ fieldData.zipWithIndex.foreach(n => {
     case name: String if userDefinedTypes.contains(name)  => {
       mv_MODULE.visitVarInsn(ALOAD, n._2);
       //add namespace to the type name
+println("caseClassName")
       val fullName = caseClassName.takeWhile(c => (c != '/')) + "/" + name
+println("fullName " + fullName)
       mv_MODULE.visitTypeInsn(CHECKCAST, fullName);
     }
 

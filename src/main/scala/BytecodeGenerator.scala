@@ -1,11 +1,5 @@
-package caseclass.generator
+package com.julianpeeters.caseclass.generator
 import artisanal.pickle.maker._
-import org.objectweb.asm._
-import Opcodes._
-
-import java.io._
-import scala.util.parsing.json._
-
 
 object BytecodeGenerator {
 
@@ -34,7 +28,7 @@ object BytecodeGenerator {
 
     //generate a pair of class and module class
     List(new MyRecordDump().dump(mySig, caseClassName, fieldData),
-         new MyRecord$Dump().dump(caseClassName, fieldData) )// $Dump is ASM's convention for naming the module class
+         new MyRecord$Dump().dump(caseClassName, fieldData)) // $Dump is ASM's convention for naming the module class
 
   }
 

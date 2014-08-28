@@ -1,15 +1,10 @@
 
-package avocet
-import caseclass.generator._
+
+import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
 import com.mongodb.casbah.Imports._
 
-
-import scala.tools.scalap.scalax.rules.scalasig._
-
-import java.util.Arrays
-import scala.reflect.internal.pickling._
 
 import org.specs2._
 import mutable._
@@ -17,24 +12,14 @@ import specification._
 
 class AnySpec extends mutable.Specification {
 
-//usually we'd be reading from a source
- // val infile = new File("input.avro")
- // val typeTemplate = CaseClassGenerator.parseFromFile(infile)//instantiated module class
 
-//but for now lets make it easy debug my Scala signature issue (chokes on > 3 fields even tho sig bytes are ok before encoding)
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Any"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
+  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Any"))
   val classData = ClassData(Some("models"), "MyRecord_AnySpec", valueMembers)
-println("hi")
   val dcc = new DynamicCaseClass(classData)
-//  val module = dcc.model
-println("hill")
-  val typeTemplate = dcc.instantiated$
+  val typeTemplate = dcc.runtimeInstance
 
   type MyRecord = typeTemplate.type
 
-//println(classOf[MyRecord])//error: class type required but avocet.Main.typeTemplate.type found
-  val parser = ScalaSigParser.parse(dcc.model.getClass)
-    println(parser)
 
   val dbo = grater[MyRecord].asDBObject(typeTemplate)
     println(dbo)
