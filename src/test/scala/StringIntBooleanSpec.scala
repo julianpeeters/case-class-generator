@@ -13,9 +13,9 @@ class StringIntBooleanSpec extends mutable.Specification {
   val classData = ClassData(Some("models"), "MyRecord_StringIntBooleanSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 
-  val typeTemplate = dcc.runtimeInstance
+ // val typeTemplate = dcc.runtimeInstance
 
-  type MyRecord = typeTemplate.type
+  type MyRecord = dcc.TYPE//typeTemplate.type
 
   val dbo = grater[MyRecord].asDBObject(typeTemplate)
     println(dbo)

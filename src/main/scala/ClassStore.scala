@@ -1,7 +1,7 @@
 package com.julianpeeters.caseclass.generator
 
 import scala.collection.JavaConversions.JConcurrentMapWrapper
-import java.util.concurrent. ConcurrentHashMap
+import java.util.concurrent.ConcurrentHashMap
 
 object ClassStore {
 

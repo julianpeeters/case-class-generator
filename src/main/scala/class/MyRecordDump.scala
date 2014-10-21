@@ -3,32 +3,30 @@ import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
-
-
 case class MyRecordDump {
 
   def dump(mySig: ScalaSig, caseClassName: String, fieldData: List[FieldData]): Array[Byte] = {
 
-    val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS)//, ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
+    val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS) //, ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
     var fv: FieldVisitor = null
     var mv: MethodVisitor = null
     var av0: AnnotationVisitor = null
-    val ctorReturnType = "(" + fieldData.map( fd => fd.typeData.typeDescriptor ).mkString + ")V"
+    val ctorReturnType = "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")V"
 
     ClassHeader(cw, caseClassName).dump
     ScalaSigAnnotation(cw, av0, mySig).dump
     Fields(cw, fieldData).dump
 
     if (fieldData.length == 1) {
-      AndThen(cw, mv, caseClassName, fieldData).dump; 
-      Compose(cw, mv, caseClassName, fieldData).dump; 
+      AndThen(cw, mv, caseClassName, fieldData).dump;
+      Compose(cw, mv, caseClassName, fieldData).dump;
     }
     else {
-      Tupled(cw, mv, caseClassName, fieldData).dump; 
+      Tupled(cw, mv, caseClassName, fieldData).dump;
       Curried(cw, mv, caseClassName).dump
     }
 
-    FieldMethods(cw, mv, caseClassName, fieldData).dump//"FieldMethods"for lack of a better name
+    FieldMethods(cw, mv, caseClassName, fieldData).dump //"FieldMethods"for lack of a better name
     val name = {
       if (caseClassName.contains('/')) caseClassName.dropWhile(c => c != '/').drop(1)
       else caseClassName

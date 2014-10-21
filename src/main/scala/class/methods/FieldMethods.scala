@@ -4,7 +4,6 @@ import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
 
-
 import java.util.Arrays
 import scala.io.Codec._
 
@@ -14,8 +13,8 @@ case class FieldMethods(cw: ClassWriter, var mv: MethodVisitor, caseClassName: S
       val tpe = {
         if (fd.typeData.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
         else fd.typeData.typeDescriptor
-      } 
-      mv = cw.visitMethod(ACC_PUBLIC, fd.fieldName, "()"+tpe, fd.typeData.unerasedType, null);
+      }
+      mv = cw.visitMethod(ACC_PUBLIC, fd.fieldName, "()" + tpe, fd.typeData.unerasedType, null);
       mv.visitCode();
       if (fd.fieldType != "Unit") {
         mv.visitVarInsn(ALOAD, 0);

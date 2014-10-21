@@ -7,17 +7,17 @@ object BytecodeGenerator {
 
     val name = classData.className
 
-    val namespace : Option[String] = { 
+    val namespace: Option[String] = {
       if (classData.classNamespace.isDefined) Some(classData.classNamespace.get.replaceAllLiterally(".", "/"))
       else None
     }
 
-    val caseClassName = { 
+    val caseClassName = {
       if (namespace.isDefined) namespace.get + "/" + name
       else name
     }
 
-    val fieldData: List[FieldData] = classData.classFields.map(field => FieldMatcher.enrichFieldData(namespace, field) )
+    val fieldData: List[FieldData] = classData.classFields.map(field => FieldMatcher.enrichFieldData(namespace, field))
 
     val potentialNamespace = {
       if (classData.classNamespace.isDefined) classData.classNamespace.get
@@ -28,12 +28,9 @@ object BytecodeGenerator {
 
     //generate a pair of class and module class
     List(new MyRecordDump().dump(mySig, caseClassName, fieldData),
-         new MyRecord$Dump().dump(caseClassName, fieldData)) // $Dump is ASM's convention for naming the module class
+      new MyRecord$Dump().dump(caseClassName, fieldData)) // $Dump is ASM's convention for naming the module class
 
   }
 
 }
-
-
-
 

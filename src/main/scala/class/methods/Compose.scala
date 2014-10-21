@@ -6,7 +6,7 @@ import Opcodes._
 
 case class Compose(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
   def dump = {
-   
+
     mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "compose", "(Lscala/Function1;)Lscala/Function1;", "<A:Ljava/lang/Object;>(Lscala/Function1<TA;" + fieldData.map(fd => fd.typeData.unerasedType).head + ">;)Lscala/Function1<TA;L" + caseClassName + ";>;", null);
 
     mv.visitCode();

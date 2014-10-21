@@ -1,4 +1,4 @@
-Runtime-Type-Provider
+Case-Class-Generator
 =====================
 
 Allows runtime data to serve as Scala case class definitions:

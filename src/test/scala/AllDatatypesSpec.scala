@@ -24,7 +24,7 @@ class AllDatatypesSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
  
- "given a dynamically generated case class MyRecord_StringIntBooleanSpec(a: Int) as a type parameter, a grater" should {
+ "given a dynamically generated case class with all datatypes as a type parameters, a grater" should {
     "serialize and deserialize correctly" in {
       typeTemplate === obj
     }

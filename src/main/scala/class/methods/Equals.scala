@@ -6,11 +6,11 @@ import Opcodes._
 
 case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
   def dump = {
-//    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
+    //    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
     val userDefinedTypes = ClassStore.generatedClasses.keys.toList
     mv = cw.visitMethod(ACC_PUBLIC, "equals", "(Ljava/lang/Object;)Z", null, null);
-    mv.visitCode();//if there's a "Nothing" then drop all value members after the first "Nothing".
-    val fields = (if (fieldData.map(n=>n.fieldType).contains("Nothing")) fieldData.reverse.dropWhile(valueMember =>   valueMember.fieldType != "Nothing").reverse; else fieldData)
+    mv.visitCode(); //if there's a "Nothing" then drop all value members after the first "Nothing".
+    val fields = (if (fieldData.map(n => n.fieldType).contains("Nothing")) fieldData.reverse.dropWhile(valueMember => valueMember.fieldType != "Nothing").reverse; else fieldData)
     var l0: Label = null
 
     if (fieldData.length > 0) {
@@ -18,14 +18,14 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
       mv.visitVarInsn(ALOAD, 1);
       l0 = new Label();
 
-      if (fieldData.map(n => n.fieldType).forall(t => List("Nothing").contains(t))) {//if all the valueMembers are "Nothing"
+      if (fieldData.map(n => n.fieldType).forall(t => List("Nothing").contains(t))) { //if all the valueMembers are "Nothing"
         mv.visitJumpInsn(IF_ACMPNE, l0);
         mv.visitInsn(ICONST_1);
         val nothingLabel = new Label();
         mv.visitJumpInsn(GOTO, nothingLabel);
         mv.visitLabel(l0);
         mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-      } 
+      }
       else {
         mv.visitJumpInsn(IF_ACMPEQ, l0);
       }
@@ -43,11 +43,11 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
     val l2 = new Label();
     mv.visitJumpInsn(GOTO, l2);
     mv.visitLabel(l1);
-    mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] ("java/lang/Object"), 0, null);
+    mv.visitFrame(Opcodes.F_APPEND, 1, Array[Object] ("java/lang/Object"), 0, null);
     mv.visitInsn(ICONST_0);
     mv.visitVarInsn(ISTORE, 3);
     mv.visitLabel(l2);
-    mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] (Opcodes.INTEGER), 0, null);
+    mv.visitFrame(Opcodes.F_APPEND, 1, Array[Object] (Opcodes.INTEGER), 0, null);
     mv.visitVarInsn(ILOAD, 3);
     val l3 = new Label();
     mv.visitJumpInsn(IFEQ, l3);
@@ -62,7 +62,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
 
     fields.foreach(valueMember => { //erased types 
       valueMember.fieldType.takeWhile(c => c != '[') match {
-        case "Boolean"|"Byte"|"Char"|"Short"|"Int" => {
+        case "Boolean" | "Byte" | "Char" | "Short" | "Int" => {
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeData.typeDescriptor);
           mv.visitVarInsn(ALOAD, 4);
@@ -70,7 +70,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           if (fieldData.indexOf(valueMember) == 0) valueMembersGOTOLabel = new Label();
           mv.visitJumpInsn(IF_ICMPNE, valueMembersGOTOLabel);
         }
-        case "Double"|"Float"|"Long" => {
+        case "Double" | "Float" | "Long" => {
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + valueMember.typeData.typeDescriptor);
           mv.visitVarInsn(ALOAD, 4);
@@ -81,7 +81,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           if (fieldData.indexOf(valueMember) == 0) valueMembersGOTOLabel = new Label();
           mv.visitJumpInsn(IFNE, valueMembersGOTOLabel);
         }
-        case "String"|"Null"|"Unit"|"Option"|"List"|"Stream" => { 
+        case "String" | "Null" | "Unit" | "Option" | "List" | "Stream" => {
           if (valueMember.fieldType == "Unit") {
             mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
             mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
@@ -112,7 +112,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           mv.visitJumpInsn(GOTO, valueMembersGOTOLabel);
           mv.visitLabel(l4);
           if (valueMember.fieldType == "Null") {
-            mv.visitFrame(Opcodes.F_FULL, 6, Array[Object] (caseClassName, "java/lang/Object", "java/lang/Object", Opcodes.INTEGER,  caseClassName, Opcodes.NULL), 1, Array[Object] (Opcodes.NULL));
+            mv.visitFrame(Opcodes.F_FULL, 6, Array[Object] (caseClassName, "java/lang/Object", "java/lang/Object", Opcodes.INTEGER, caseClassName, Opcodes.NULL), 1, Array[Object] (Opcodes.NULL));
           }
           else {
             mv.visitFrame(Opcodes.F_FULL, 6, Array[Object] (caseClassName, "java/lang/Object", "java/lang/Object", Opcodes.INTEGER, caseClassName, valueMember.typeData.typeDescriptor.drop(1).dropRight(1)), 1, Array[Object] (valueMember.typeData.typeDescriptor.drop(1).dropRight(1)));
@@ -123,7 +123,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           mv.visitLabel(l5);
           mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
         }
-        case "Any"|"AnyRef"|"Object" => {
+        case "Any" | "AnyRef" | "Object" => {
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()Ljava/lang/Object;");
           mv.visitVarInsn(ALOAD, 4);
@@ -131,7 +131,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "equals", "(Ljava/lang/Object;Ljava/lang/Object;)Z");
           if (fieldData.indexOf(valueMember) == 0) valueMembersGOTOLabel = new Label();
           mv.visitJumpInsn(IFEQ, valueMembersGOTOLabel);
-        }  
+        }
         case "Nothing" => {
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()Lscala/runtime/Nothing$;");
@@ -155,37 +155,35 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           mv.visitJumpInsn(GOTO, valueMembersGOTOLabel);
           mv.visitLabel(l4);
 
-
           val namespace = caseClassName.takeWhile(c => (c != '/'))
-          val name =  valueMember.typeData.typeDescriptor.drop(1).dropRight(1)
+          val name = valueMember.typeData.typeDescriptor.drop(1).dropRight(1)
 
+          mv.visitFrame(Opcodes.F_FULL, 6, Array[Object] (caseClassName, "java/lang/Object", "java/lang/Object", Opcodes.INTEGER, caseClassName, name), 1, Array[Object] (name));
 
-          mv.visitFrame( Opcodes.F_FULL, 6, Array[Object] (caseClassName, "java/lang/Object", "java/lang/Object", Opcodes.INTEGER, caseClassName, name ), 1, Array[Object] ( name) );
-          
           mv.visitVarInsn(ALOAD, 5);
           mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/Object", "equals", "(Ljava/lang/Object;)Z");
           mv.visitJumpInsn(IFEQ, valueMembersGOTOLabel);
           mv.visitLabel(l5);
           mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
-        }    
+        }
         case _ => error("Could not generate equals method: unsupported type")
       }
     })
 
-//do the following unless there is was "Nothing" type and we broke out with a ATHROW instead
+    //do the following unless there is was "Nothing" type and we broke out with a ATHROW instead
     if (!fieldData.map(n => n.fieldType).contains("Nothing")) mv.visitVarInsn(ALOAD, 4);
-//if all value members are of type "Nothing", skip the canEqual portion and go to the final portion
+    //if all value members are of type "Nothing", skip the canEqual portion and go to the final portion
     if (!fieldData.map(n => n.fieldType).forall(t => List("Nothing").contains(t))) {
       fields.contains("Nothing") match {
         case true => { //if there is a "Nothing" type, then it will be the last value member, and the canEqual is skipped
           mv.visitLabel(valueMembersGOTOLabel);
-          mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] (caseClassName), 0, null);
+          mv.visitFrame(Opcodes.F_APPEND, 1, Array[Object] (caseClassName), 0, null);
           mv.visitInsn(ICONST_0);
           mv.visitJumpInsn(IFEQ, l3);
           mv.visitLabel(l0);
-          mv.visitFrame(Opcodes.F_CHOP,3, null, 0, null);
+          mv.visitFrame(Opcodes.F_CHOP, 3, null, 0, null);
         }
-        case false => {//there is not a Nothing type in the record
+        case false => { //there is not a Nothing type in the record
           mv.visitVarInsn(ALOAD, 0);
           mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, "canEqual", "(Ljava/lang/Object;)Z");
           mv.visitJumpInsn(IFEQ, valueMembersGOTOLabel);
@@ -194,17 +192,17 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
           mv.visitJumpInsn(GOTO, penultimateLabel);
           mv.visitLabel(valueMembersGOTOLabel);
 
-  //if all value members are from this list, then:
-          if (fieldData.map(n => n.fieldType.takeWhile(c => c != '[')).forall(t => List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "Object").contains(t))) {//if all field types are types on this list 
-            mv.visitFrame(Opcodes.F_APPEND,1, Array[Object] (caseClassName), 0, null);
+          //if all value members are from this list, then:
+          if (fieldData.map(n => n.fieldType.takeWhile(c => c != '[')).forall(t => List("Any", "AnyRef", "Boolean", "Byte", "Char", "Int", "Double", "Float", "Long", "Short", "Object").contains(t))) { //if all field types are types on this list 
+            mv.visitFrame(Opcodes.F_APPEND, 1, Array[Object] (caseClassName), 0, null);
             mv.visitInsn(ICONST_0);
             mv.visitLabel(penultimateLabel);
             mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, Array[Object] (Opcodes.INTEGER));
             mv.visitJumpInsn(IFEQ, l3);
             mv.visitLabel(l0);
-            mv.visitFrame(Opcodes.F_CHOP,3, null, 0, null);
+            mv.visitFrame(Opcodes.F_CHOP, 3, null, 0, null);
           }
-          if ((List("String", "Unit", "List", "Option", "Null"):::userDefinedTypes).contains(fieldData.head.fieldType.takeWhile(c => c != '['))){
+          if ((List("String", "Unit", "List", "Option", "Null") ::: userDefinedTypes).contains(fieldData.head.fieldType.takeWhile(c => c != '['))) {
             mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
             mv.visitInsn(ICONST_0);
             mv.visitLabel(penultimateLabel);
@@ -219,7 +217,7 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
             mv.visitFrame(Opcodes.F_SAME1, 0, null, 1, Array[Object] (Opcodes.INTEGER));
             mv.visitJumpInsn(IFEQ, l3);
             mv.visitLabel(l0);
-            mv.visitFrame(Opcodes.F_CHOP,3, null, 0, null);
+            mv.visitFrame(Opcodes.F_CHOP, 3, null, 0, null);
           }
         }
       }
@@ -227,9 +225,9 @@ case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String,
       ultimateLabel = new Label();
       mv.visitJumpInsn(GOTO, ultimateLabel);
       mv.visitLabel(l3);
-      mv.visitFrame(Opcodes.F_APPEND,2, Array[Object] ("java/lang/Object", Opcodes.INTEGER), 0, null);
+      mv.visitFrame(Opcodes.F_APPEND, 2, Array[Object] ("java/lang/Object", Opcodes.INTEGER), 0, null);
     }
-    else { 
+    else {
       mv.visitLabel(l3);
       mv.visitFrame(Opcodes.F_SAME, 0, null, 0, null);
     }

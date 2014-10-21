@@ -3,7 +3,6 @@ import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
-
 case class ModuleToString(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String) {
   def dump = {
     mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC + ACC_FINAL, "toString", "()Ljava/lang/String;", null, null);

@@ -6,28 +6,27 @@ import Opcodes._
 
 case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData], ctorReturnType: String) {
   def dump = {
-println("Init: ctorReturn Type" + ctorReturnType)
+    println("Init: ctorReturn Type" + ctorReturnType)
     //init method
-    if ( fieldData.map(fd => fd.fieldType).exists(ft => ft.endsWith("]"))) {
+    if (fieldData.map(fd => fd.fieldType).exists(ft => ft.endsWith("]"))) {
       mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")V", null);
     }
     else mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, null, null);
     mv.visitCode();
 
-
-//the variable part of the constructor:
+    //the variable part of the constructor:
     var stackIndex = 1
 
     fieldData.map(fd => { //fd.typeData.loadInstr).foreach(lI => {
-      if (fd.typeData.loadInstr == DLOAD | fd.typeData.loadInstr == LLOAD ) {
+      if (fd.typeData.loadInstr == DLOAD | fd.typeData.loadInstr == LLOAD) {
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(fd.typeData.loadInstr, stackIndex); 
+        mv.visitVarInsn(fd.typeData.loadInstr, stackIndex);
         mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeData.typeDescriptor.toString);
         stackIndex += 2
       }
-      else { 
+      else {
         mv.visitVarInsn(ALOAD, 0);
-        mv.visitVarInsn(fd.typeData.loadInstr, stackIndex); 
+        mv.visitVarInsn(fd.typeData.loadInstr, stackIndex);
         mv.visitFieldInsn(PUTFIELD, caseClassName, fd.fieldName, fd.typeData.typeDescriptor.toString);
         stackIndex += 1;
       }

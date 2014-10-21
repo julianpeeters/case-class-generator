@@ -4,7 +4,6 @@ import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
 
-
 import java.util.Arrays
 import scala.io.Codec._
 case class Curried(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String) {
