@@ -13,7 +13,7 @@ import specification._
 
 class DoubleDoubleSpec extends mutable.Specification {
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Double"), FieldSeed("b","Double"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Double"), FieldData("b","Double"))
   val classData = ClassData(Some("models"), "MyRecord_DoubleDoubleSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

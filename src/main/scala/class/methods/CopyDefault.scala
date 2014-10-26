@@ -2,7 +2,7 @@ package com.julianpeeters.caseclass.generator
 import org.objectweb.asm._
 import Opcodes._
 
-case class CopyDefault(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
+case class CopyDefault(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
   def dump = {
     fieldData.zipWithIndex.foreach(fd => {
       val tpe = {

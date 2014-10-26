@@ -15,7 +15,7 @@ import specification._
 class BooleanBooleanSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Boolean"), FieldSeed("b","Boolean"))//, FieldSeed("d","Boolean"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Boolean"), FieldData("b","Boolean"))//, FieldData("d","Boolean"))
   val classData = ClassData(Some("models"), "MyRecord_BooleanBooleanSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

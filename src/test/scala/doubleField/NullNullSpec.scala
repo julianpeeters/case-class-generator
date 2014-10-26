@@ -14,7 +14,7 @@ import specification._
 class NullNullSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Null"), FieldSeed("b","Null"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Null"), FieldData("b","Null"))
   val classData = ClassData(Some("models"), "MyRecord_NullNullSpec", valueMembers)
 
   val dcc = new DynamicCaseClass(classData)

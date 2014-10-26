@@ -13,7 +13,7 @@ import specification._
 class AnySpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Any"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Any"))
   val classData = ClassData(Some("models"), "MyRecord_AnySpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
   val typeTemplate = dcc.runtimeInstance

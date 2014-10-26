@@ -13,7 +13,7 @@ import specification._
 class ObjectObjectSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Object"), FieldSeed("b","Object"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Object"), FieldData("b","Object"))
   val classData = ClassData(Some("models"), "MyRecord_ObjectObjectSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

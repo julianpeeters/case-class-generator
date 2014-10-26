@@ -1,6 +1,6 @@
 name := "case-class-generator"
 
-version := "0.4"
+version := "0.5"
 
 organization := "com.julianpeeters"
 
@@ -14,8 +14,7 @@ libraryDependencies ++= Seq(
   "org.apache.avro" % "avro" % "1.7.6",
   "org.slf4j" % "slf4j-simple" % "1.7.5", 
   "org.specs2" %% "specs2" % "2.2" % "test",
-  "com.novus" %% "salat" % "1.9.8", //% "test"
-  "com.gensler" %% "scalavro" % "0.6.2"
+  "com.novus" %% "salat" % "1.9.8" % "test"
 )
 
 publishMavenStyle := true

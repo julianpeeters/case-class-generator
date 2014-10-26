@@ -3,7 +3,7 @@ import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
+case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
   def dump = {
 
     val userDefinedTypes = ClassStore.generatedClasses.keys.toList

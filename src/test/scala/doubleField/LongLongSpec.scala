@@ -12,7 +12,7 @@ import specification._
 class LongLongSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Long"), FieldSeed("b","Long"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Long"), FieldData("b","Long"))
   val classData = ClassData(Some("models"), "MyRecord_LongLongSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

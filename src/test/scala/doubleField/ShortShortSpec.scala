@@ -14,7 +14,7 @@ import specification._
 class ShortShortSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Short"), FieldSeed("b","Short"))//, FieldSeed("d","Boolean"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Short"), FieldData("b","Short"))//, FieldData("d","Boolean"))
   val classData = ClassData(Some("models"), "MyRecord_ShortShortSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

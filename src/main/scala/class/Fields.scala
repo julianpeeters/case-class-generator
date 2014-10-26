@@ -6,7 +6,7 @@ import Opcodes._
 
 import java.util.Arrays
 import scala.io.Codec._
-case class Fields(cw: ClassWriter, fieldData: List[FieldData]) {
+case class Fields(cw: ClassWriter, fieldData: List[TypedFields]) {
   def dump = {
     fieldData.foreach(fd => (cw.visitField(ACC_PRIVATE + ACC_FINAL, fd.fieldName, fd.typeData.typeDescriptor.toString, fd.typeData.unerasedType, null).visitEnd()))
   }

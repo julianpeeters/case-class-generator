@@ -12,7 +12,7 @@ import specification._
 class StringStringSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","String"), FieldSeed("b","String"))
+  val valueMembers: List[FieldData] = List(FieldData("a","String"), FieldData("b","String"))
   val classData = ClassData(Some("models"), "MyRecord_StringStringSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

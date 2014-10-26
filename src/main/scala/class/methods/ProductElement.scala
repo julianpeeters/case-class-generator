@@ -4,7 +4,7 @@ import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ProductElement(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
+case class ProductElement(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
   def dump = {
     mv = cw.visitMethod(ACC_PUBLIC, "productElement", "(I)Ljava/lang/Object;", null, null);
     mv.visitCode();

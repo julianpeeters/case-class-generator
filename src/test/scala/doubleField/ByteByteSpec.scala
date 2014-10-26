@@ -15,7 +15,7 @@ import specification._
 class ByteByteSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Byte"), FieldSeed("b","Byte"))//, FieldSeed("d","Boolean"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Byte"), FieldData("b","Byte"))//, FieldData("d","Boolean"))
   val classData = ClassData(Some("models"), "MyRecord_ByteByteSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

@@ -7,7 +7,7 @@ import Opcodes._
 import java.util.Arrays
 import scala.io.Codec._
 
-case class FieldMethods(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
+case class FieldMethods(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
   def dump = {
     fieldData.foreach(fd => {
       val tpe = {

@@ -14,7 +14,7 @@ import specification._
 
 class AnyRefSpec extends mutable.Specification {
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","AnyRef"))//, FieldSeed("b","Int"))
+  val valueMembers: List[FieldData] = List(FieldData("a","AnyRef"))//, FieldData("b","Int"))
   val classData = ClassData(Some("models"), "MyRecord_AnyRefSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

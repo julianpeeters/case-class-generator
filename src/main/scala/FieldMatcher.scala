@@ -4,9 +4,9 @@ import Opcodes._
 
 object FieldMatcher {
 
-  def enrichFieldData(namespace: Option[String], field: FieldSeed): FieldData = {
+  def enrichFieldData(namespace: Option[String], field: FieldData): TypedFields = {
     val fieldType = field.fieldType
-    FieldData(
+    TypedFields(
       field.fieldName,
       fieldType,
       getTypeData(namespace, fieldType)
@@ -318,7 +318,7 @@ value, i.e. Object and array references.
     }
   }
 
-  def getReturnType(fieldSeeds: List[FieldSeed]) = {
+  def getReturnType(fieldSeeds: List[FieldData]) = {
     fieldSeeds.map(n => n.fieldType).map(m => m match {
       //    case "Null"    => classOf[Unit]
       case "Boolean"                            => classOf[Boolean]

@@ -6,7 +6,7 @@ import Opcodes._
 
 import java.util.Arrays
 import scala.io.Codec._
-case class ModuleHeader(cw_MODULE: ClassWriter, caseClassName: String, fieldData: List[FieldData]) {
+case class ModuleHeader(cw_MODULE: ClassWriter, caseClassName: String, fieldData: List[TypedFields]) {
   def dump = {
 
     //if it's a user-defined type 

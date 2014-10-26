@@ -3,7 +3,7 @@ import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ModuleSyntheticApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
+case class ModuleSyntheticApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
   def dump = {
 
     //  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.map(k => k.dropWhile(c => (c != '.')).tail).toList

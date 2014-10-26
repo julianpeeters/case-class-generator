@@ -4,9 +4,9 @@ import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
 
-case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData], ctorReturnType: String) {
+case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields], ctorReturnType: String) {
   def dump = {
-    println("Init: ctorReturn Type" + ctorReturnType)
+
     //init method
     if (fieldData.map(fd => fd.fieldType).exists(ft => ft.endsWith("]"))) {
       mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")V", null);
@@ -17,7 +17,7 @@ case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, f
     //the variable part of the constructor:
     var stackIndex = 1
 
-    fieldData.map(fd => { //fd.typeData.loadInstr).foreach(lI => {
+    fieldData.map(fd => { 
       if (fd.typeData.loadInstr == DLOAD | fd.typeData.loadInstr == LLOAD) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitVarInsn(fd.typeData.loadInstr, stackIndex);

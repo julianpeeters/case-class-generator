@@ -14,7 +14,7 @@ import specification._
 class IntSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Int"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Int"))
   val classData = ClassData(Some("models"), "MyRecord_IntSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

@@ -5,7 +5,7 @@ import org.objectweb.asm._
 import Opcodes._
 
 //HashCode has two methods: the main "dump" method, and the helper "matchFields" That it calls
-case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
+case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
 
   //  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
   val userDefinedTypes = ClassStore.generatedClasses.keys.toList
@@ -55,7 +55,7 @@ case class HashCode(cw: ClassWriter, var mv: MethodVisitor, caseClassName: Strin
     }
   }
 
-  def matchFields(valueMember: FieldData) = {
+  def matchFields(valueMember: TypedFields) = {
     valueMember.fieldType match {
       case "Byte" | "Char" | "Short" | "Int" | "Long" | "Float" | "Double" | "Unit" | "Null" => {
         valueMember.fieldType match {

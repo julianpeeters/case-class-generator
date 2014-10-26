@@ -4,7 +4,7 @@ import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
 
-case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[FieldData]) {
+case class Equals(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
   def dump = {
     //    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
     val userDefinedTypes = ClassStore.generatedClasses.keys.toList

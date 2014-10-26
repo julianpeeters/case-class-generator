@@ -14,7 +14,7 @@ import specification._
 class UnitUnitSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Unit"), FieldSeed("b","Unit"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Unit"), FieldData("b","Unit"))
   val classData = ClassData(Some("models"), "MyRecord_UnitUnitSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

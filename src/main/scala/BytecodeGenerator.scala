@@ -17,18 +17,18 @@ object BytecodeGenerator {
       else name
     }
 
-    val fieldData: List[FieldData] = classData.classFields.map(field => FieldMatcher.enrichFieldData(namespace, field))
+    val typedFields: List[TypedFields] = classData.classFields.map(field => FieldMatcher.enrichFieldData(namespace, field))
 
     val potentialNamespace = {
       if (classData.classNamespace.isDefined) classData.classNamespace.get
       else "<empty>"
     }
 
-    val mySig = new ScalaSig(List("case class"), List(potentialNamespace, classData.className), fieldData.map(f => (f.fieldName, f.fieldType)))
+    val mySig = new ScalaSig(List("case class"), List(potentialNamespace, classData.className), typedFields.map(f => (f.fieldName, f.fieldType)))
 
     //generate a pair of class and module class
-    List(new MyRecordDump().dump(mySig, caseClassName, fieldData),
-      new MyRecord$Dump().dump(caseClassName, fieldData)) // $Dump is ASM's convention for naming the module class
+    List(new MyRecordDump().dump(mySig, caseClassName, typedFields),
+      new MyRecord$Dump().dump(caseClassName, typedFields)) // $Dump is ASM's convention for naming the module class
 
   }
 

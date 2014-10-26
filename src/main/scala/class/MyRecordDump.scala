@@ -5,7 +5,7 @@ import Opcodes._
 
 case class MyRecordDump {
 
-  def dump(mySig: ScalaSig, caseClassName: String, fieldData: List[FieldData]): Array[Byte] = {
+  def dump(mySig: ScalaSig, caseClassName: String, fieldData: List[TypedFields]): Array[Byte] = {
 
     val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS) //, ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
     var fv: FieldVisitor = null

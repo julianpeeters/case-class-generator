@@ -14,7 +14,7 @@ import specification._
 class FloatSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Float"))//, FieldSeed("b","Int"))//, FieldSeed("d","Boolean"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Float"))//, FieldData("b","Int"))//, FieldData("d","Boolean"))
   val classData = ClassData(Some("models"), "MyRecord_FloatSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 

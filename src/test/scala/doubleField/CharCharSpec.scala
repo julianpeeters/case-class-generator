@@ -14,7 +14,7 @@ import specification._
 class CharCharSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Char"), FieldSeed("b","Char"))//, FieldSeed("d","Boolean"))
+  val valueMembers: List[FieldData] = List(FieldData("a","Char"), FieldData("b","Char"))//, FieldData("d","Boolean"))
   val classData = ClassData(Some("models"), "MyRecord_CharCharSpec", valueMembers)
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
