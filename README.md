@@ -41,12 +41,15 @@ Add the following dependency:
 Then get a `DynamicCaseClass` instance with:
 
 
-    import com.julianpeeters.caseclass.generator.{ FieldData, ClassData, DynamicCaseClass }
+    import com.julianpeeters.caseclass.generator._
 
-    val fieldData = List(FieldData("name", typeOf[String], FieldData("age", typeOf[Int])
-    val classData = ClassData(Some("mypackage"), "Person", fieldData)
+    val name      = ClassName("Person")
+    val namespace = ClassNamespace(Some("mypackage"))
+    val fieldData = ClassFieldData(List(FieldData("name", typeOf[String], FieldData("age", typeOf[Int]))
+    val classData = ClassData(namespace, name, fieldData)
     
     val dcc = new DynamicCaseClass(classData)
+
 
 with which you will be a able to:
 
@@ -64,16 +67,14 @@ with which you will be a able to:
 
 
 * Import the new  class' type tag/manifest, use the `TYPE` type member as a type parameter (implicit scoping rules apply):
-    `import scala.reflect.runtime.universe._
-     import dcc.implicits.{ tag, manifest }
+    import scala.reflect.runtime.universe._
+    import dcc.implicits.{ tag, manifest }
 
-     typeOf[dcc.TYPE]`
+    typeOf[dcc.TYPE]
 
 
-* Retrieve previously generated classes from a `Map[Type, DynamicCaseClass]`:
-    `import com.julianpeeters.caseclass.generator.ClassStore
-
-     ClassStore.generatedClasses.get(dcc.tpe)`
+* Retrieve previously generated classes from a `Map[Type, DynamicCaseClass]`
+     `ClassStore.generatedClasses.get(dcc.tpe)`
 
 
 ##Warnings: 
