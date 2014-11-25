@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -14,8 +15,8 @@ import specification._
 class UnitUnitSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Unit"), FieldData("b","Unit"))
-  val classData = ClassData(Some("models"), "MyRecord_UnitUnitSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Unit]), FieldData("b", typeOf[Unit]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_UnitUnitSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 

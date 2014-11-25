@@ -6,7 +6,8 @@ import Opcodes._
 
 import java.util.Arrays
 import scala.io.Codec._
-case class ModuleInit(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class ModuleInit(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
+
   def dump = {
 
     mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);

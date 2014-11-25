@@ -3,9 +3,9 @@ import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
-case class MyRecord$Dump {
+object MyRecord$Dumper {
 
-  def dump(caseClassName: String, fieldData: List[TypedFields]): Array[Byte] = {
+  def dump(caseClassName: String, fieldData: List[EnrichedField]): Array[Byte] = {
     val cw_MODULE: ClassWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
     var fv_MODULE: FieldVisitor = null;
     var mv_MODULE: MethodVisitor = null;

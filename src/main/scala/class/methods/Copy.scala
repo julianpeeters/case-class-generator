@@ -6,7 +6,7 @@ import Opcodes._
 
 import java.util.Arrays
 import scala.io.Codec._
-case class Copy(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class Copy(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
   def dump = {
 
     mv = cw.visitMethod(ACC_PUBLIC, "copy", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";", "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")L" + caseClassName + ";", null);

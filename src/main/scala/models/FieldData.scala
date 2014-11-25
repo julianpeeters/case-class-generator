@@ -1,11 +1,14 @@
 package com.julianpeeters.caseclass.generator
 
-//User-facing
-case class FieldData(fieldName: String, fieldType: String)
+import scala.reflect.runtime.universe._
 
-//FieldSeeds get enhanced with a typeData field when a DynamicCaseClass is made
-case class TypedFields(
+
+//User-facing
+case class FieldData(fieldName: String, fieldType: Type)
+
+//Field seeds get enhanced with a typeData field when a DynamicCaseClass is made
+case class EnrichedField(
   fieldName: String,
-  fieldType: String,
+  fieldType: Type,
   typeData: TypeData)
 

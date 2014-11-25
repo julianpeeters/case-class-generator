@@ -1,13 +1,14 @@
 package com.julianpeeters.caseclass.generator
-import artisanal.pickle.maker._
+
+import scala.reflect.runtime.universe._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
+
   def dump = {
 
     val userDefinedTypes = ClassStore.generatedClasses.keys.toList
-    //    val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
 
     fieldData.length match {
       case 1 => {
@@ -37,88 +38,93 @@ case class ModuleUnapply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, c
     }
 
     fieldData.foreach(fd => {
-      //match types after erasing boxed types
-      fd.fieldType.takeWhile(c => c != '[') match {
-        case "Int" => {
+      fd.fieldType match {
+
+        case l if l =:= typeOf[Int] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
         }
-        case "Boolean" => {
+        case l if l =:= typeOf[Boolean] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToBoolean", "(Z)Ljava/lang/Boolean;");
         }
-        case "Long" => {
+        case l if l =:= typeOf[Long] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToLong", "(J)Ljava/lang/Long;");
         }
-
-        case "Double" => {
+        case l if l =:= typeOf[Double] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToDouble", "(D)Ljava/lang/Double;");
         }
-        case "Float" => {
+        case l if l =:= typeOf[Float] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToFloat", "(F)Ljava/lang/Float;");
         }
-        case "Byte" => {
+        case l if l =:= typeOf[Byte] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
         }
-        case "Short" => {
+        case l if l =:= typeOf[Short] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
         }
-        case "Char" => {
+        case l if l =:= typeOf[Char] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToCharacter", "(C)Ljava/lang/Character;");
         }
-        case "String" => {
+
+        case s if s =:= typeOf[String] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
         }
-        case "Unit" => {
+
+        case s if s =:= typeOf[Unit] => {
           mv_MODULE.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
         }
-        case "Null" => {
+        case s if s =:= typeOf[Null] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitInsn(POP);
           mv_MODULE.visitInsn(ACONST_NULL);
         }
-        case "Nothing" => {
+        case s if s =:= typeOf[Nothing] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
           mv_MODULE.visitInsn(ATHROW);
         }
-        case "Any" => {
+        case s if s =:= typeOf[Any] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
         }
-        case "AnyRef" => {
+        case s if s =:= typeOf[AnyRef] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
         }
-        case "Object" => {
+        case s if s =:= typeOf[Object] => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
         }
+
         //generics
-        case "List" | "Option" => {
+        case la @ TypeRef(pre, symbol, args) if ( (la <:< typeOf[List[Any]] | la <:< typeOf[Option[Any]]) && args.length == 1 ) => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
         }
-        case name: String if userDefinedTypes.contains(name) => {
+
+        // user defined or other case classes
+        case name @ TypeRef(pre, symbol, args) if userDefinedTypes.contains(name) => {
           mv_MODULE.visitVarInsn(ALOAD, 1);
           mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName, fd.fieldName, "()" + fd.typeData.typeDescriptor);
         }
+
         case _ => error("cannot generate module unapply method, unsupported type")
       }
     })

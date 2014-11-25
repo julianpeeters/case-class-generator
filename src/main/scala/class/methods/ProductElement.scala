@@ -1,10 +1,10 @@
 package com.julianpeeters.caseclass.generator
-import artisanal.pickle.maker._
-import scala.reflect.internal.pickling._
+
+import scala.reflect.runtime.universe._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ProductElement(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class ProductElement(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
   def dump = {
     mv = cw.visitMethod(ACC_PUBLIC, "productElement", "(I)Ljava/lang/Object;", null, null);
     mv.visitCode();
@@ -34,29 +34,40 @@ case class ProductElement(cw: ClassWriter, var mv: MethodVisitor, caseClassName:
         if (valueMember.typeData.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
         else valueMember.typeData.typeDescriptor
       }
+
       mv.visitMethodInsn(INVOKEVIRTUAL, caseClassName, valueMember.fieldName, "()" + tpe);
 
       valueMember.fieldType match {
-        case "Byte"       => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
-        case "Short"      => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
-        case "Int"        => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
-        case "Long"       => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToLong", "(J)Ljava/lang/Long;");
-        case "Float"      => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToFloat", "(F)Ljava/lang/Float;");
-        case "Double"     => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToDouble", "(D)Ljava/lang/Double;");
-        case "Char"       => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToCharacter", "(C)Ljava/lang/Character;");
-        case "String"     =>
-        case "Boolean"    => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToBoolean", "(Z)Ljava/lang/Boolean;");
-        case "Unit"       => mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
-        case "Null"       => mv.visitInsn(POP); mv.visitInsn(ACONST_NULL);
-        case "Nothing"    => mv.visitInsn(ATHROW);
-        case "Any"        =>
-        case "AnyRef"     =>
-        case "Object"     =>
 
-        case "list"       =>
-        case name: String => //nothing needed for user-defined types
+        case l if l =:= typeOf[Byte]       => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToByte", "(B)Ljava/lang/Byte;");
+        case l if l =:= typeOf[Short]      => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToShort", "(S)Ljava/lang/Short;");
+        case l if l =:= typeOf[Int]        => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToInteger", "(I)Ljava/lang/Integer;");
+
+        case l if l =:= typeOf[Long]       => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToLong", "(J)Ljava/lang/Long;");
+
+        case l if l =:= typeOf[Float]      => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToFloat", "(F)Ljava/lang/Float;");
+        case l if l =:= typeOf[Double]     => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToDouble", "(D)Ljava/lang/Double;");
+        case l if l =:= typeOf[Char]       => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToCharacter", "(C)Ljava/lang/Character;");
+
+        case x if x =:= typeOf[String]     =>
+
+        case l if l =:= typeOf[Boolean]    => mv.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "boxToBoolean", "(Z)Ljava/lang/Boolean;");
+        case l if l =:= typeOf[Unit]       => mv.visitFieldInsn(GETSTATIC, "scala/runtime/BoxedUnit", "UNIT", "Lscala/runtime/BoxedUnit;");
+        case l if l =:= typeOf[Null]       => mv.visitInsn(POP); mv.visitInsn(ACONST_NULL);
+        case l if l =:= typeOf[Nothing]    => mv.visitInsn(ATHROW);
+        case l if l =:= typeOf[Any]        => 
+        case l if l =:= typeOf[AnyRef]     => 
+        case l if l <:< typeOf[Option[Any]]     => 
+        case l if l <:< typeOf[Object]     => 
+
+
+        //nothing needed for generics such as list, option, nor for user-defined types
+        case TypeRef(pre, symbol, args) =>
         case _            => error("cannot generate productElement method: unsupported type")
+
       }
+
+
       if (fieldData.length > 1) {
 
         reversed.indexOf(valueMember) match {

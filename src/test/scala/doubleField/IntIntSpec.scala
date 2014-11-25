@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 import org.specs2._
 import mutable._
@@ -12,8 +13,8 @@ import specification._
 class IntIntSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Int"), FieldData("b","Int"))
-  val classData = ClassData(Some("models"), "MyRecord_IntIntSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Int]), FieldData("b", typeOf[Int]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_IntIntSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 

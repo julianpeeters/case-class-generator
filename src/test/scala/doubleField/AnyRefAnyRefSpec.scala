@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -13,8 +14,8 @@ import specification._
 
 class AnyRefAnyRefSpec extends mutable.Specification {
 
-  val valueMembers: List[FieldData] = List(FieldData("a","AnyRef"), FieldData("b","AnyRef"))
-  val classData = ClassData(Some("models"), "MyRecord_AnyRefAnyRefSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a",typeOf[AnyRef]), FieldData("b",typeOf[AnyRef]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_AnyRefAnyRefSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 

@@ -6,7 +6,7 @@ import Opcodes._
 
 import java.util.Arrays
 import scala.io.Codec._
-case class Tupled(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class Tupled(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
   def dump = {
     mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "tupled", "()Lscala/Function1;", "()Lscala/Function1<Lscala/Tuple" + fieldData.length + "<" + fieldData.map(fd => fd.typeData.unapplyType).mkString + ">;L" + caseClassName + ";>;", null);
     mv.visitCode();

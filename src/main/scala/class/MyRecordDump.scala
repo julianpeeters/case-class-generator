@@ -1,11 +1,15 @@
 package com.julianpeeters.caseclass.generator
+
 import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
-case class MyRecordDump {
+import scala.reflect.internal.pickling.ByteCodecs
+import scala.reflect.ScalaSignature
 
-  def dump(mySig: ScalaSig, caseClassName: String, fieldData: List[TypedFields]): Array[Byte] = {
+object MyRecordDumper {
+
+  def dump(mySig: artisanal.pickle.maker.ScalaSig, caseClassName: String, fieldData: List[EnrichedField]): Array[Byte] = {
 
     val cw = new ClassWriter(ClassWriter.COMPUTE_MAXS) //, ClassWriter.COMPUTE_FRAMES); //now visit max's args don't matter
     var fv: FieldVisitor = null
@@ -26,7 +30,8 @@ case class MyRecordDump {
       Curried(cw, mv, caseClassName).dump
     }
 
-    FieldMethods(cw, mv, caseClassName, fieldData).dump //"FieldMethods"for lack of a better name
+    Constructor(cw, mv, caseClassName, fieldData).dump 
+
     val name = {
       if (caseClassName.contains('/')) caseClassName.dropWhile(c => c != '/').drop(1)
       else caseClassName
@@ -42,6 +47,7 @@ case class MyRecordDump {
     ToString(cw, mv).dump
     Equals(cw, mv, caseClassName, fieldData).dump
     Init(cw, mv, caseClassName, fieldData, ctorReturnType).dump
+
     cw.toByteArray()
   }
 }

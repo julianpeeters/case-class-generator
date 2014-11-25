@@ -1,22 +1,24 @@
 package com.julianpeeters.caseclass.generator
-import artisanal.pickle.maker._
-import scala.reflect.internal.pickling._
+
 import org.objectweb.asm._
 import Opcodes._
+import scala.reflect.runtime.universe._
 
 import java.util.Arrays
 import scala.io.Codec._
 
-case class FieldMethods(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class Constructor(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
+
   def dump = {
     fieldData.foreach(fd => {
       val tpe = {
         if (fd.typeData.typeDescriptor == "Lscala/runtime/BoxedUnit;") "V"
         else fd.typeData.typeDescriptor
       }
+
       mv = cw.visitMethod(ACC_PUBLIC, fd.fieldName, "()" + tpe, fd.typeData.unerasedType, null);
       mv.visitCode();
-      if (fd.fieldType != "Unit") {
+      if (!(fd.fieldType =:= typeOf[Unit])) {
         mv.visitVarInsn(ALOAD, 0);
         mv.visitFieldInsn(GETFIELD, caseClassName, fd.fieldName, fd.typeData.typeDescriptor.toString);
       }

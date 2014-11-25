@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -13,8 +14,8 @@ import specification._
 
 class DoubleDoubleSpec extends mutable.Specification {
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Double"), FieldData("b","Double"))
-  val classData = ClassData(Some("models"), "MyRecord_DoubleDoubleSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Double]), FieldData("b", typeOf[Double]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_DoubleDoubleSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 

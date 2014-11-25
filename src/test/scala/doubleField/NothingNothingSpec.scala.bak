@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -14,8 +15,8 @@ import specification._
 class NothingSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldSeed] = List(FieldSeed("a","Nothing"))
-  val classData = ClassData(Some("models"), "MyRecord_Nothing", valueMembers)
+  val valueMembers: List[FieldSeed] = List(FieldSeed("a", typeOf[Nothing]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_Nothing"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 

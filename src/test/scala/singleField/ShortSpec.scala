@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 import org.specs2._
@@ -13,12 +14,12 @@ import specification._
 class ShortSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Short"))//, FieldData("b","Int"))//, FieldData("d","Boolean"))
-  val classData = ClassData(Some("models"), "MyRecord_ShortSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Short]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_ShortSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 
-  val typeTemplate = dcc.runtimeInstance
+  val typeTemplate = dcc.newInstance(2.toShort)
 
   type MyRecord = typeTemplate.type
 

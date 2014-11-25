@@ -1,13 +1,12 @@
 package com.julianpeeters.caseclass.generator
 
-import artisanal.pickle.maker._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ModuleApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class ModuleApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
   def dump = {
 
-    if (fieldData.map(fd => fd.fieldType).exists(ft => ft.endsWith("]"))) {
+    if (fieldData.map(fd => fd.fieldType).exists(ft => ft.takesTypeArgs)) {
       mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC, "apply", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";", "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")L" + caseClassName + ";", null);
     }
     else {

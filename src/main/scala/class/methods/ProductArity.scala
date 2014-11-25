@@ -4,7 +4,7 @@ import scala.reflect.internal.pickling._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ProductArity(cw: ClassWriter, var mv: MethodVisitor, fieldData: List[TypedFields]) {
+case class ProductArity(cw: ClassWriter, var mv: MethodVisitor, fieldData: List[EnrichedField]) {
   def dump = {
     val ICONST_VALUE = fieldData.length match {
       case 1 => ICONST_1

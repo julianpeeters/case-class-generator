@@ -1,13 +1,12 @@
 package com.julianpeeters.caseclass.generator
-import artisanal.pickle.maker._
+
+import scala.reflect.runtime.universe._
 import org.objectweb.asm._
 import Opcodes._
 
-case class ModuleSyntheticApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[TypedFields]) {
+case class ModuleSyntheticApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField]) {
   def dump = {
 
-    //  val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.map(k => k.dropWhile(c => (c != '.')).tail).toList
-    //      val userDefinedTypes = CaseClassGenerator.generatedClasses.keys.toList
     val userDefinedTypes = ClassStore.generatedClasses.keys.toList
 
     mv_MODULE = cw_MODULE.visitMethod(ACC_PUBLIC + ACC_BRIDGE + ACC_SYNTHETIC, "apply", "(" + Stream.continually("Ljava/lang/Object;").take(fieldData.length).mkString + ")Ljava/lang/Object;", null, null);
@@ -15,79 +14,77 @@ case class ModuleSyntheticApply(cw_MODULE: ClassWriter, var mv_MODULE: MethodVis
     mv_MODULE.visitVarInsn(ALOAD, 0);
 
     fieldData.zipWithIndex.foreach(n => {
-      //erase types and then match types
-      n._1.fieldType.takeWhile(c => c != '[') match {
-        case "String" => {
+      n._1.fieldType match {
+        case s if s =:= typeOf[String] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitTypeInsn(CHECKCAST, "java/lang/String");
         }
-        case "Int" => {
+        case i if i =:= typeOf[Int] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToInt", "(Ljava/lang/Object;)I");
         }
-        case "Boolean" => {
+        case z if z =:= typeOf[Boolean] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToBoolean", "(Ljava/lang/Object;)Z");
         }
-        case "Short" => {
+        case s if s =:= typeOf[Short] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToShort", "(Ljava/lang/Object;)S");
         }
-        case "Long" => {
+        case l if l =:= typeOf[Long] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToLong", "(Ljava/lang/Object;)J");
         }
-        case "Float" => {
+        case s if s =:= typeOf[Float] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToFloat", "(Ljava/lang/Object;)F");
         }
-        case "Double" => {
+        case s if s =:= typeOf[Double] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToDouble", "(Ljava/lang/Object;)D");
         }
-        case "Byte" => {
+        case s if s =:= typeOf[Byte] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToByte", "(Ljava/lang/Object;)B");
         }
-        case "Char" => {
+        case s if s =:= typeOf[Char] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitMethodInsn(INVOKESTATIC, "scala/runtime/BoxesRunTime", "unboxToChar", "(Ljava/lang/Object;)C");
         }
-        case "Unit" => {
+        case s if s =:= typeOf[Unit] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitTypeInsn(CHECKCAST, "scala/runtime/BoxedUnit");
         }
-        case "Null" => {
+        case s if s =:= typeOf[Null] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitTypeInsn(CHECKCAST, "scala/runtime/Null$");
         }
-        case "Nothing" => {
+        case s if s =:= typeOf[Nothing] => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitTypeInsn(CHECKCAST, "scala/runtime/Nothing$");
         }
-        case "Any"    => mv_MODULE.visitVarInsn(ALOAD, n._2);
-        case "AnyRef" => mv_MODULE.visitVarInsn(ALOAD, n._2);
-        case "Object" => mv_MODULE.visitVarInsn(ALOAD, n._2);
-        case "List" => {
+        case s if s =:= typeOf[Any]    => mv_MODULE.visitVarInsn(ALOAD, n._2);
+        case s if s =:= typeOf[AnyRef] => mv_MODULE.visitVarInsn(ALOAD, n._2);
+        case s if s =:= typeOf[Object] => mv_MODULE.visitVarInsn(ALOAD, n._2);
+
+        case la @ TypeRef(pre, symbol, args) if (la <:< typeOf[List[Any]] && args.length == 1) => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitTypeInsn(CHECKCAST, "scala/collection/immutable/List")
         }
-        case "Option" => {
+
+        case la @ TypeRef(pre, symbol, args) if (la <:< typeOf[Option[Any]] && args.length == 1) => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           mv_MODULE.visitTypeInsn(CHECKCAST, "scala/Option")
         }
-        case "bytes" => //TODO move this into avro datafile parser
 
-        case name: String if userDefinedTypes.contains(name) => {
+        case name @ TypeRef(pre, symbol, args) if userDefinedTypes.contains(name) => {
           mv_MODULE.visitVarInsn(ALOAD, n._2);
           //add namespace to the type name
-          println("caseClassName")
-          val fullName = caseClassName.takeWhile(c => (c != '/')) + "/" + name
-          println("fullName " + fullName)
+          val fullName = name.toString.replaceAllLiterally(".", "/")//caseClassName.takeWhile(c => (c != '/')) + "/" + name
           mv_MODULE.visitTypeInsn(CHECKCAST, fullName);
         }
 
-        case _ => error("cannot generate synthetic apply method: unsupported type")
+        case x => error("cannot generate synthetic apply method of the module class: unsupported type: " + x)
       }
     })
     mv_MODULE.visitMethodInsn(INVOKEVIRTUAL, caseClassName + "$", "apply", "(" + fieldData.map(fd => fd.typeData.typeDescriptor).mkString + ")L" + caseClassName + ";");

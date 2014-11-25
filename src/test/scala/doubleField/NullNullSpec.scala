@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -14,8 +15,8 @@ import specification._
 class NullNullSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Null"), FieldData("b","Null"))
-  val classData = ClassData(Some("models"), "MyRecord_NullNullSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a",typeOf[Null]), FieldData("b",typeOf[Null]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_NullNullSpec"), ClassFieldData(valueMembers))
 
   val dcc = new DynamicCaseClass(classData)
 

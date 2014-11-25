@@ -1,20 +1,18 @@
 package com.julianpeeters.caseclass.generator
-import artisanal.pickle.maker._
-import scala.reflect.internal.pickling._
+
 import org.objectweb.asm._
 import Opcodes._
 
-case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[TypedFields], ctorReturnType: String) {
+case class Init(cw: ClassWriter, var mv: MethodVisitor, caseClassName: String, fieldData: List[EnrichedField], ctorReturnType: String) {
   def dump = {
 
     //init method
-    if (fieldData.map(fd => fd.fieldType).exists(ft => ft.endsWith("]"))) {
+    if (fieldData.map(fd => fd.fieldType).exists(ft => ft.takesTypeArgs)) {
       mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, "(" + fieldData.map(fd => fd.typeData.unerasedTypeDescriptor).mkString + ")V", null);
     }
     else mv = cw.visitMethod(ACC_PUBLIC, "<init>", ctorReturnType, null, null);
     mv.visitCode();
 
-    //the variable part of the constructor:
     var stackIndex = 1
 
     fieldData.map(fd => { 

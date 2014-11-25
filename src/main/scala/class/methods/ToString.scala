@@ -1,6 +1,5 @@
 package com.julianpeeters.caseclass.generator
-import artisanal.pickle.maker._
-import scala.reflect.internal.pickling._
+
 import org.objectweb.asm._
 import Opcodes._
 

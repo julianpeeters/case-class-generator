@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -14,12 +15,12 @@ import specification._
 
 class LongSpec extends mutable.Specification {
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Long"))
-  val classData = ClassData(Some("models"), "MyRecord_LongSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Long]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_LongSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 
-  val typeTemplate = dcc.runtimeInstance
+  val typeTemplate = dcc.newInstance(1L)
 
   type MyRecord = typeTemplate.type
 

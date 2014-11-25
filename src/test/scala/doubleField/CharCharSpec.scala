@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -14,8 +15,8 @@ import specification._
 class CharCharSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Char"), FieldData("b","Char"))//, FieldData("d","Boolean"))
-  val classData = ClassData(Some("models"), "MyRecord_CharCharSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Char]), FieldData("b", typeOf[Char]))//, FieldData("d", typeOf[Boolean]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_CharCharSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 //  val module = dcc.model
 

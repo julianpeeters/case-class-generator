@@ -3,7 +3,8 @@
 import com.julianpeeters.caseclass.generator._
 import com.novus.salat._
 import com.novus.salat.global._
-import com.mongodb.casbah.Imports._
+import com.mongodb.casbah.Imports._ 
+import scala.reflect.runtime.universe._
 
 
 
@@ -14,12 +15,12 @@ import specification._
 class FloatSpec extends mutable.Specification {
 
 
-  val valueMembers: List[FieldData] = List(FieldData("a","Float"))//, FieldData("b","Int"))//, FieldData("d","Boolean"))
-  val classData = ClassData(Some("models"), "MyRecord_FloatSpec", valueMembers)
+  val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Float]))//, FieldData("b", typeOf[Int]))//, FieldData("d", typeOf[Boolean]))
+  val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_FloatSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
 
 
-  val typeTemplate = dcc.runtimeInstance
+  val typeTemplate = dcc.newInstance(1F)
 
   type MyRecord = typeTemplate.type
 
