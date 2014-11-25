@@ -67,6 +67,8 @@ with which you will be a able to:
 
 
 * Import the new  class' type tag/manifest, use the `TYPE` type member as a type parameter (implicit scoping rules apply):
+
+
     import scala.reflect.runtime.universe._
     import dcc.implicits.{ tag, manifest }
 
