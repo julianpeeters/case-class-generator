@@ -33,7 +33,7 @@ Supports generating classes with arbitrary fields of the following datatypes:
 
 ###Usage:
 
-Add the following dependency: 
+Add the following dependency: [![Build Status](https://travis-ci.org/julianpeeters/case-class-generator.svg?branch=scala_2.10)](https://travis-ci.org/julianpeeters/case-class-generator)
   
 
     "com.julianpeeters" %% "case-class-generator" % "0.6.1"
@@ -45,7 +45,7 @@ Then get a `DynamicCaseClass` instance with:
 
     val name      = ClassName("Person")
     val namespace = ClassNamespace(Some("mypackage"))
-    val fieldData = ClassFieldData(List(FieldData("name", typeOf[String], FieldData("age", typeOf[Int]))
+    val fieldData = ClassFieldData( List(FieldData("name", typeOf[String]), FieldData("age", typeOf[Int])) )
     val classData = ClassData(namespace, name, fieldData)
     
     val dcc = new DynamicCaseClass(classData)
