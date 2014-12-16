@@ -1,11 +1,11 @@
 # See http://about.travis-ci.org/docs/user/build-configuration/
 language: scala
 scala:
-   - 2.10.4
+   - 2.11.4
 branches:
   only:
     - master
-    - scala_2.10
+    - scala_2.11
 notifications:
   email:
     recipients:

@@ -33,10 +33,10 @@ Supports generating classes with arbitrary fields of the following datatypes:
 
 ###Usage:
 
-Add the following dependency: [![Build Status](https://travis-ci.org/julianpeeters/case-class-generator.svg?branch=master)](https://travis-ci.org/julianpeeters/case-class-generator)
+Add the following dependency for Scala 2.11 (please see branches for other supported versions): [![Build Status](https://travis-ci.org/julianpeeters/case-class-generator.svg?branch=master)](https://travis-ci.org/julianpeeters/case-class-generator)
   
 
-    "com.julianpeeters" %% "case-class-generator" % "0.6.1"
+    "com.julianpeeters" %% "case-class-generator" % "0.7.1"
 
 Then get a `DynamicCaseClass` instance with:
 
