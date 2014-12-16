@@ -13,6 +13,11 @@ import specification._
 class IntIntSpec extends mutable.Specification {
 
 
+ 
+ "given a dynamically generated case class MyRecord_IntIntSpecs(a: Int, b: Int) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Int]), FieldData("b", typeOf[Int]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_IntIntSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
@@ -28,9 +33,7 @@ class IntIntSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_IntIntSpecs(a: Int, b: Int) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }

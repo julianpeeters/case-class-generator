@@ -15,6 +15,10 @@ import specification._
 class BooleanSpec extends mutable.Specification {
 
 
+ 
+ "given a dynamically generated case class MyRecord_BooleanSpec(a: Boolean) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Boolean]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_BooleanSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
@@ -30,9 +34,8 @@ class BooleanSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_BooleanSpec(a: Boolean) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
+
       typeTemplate === obj
     }
 }

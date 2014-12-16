@@ -13,6 +13,10 @@ import specification._
 
 class ByteSpec extends mutable.Specification {
 
+ "given a dynamically generated case class MyRecord_ByteSpec(a: Byte) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Byte]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_ByteSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
@@ -29,8 +33,7 @@ class ByteSpec extends mutable.Specification {
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
  
- "given a dynamically generated case class MyRecord_ByteSpec(a: Byte) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }

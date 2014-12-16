@@ -13,6 +13,11 @@ import specification._
 
 class NullSpec extends mutable.Specification {
 
+ 
+ "given a dynamically generated case class MyRecord(a: Null) as a type parameter, a grater" should {
+    "serialize correctly" in {
+
+
   val valueMembers: List[FieldData] = List(FieldData("a",typeOf[Null]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_NullSpec"), ClassFieldData(valueMembers))
 
@@ -28,9 +33,7 @@ class NullSpec extends mutable.Specification {
 
  // val obj = grater[MyRecord].asObject(dbo)
   //  println(obj)
- 
- "given a dynamically generated case class MyRecord(a: Null) as a type parameter, a grater" should {
-    "serialize correctly" in {
+
       dbo.toString === """{ "a" :  null }"""
     }
 }

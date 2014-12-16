@@ -15,10 +15,13 @@ import specification._
 class CharCharSpec extends mutable.Specification {
 
 
+ 
+ "given a dynamically generated case class MyRecord_CharCharSpec(a: Char, b: Char) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Char]), FieldData("b", typeOf[Char]))//, FieldData("d", typeOf[Boolean]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_CharCharSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
-//  val module = dcc.model
 
   val typeTemplate = dcc.runtimeInstance
 
@@ -31,9 +34,8 @@ class CharCharSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_CharCharSpec(a: Char, b: Char) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
+
       typeTemplate === obj
     }
 }

@@ -1,14 +1,15 @@
 package com.julianpeeters.caseclass.generator;
 import java.lang.reflect.*;
 
-
 public class DynamicClassLoader {
   public static Class<?> loadClass(String className, byte[] b)  {
+
     //override classDefine (as it is protected) and define the class.
     Class<?> clazz = null;
     try {
       Class<?> cls = Class.forName("java.lang.ClassLoader");
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+      ClassLoaderProbe probe = new ClassLoaderProbe();
+      ClassLoader loader = probe.getClass().getClassLoader();
       Method method = cls.getDeclaredMethod("defineClass", new Class[] { String.class, byte[].class, int.class, int.class });
 
       // protected method invocaton

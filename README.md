@@ -66,7 +66,7 @@ with which you will be a able to:
     `val x = myParamterizedThing[record.type]`
 
 
-* Import the new  class' type tag/manifest, use the `TYPE` type member as a type parameter (implicit scoping rules apply):
+* Import the new  class' implicits and use the `.TYPE` type member as a type parameter (carries a type tag/manifest, implicit scoping rules apply):
 
 
 
@@ -90,7 +90,7 @@ with which you will be a able to:
 
 4) For now only classes with vals can be generated: no vars. It is feasible to add vars in the future, but for them to work, [Artisinal-Pickle-Maker](https://github.com/julianpeeters/artisanal-pickle-maker) must be updated as well.
 
-5) Neither objectWeb's ASM classwriter nor [Artisinal-Pickle-Maker](https://github.com/julianpeeters/artisanal-pickle-maker) are thread-safe.
+5) ObjectWeb's ASM classwriter, and thus this project, is _not_ thread-safe. Testing with Travis CI is done by using `parallelExecution in Test := false` in the build file.
 
 
 Fork away, just make sure the tests pass. Criticism is appreciated.

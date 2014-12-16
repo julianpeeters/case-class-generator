@@ -15,6 +15,11 @@ import specification._
 class ShortShortSpec extends mutable.Specification {
 
 
+ 
+ "given a dynamically generated case class MyRecord_ShortShortSpec(a: Short) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Short]), FieldData("b", typeOf[Short]))//, FieldData("d", typeOf[Boolean]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_ShortShortSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
@@ -30,9 +35,7 @@ class ShortShortSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_ShortShortSpec(a: Short) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }

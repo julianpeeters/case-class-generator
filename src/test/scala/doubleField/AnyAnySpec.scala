@@ -14,6 +14,11 @@ import specification._
 
 class AnyAnySpec extends mutable.Specification {
 
+ 
+ "given a dynamically generated case class MyRecord(a: Any, b: Any) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
 
   val valueMembers: List[FieldData] = List(FieldData("a",typeOf[Any]), FieldData("b",typeOf[Any]))//, FieldData("d", typeOf[Boolean]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_AnyAnySpec"), ClassFieldData(valueMembers))
@@ -30,9 +35,7 @@ class AnyAnySpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord(a: Any, b: Any) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }

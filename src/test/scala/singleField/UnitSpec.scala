@@ -16,6 +16,11 @@ class UnitSpec extends mutable.Specification {
 
 
 
+ 
+ "given a dynamically generated case class MyRecord_UnitSpec(a: Unit) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Unit]))//, FieldData("b", typeOf[Int]))//, FieldData("d", typeOf[Boolean]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_UnitSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
@@ -32,9 +37,7 @@ class UnitSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_UnitSpec(a: Unit) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }

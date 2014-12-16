@@ -22,6 +22,7 @@ case class DynamicCaseClass(classData: ClassData) {
 
   // Get an ASM classwriter, passing it the data needed to dynamically generate a class, "dump" the bytecode
   val bytecode = BytecodeGenerator.dump(classData) //defines the class
+  //val loader = new DynamicClassLoader
   val runtimeClass: java.lang.Class[_] = DynamicClassLoader.loadClass(fullName, bytecode.classBytes.bytes) 
   val runtimeCompanion: java.lang.Class[_] = DynamicClassLoader.loadClass(fullName + "$", bytecode.moduleBytes.bytes)
 

@@ -13,6 +13,11 @@ import specification._
 
 class DoubleSpec extends mutable.Specification {
 
+ 
+ "given a dynamically generated case class MyRecord_DoubleSpec(a: Double) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
 
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Double]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_DoubleSpec"), ClassFieldData(valueMembers))
@@ -30,9 +35,7 @@ class DoubleSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_DoubleSpec(a: Double) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }

@@ -12,6 +12,11 @@ class AllDatatypesImplicitsSpec extends mutable.Specification {
 
 
 
+  
+  "given a dynamically generated case class with all datatypes as a type parameter defined as a type alias, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
     val valueMembersA: List[FieldData] = List(FieldData("i", typeOf[Int]))
     val classDataA = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_UserA"), ClassFieldData(valueMembersA))
     val dccA = new DynamicCaseClass(classDataA)
@@ -30,9 +35,9 @@ class AllDatatypesImplicitsSpec extends mutable.Specification {
     val dbo = grater[MyRecord].asDBObject(dcc.runtimeInstance)
 
     val obj = grater[MyRecord].asObject(dbo)
-  
-  "given a dynamically generated case class with all datatypes as a type parameter defined as a type alias, a grater" should {
-    "serialize and deserialize correctly" in {
+
+
+
       dcc.runtimeInstance === obj
     }
  }

@@ -13,6 +13,10 @@ import specification._
 
 class String2Spec extends mutable.Specification {
 
+ "given a dynamically generated case class MyRecord_StringSpec(a: String) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
 
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[String]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_StringSpec"), ClassFieldData(valueMembers))
@@ -30,8 +34,7 @@ class String2Spec extends mutable.Specification {
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
  
- "given a dynamically generated case class MyRecord_StringSpec(a: String) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }

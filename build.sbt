@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "org.apache.avro" % "avro" % "1.7.7",
   "org.slf4j" % "slf4j-simple" % "1.7.5", 
   "org.specs2" %% "specs2" % "2.4" % "test",
-  "com.novus" %% "salat" % "1.9.9" % "test"
+  "com.novus" %% "salat" % "1.9.9" % "test" 
 )
 
 parallelExecution in Test := false

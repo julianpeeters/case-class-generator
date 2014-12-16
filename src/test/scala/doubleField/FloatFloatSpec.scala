@@ -13,6 +13,10 @@ import specification._
 
 class FloatFloatSpec extends mutable.Specification {
 
+ 
+ "given a dynamically generated case class MyRecord_FloatFloatSpec(a: Float, b: Float) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Float]), FieldData("b", typeOf[Float]))//, FieldData("d", typeOf[Boolean]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_FloatFloatSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
@@ -29,9 +33,8 @@ class FloatFloatSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_FloatFloatSpec(a: Float, b: Float) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
+
       typeTemplate === obj
     }
 }

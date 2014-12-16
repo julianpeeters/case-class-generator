@@ -14,6 +14,10 @@ import specification._
 class UserDefinedSpec extends mutable.Specification {
 
 
+
+
+  "given a dynamically generated case class MyRecord_UserDefinedRefSpecC(a: MyRecord_UserDefinedRefSpecB, b: MyRecord_UserDefinedRefSpecB) as a type parameter, a grater" should {"serialize and deserialize correctly" in {
+
   val valueMembersA: List[FieldData] = List(FieldData("i", typeOf[Int]))
   val classDataA = new ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_UserDefinedRefSpecA"), ClassFieldData(valueMembersA))
   val dccA = DynamicCaseClass(classDataA)
@@ -36,8 +40,6 @@ class UserDefinedSpec extends mutable.Specification {
 
   val obj = grater[dccC.TYPE].asObject(dbo)
    println("obj: " + obj)
-
-  "given a dynamically generated case class MyRecord_UserDefinedRefSpecC(a: MyRecord_UserDefinedRefSpecB, b: MyRecord_UserDefinedRefSpecB) as a type parameter, a grater" should {"serialize and deserialize correctly" in {
 
     obj === typeTemplateC
     }

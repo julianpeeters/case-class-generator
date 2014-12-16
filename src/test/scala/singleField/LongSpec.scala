@@ -15,6 +15,11 @@ import specification._
 
 class LongSpec extends mutable.Specification {
 
+ 
+ "given a dynamically generated case class MyRecord_LongSpec(a: Long) as a type parameter, a grater" should {
+    "serialize and deserialize correctly" in {
+
+
   val valueMembers: List[FieldData] = List(FieldData("a", typeOf[Long]))
   val classData = ClassData(ClassNamespace(Some("models")), ClassName("MyRecord_LongSpec"), ClassFieldData(valueMembers))
   val dcc = new DynamicCaseClass(classData)
@@ -30,9 +35,7 @@ class LongSpec extends mutable.Specification {
 
   val obj = grater[MyRecord].asObject(dbo)
     println(obj)
- 
- "given a dynamically generated case class MyRecord_LongSpec(a: Long) as a type parameter, a grater" should {
-    "serialize and deserialize correctly" in {
+
       typeTemplate === obj
     }
 }
