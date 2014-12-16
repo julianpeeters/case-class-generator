@@ -33,7 +33,7 @@ Supports generating classes with arbitrary fields of the following datatypes:
 
 ###Usage:
 
-Add the following dependency: [![Build Status](https://travis-ci.org/julianpeeters/case-class-generator.svg?branch=scala_2.10)](https://travis-ci.org/julianpeeters/case-class-generator)
+Add the following dependency: [![Build Status](https://travis-ci.org/julianpeeters/case-class-generator.svg?branch=master)](https://travis-ci.org/julianpeeters/case-class-generator)
   
 
     "com.julianpeeters" %% "case-class-generator" % "0.6.1"
