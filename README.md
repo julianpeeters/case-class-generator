@@ -36,7 +36,7 @@ Supports generating classes with arbitrary fields of the following datatypes:
 Add the following dependency: 
   
 
-    "com.julianpeeters" %% "case-class-generator" % "0.6"
+    "com.julianpeeters" %% "case-class-generator" % "0.6.1"
 
 Then get a `DynamicCaseClass` instance with:
 

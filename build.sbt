@@ -1,6 +1,6 @@
 name := "case-class-generator"
 
-version := "0.6"
+version := "0.6.1"
 
 organization := "com.julianpeeters"
 
@@ -10,12 +10,14 @@ scalacOptions in Test ++= Seq("-Yrangepos")
 
 libraryDependencies ++= Seq( 
   "org.ow2.asm" % "asm-util" % "4.1",  
-  "com.julianpeeters" %% "artisanal-pickle-maker" % "0.9.0",
+  "com.julianpeeters" %% "artisanal-pickle-maker" % "0.9.2",
   "org.apache.avro" % "avro" % "1.7.7",
   "org.slf4j" % "slf4j-simple" % "1.7.5", 
   "org.specs2" %% "specs2" % "2.4" % "test",
   "com.novus" %% "salat" % "1.9.9" % "test"
 )
+
+parallelExecution in Test := false
 
 publishMavenStyle := true
 
