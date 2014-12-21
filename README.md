@@ -70,13 +70,14 @@ with which you will be a able to:
 
 
 
-    import scala.reflect.runtime.universe._
+    `import scala.reflect.runtime.universe._
     import dcc.implicits.{ tag, manifest }
 
-    typeOf[dcc.TYPE]
+    typeOf[dcc.TYPE]`
 
 
 * Retrieve previously generated classes from a `Map[Type, DynamicCaseClass]`
+     `import stores._`
      `ClassStore.generatedClasses.get(dcc.tpe)`
 
 
