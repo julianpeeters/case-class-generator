@@ -62,7 +62,7 @@ with which you will be a able to:
     `val record = dcc.runtimeInstance`
 
 
-* Call `.type` on an instance of the runtime class to use it as a type parameter (doesn't carry a type tag):
+* Call `.type` on an instance of the runtime class to use it as a type parameter (doesn't carry a type tag, but does carry a manifest):
     `val x = myParamterizedThing[record.type]`
 
 
@@ -70,13 +70,14 @@ with which you will be a able to:
 
 
 
-    import scala.reflect.runtime.universe._
-    import dcc.implicits.{ tag, manifest }
+    `import scala.reflect.runtime.universe._`
+    `import dcc.implicits.{ tag, manifest }`
 
-    typeOf[dcc.TYPE]
+    `typeOf[dcc.TYPE]`
 
 
 * Retrieve previously generated classes from a `Map[Type, DynamicCaseClass]`
+     `import stores._`
      `ClassStore.generatedClasses.get(dcc.tpe)`
 
 
