@@ -1,6 +1,8 @@
 Case-Class-Generator
 =====================
 
+[![Build Status](https://travis-ci.org/julianpeeters/case-class-generator.svg?branch=scala_2.11)](https://travis-ci.org/julianpeeters/case-class-generator)
+
 Allows runtime data to serve as Scala case class definitions:
 * Case classes defined and loaded at runtime
 * Pseudo Type-Provider via type alias
@@ -33,7 +35,7 @@ Supports generating classes with arbitrary fields of the following datatypes:
 
 ###Usage:
 
-Add the following dependency for Scala 2.11 (please see branches for other supported versions): [![Build Status](https://travis-ci.org/julianpeeters/case-class-generator.svg?branch=scala_2.11)](https://travis-ci.org/julianpeeters/case-class-generator)
+Add the following dependency for Scala 2.11 (please see branches for other supported versions): 
   
 
     "com.julianpeeters" %% "case-class-generator" % "0.7.1"
@@ -70,10 +72,11 @@ with which you will be a able to:
 
 
 
-    `import scala.reflect.runtime.universe._
-    import dcc.implicits.{ tag, manifest }
+    `import scala.reflect.runtime.universe._`
 
-    typeOf[dcc.TYPE]`
+    `import dcc.implicits.{ tag, manifest }`
+
+    `typeOf[dcc.TYPE]`
 
 
 * Retrieve previously generated classes from a `Map[Type, DynamicCaseClass]`
