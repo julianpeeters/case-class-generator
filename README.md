@@ -7,7 +7,7 @@ Allows runtime data to serve as Scala case class definitions:
 * Case classes defined and loaded at runtime
 * Pseudo Type-Provider via type alias
 
-Runtime code-generation and evaluation can be accomplished in a `scala.tools.reflect.ToolBox`, yet only one class per package can be created (see [this error](https://github.com/julianpeeters/toolbox-salat-example/blob/two_classes_error/src/main/scala/Main.scala#L59)). So for now I'm using [ASM](http://asm.ow2.org/) and [Artisinal-Pickle-Maker](https://github.com/julianpeeters/artisanal-pickle-maker) to generate bytecode for case classes, and a custom classloader to load the newly-made classes.
+Runtime code-generation and evaluation can be accomplished in a `scala.tools.reflect.ToolBox`, yet only one class per package can be created (see [this error](https://github.com/julianpeeters/toolbox-salat-example/blob/two_classes_error/src/main/scala/Main.scala#L59)). So for now I'm using [ASM](http://asm.ow2.org/) and [Artisanal-Pickle-Maker](https://github.com/julianpeeters/artisanal-pickle-maker) to generate bytecode for case classes, and a custom classloader to load the newly-made classes.
 
 The dynamically generated class can be used to instantiate new objects at runtime, or serve as as a type parameter. Please see warnings below.
 
@@ -92,7 +92,7 @@ with which you will be a able to:
 
 3) Only the generation of case classes with fields but without a body are supported. This is due to concerns about hygeine, specifically restricting the generation of anonymous classes that may pollute the namespace. 
 
-4) For now only classes with vals can be generated: no vars. It is feasible to add vars in the future, but for them to work, [Artisinal-Pickle-Maker](https://github.com/julianpeeters/artisanal-pickle-maker) must be updated as well.
+4) For now only classes with vals can be generated: no vars. It is feasible to add vars in the future, but for them to work, [Artisanal-Pickle-Maker](https://github.com/julianpeeters/artisanal-pickle-maker) must be updated as well.
 
 5) ObjectWeb's ASM classwriter, and thus this project, is _not_ thread-safe. Testing with Travis CI is done by using `parallelExecution in Test := false` in the build file.
 
